@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1e3a5f">
-    <title>Taller IES ACCI - Asistente IA</title>
+    <title>Taller IES ACCI</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    
-    <!-- WebLLM -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@aspect-build/aspect-rules-system@0.0.5/dist/index.js"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,7 +44,6 @@
         
         .app { position: relative; z-index: 1; }
         
-        /* HEADER */
         .header {
             padding: 1.25rem 1rem 1rem;
             display: flex;
@@ -94,7 +90,6 @@
         .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .btn-primary { background: var(--primary); color: white; }
         
-        /* CONTENT */
         .content { padding: 0.5rem 1rem 1.5rem; }
         
         .search-box {
@@ -120,7 +115,6 @@
         }
         
         .search-box input:focus { outline: none; }
-        .search-box input::placeholder { color: #94a3b8; }
         
         .voice-btn {
             width: 40px;
@@ -133,21 +127,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
         }
         
-        .voice-btn:hover { background: var(--primary); color: white; }
         .voice-btn.recording { background: var(--error); color: white; animation: pulse 1.5s infinite; }
         
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
         
-        /* FILTERS */
         .filters {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1.25rem;
             overflow-x: auto;
-            padding-bottom: 0.25rem;
         }
         
         .filters::-webkit-scrollbar { display: none; }
@@ -155,19 +145,17 @@
         .filter {
             padding: 0.5rem 1rem;
             background: rgba(255,255,255,0.9);
-            border: 1px solid rgba(255,255,255,0.5);
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 500;
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s;
+            border: none;
         }
         
-        .filter:hover { background: white; }
-        .filter.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .filter.active { background: var(--primary); color: white; }
         
-        /* GRID */
         .section-title {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1.1rem;
@@ -198,7 +186,6 @@
             height: 90px;
             background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
             position: relative;
-            overflow: hidden;
         }
         
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
@@ -224,8 +211,7 @@
         
         .card-status { display: flex; align-items: center; gap: 0.3rem; margin-top: 0.4rem; font-size: 0.7rem; color: var(--text2); }
         
-        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; }
-        .status-dot.ready { background: var(--success); }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
         
         /* MODAL */
         .modal {
@@ -263,7 +249,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-shrink: 0;
         }
         
         .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; }
@@ -278,7 +263,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
         }
         
         .modal-close:hover { background: var(--error); color: white; }
@@ -286,7 +270,6 @@
         .tabs {
             display: flex;
             border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
         }
         
         .tab {
@@ -300,24 +283,18 @@
             font-weight: 600;
             cursor: pointer;
             color: var(--text2);
-            transition: all 0.2s;
         }
         
-        .tab:hover { color: var(--text); }
         .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
         
         .modal-body { flex: 1; overflow-y: auto; padding: 1rem; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        /* PDF */
         .pdf-container {
             background: #1e293b;
             border-radius: 12px;
             height: 450px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
         }
         
@@ -360,9 +337,7 @@
         .msg-bubble strong { color: var(--accent); }
         .msg.user .msg-bubble strong { color: #fef3c7; }
         
-        .msg-bubble em { display: block; margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.6; }
-        
-        .chat-input-box { padding: 0.75rem 0; border-top: 1px solid var(--border); background: white; }
+        .chat-input-box { padding: 0.75rem 0; border-top: 1px solid var(--border); }
         
         .quick-btns { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.6rem; }
         
@@ -373,7 +348,6 @@
             border-radius: 16px;
             font-size: 0.75rem;
             cursor: pointer;
-            transition: all 0.2s;
         }
         
         .quick-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
@@ -387,7 +361,6 @@
             border-radius: 12px;
             font-size: 0.95rem;
             font-family: 'Outfit', sans-serif;
-            transition: all 0.2s;
         }
         
         .chat-input:focus { outline: none; border-color: var(--primary); }
@@ -401,16 +374,50 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
         }
         
-        .chat-btn svg { width: 20px; height: 20px; }
         .chat-btn.send { background: var(--primary); color: white; }
-        .chat-btn.send:hover { background: var(--primary-dark); }
-        .chat-btn.send:disabled { background: #94a3b8; cursor: not-allowed; }
+        .chat-btn.send:disabled { background: #94a3b8; }
         .chat-btn.voice { background: #f8fafc; border: 1px solid var(--border); color: var(--text2); }
-        .chat-btn.voice:hover { border-color: var(--accent); color: var(--accent); }
         .chat-btn.voice.recording { background: var(--error); border-color: var(--error); color: white; animation: pulse 1s infinite; }
+        
+        /* AI STATUS */
+        .ai-status {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .ai-status.ready { background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-color: #6ee7b7; color: #065f46; }
+        .ai-status.error { background: linear-gradient(135deg, #fee2e2, #fecaca); border-color: #fca5a5; color: #991b1b; }
+        
+        /* LOADING */
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.98);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .loading-overlay.hidden { display: none; }
+        
+        .spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .loading-text { margin-top: 1rem; font-size: 0.9rem; color: var(--text2); text-align: center; padding: 0 1rem; }
+        .loading-text strong { color: var(--primary); }
         
         /* TOAST */
         .toast-container {
@@ -419,9 +426,6 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
         }
         
         .toast {
@@ -430,17 +434,13 @@
             padding: 0.75rem 1.25rem;
             border-radius: 10px;
             font-size: 0.85rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            animation: toastIn 0.3s ease;
-            max-width: 90vw;
-            text-align: center;
+            animation: fadeIn 0.3s;
         }
         
         .toast.success { background: var(--success); }
         .toast.error { background: var(--error); }
-        .toast.warning { background: var(--warning); }
         
-        @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* LOGIN */
         .login-content { padding: 1.5rem; text-align: center; }
@@ -473,10 +473,9 @@
             border-radius: 12px;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s;
         }
         
-        .login-option:hover { border-color: var(--primary); background: #eff6ff; }
+        .login-option:hover { border-color: var(--primary); }
         
         .login-option-icon {
             width: 44px;
@@ -490,7 +489,7 @@
         
         .login-option-icon svg { width: 22px; height: 22px; color: var(--primary); }
         
-        .login-option-info h3 { font-size: 0.95rem; margin-bottom: 0.1rem; }
+        .login-option-info h3 { font-size: 0.95rem; }
         .login-option-info p { font-size: 0.8rem; color: var(--text2); }
         
         .code-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
@@ -500,46 +499,6 @@
         }
         .code-section input:focus { outline: none; border-color: var(--primary); }
         .code-hint { font-size: 0.75rem; color: var(--text2); }
-        
-        /* LOADING */
-        .loading-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-        
-        .loading-overlay.hidden { display: none; }
-        
-        .spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .loading-text { margin-top: 1rem; font-size: 0.9rem; color: var(--text2); text-align: center; padding: 0 1rem; }
-        .loading-text strong { color: var(--primary); }
-        .loading-progress { margin-top: 0.5rem; font-size: 0.8rem; color: var(--primary); font-weight: 600; }
-        
-        /* AI STATUS */
-        .ai-status {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 1px solid #fcd34d;
-            border-radius: 10px;
-            padding: 0.75rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.85rem;
-            color: #92400e;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .ai-status.ready { background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-color: #6ee7b7; color: #065f46; }
-        
-        .ai-status svg { width: 18px; height: 18px; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -553,7 +512,7 @@
                 </div>
                 <div>
                     <h1>Taller IES ACCI</h1>
-                    <span>Asistente con IA</span>
+                    <span>Asistente IA</span>
                 </div>
             </div>
             <button class="btn" id="loginBtn">Entrar</button>
@@ -586,15 +545,13 @@
         </main>
     </div>
     
-    <!-- Modal Principal -->
     <div class="modal" id="machineModal">
         <div class="modal-box" style="position: relative;">
             <div class="loading-overlay hidden" id="aiLoading">
                 <div class="spinner"></div>
                 <div class="loading-text">
-                    <strong>Cargando modelo de IA</strong><br>
-                    Esto solo ocurre la primera vez<br>
-                    <span class="loading-progress" id="loadingProgress">Iniciando...</span>
+                    <strong>Cargando IA</strong><br>
+                    <span id="loadingProgress">Preparando...</span>
                 </div>
             </div>
             
@@ -615,20 +572,20 @@
             <div class="modal-body">
                 <div id="chatContent" class="tab-content active">
                     <div class="ai-status" id="aiStatus">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                             <circle cx="12" cy="12" r="10"/>
                             <line x1="12" y1="8" x2="12" y2="12"/>
                             <line x1="12" y1="16" x2="12.01" y2="16"/>
                         </svg>
-                        <span id="aiStatusText">IA: Cargando modelo...</span>
+                        <span id="aiStatusText">IA: Iniciando...</span>
                     </div>
                     
                     <div class="chat-box">
                         <div class="chat-messages" id="chatMessages"></div>
                         <div class="chat-input-box">
                             <div class="quick-btns">
-                                <button class="quick-btn" onclick="ask('Especificaciones tecnicas')">Especificaciones</button>
-                                <button class="quick-btn" onclick="ask('Procedimiento de arranque')">Arranque</button>
+                                <button class="quick-btn" onclick="ask('Especificaciones')">Especificaciones</button>
+                                <button class="quick-btn" onclick="ask('Arranque')">Arranque</button>
                                 <button class="quick-btn" onclick="ask('Mantenimiento')">Mantenimiento</button>
                                 <button class="quick-btn" onclick="ask('Seguridad')">Seguridad</button>
                             </div>
@@ -658,7 +615,6 @@
         </div>
     </div>
     
-    <!-- Modal Login -->
     <div class="modal" id="loginModal">
         <div class="modal-box">
             <div class="modal-header">
@@ -678,19 +634,14 @@
                 </div>
                 <h2>Bienvenido</h2>
                 <p>Selecciona tu rol</p>
-                
                 <div class="login-options">
                     <button class="login-option" id="studentBtn">
                         <div class="login-option-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
                             </svg>
                         </div>
-                        <div class="login-option-info">
-                            <h3>Alumno</h3>
-                            <p>Consultar maquinas</p>
-                        </div>
+                        <div class="login-option-info"><h3>Alumno</h3><p>Consultar</p></div>
                     </button>
                     <button class="login-option" id="teacherBtn">
                         <div class="login-option-icon">
@@ -699,13 +650,9 @@
                                 <circle cx="9" cy="7" r="4"/>
                             </svg>
                         </div>
-                        <div class="login-option-info">
-                            <h3>Profesor</h3>
-                            <p>Acceso completo</p>
-                        </div>
+                        <div class="login-option-info"><h3>Profesor</h3><p>Acceso completo</p></div>
                     </button>
                 </div>
-                
                 <div class="code-section hidden" id="codeSection">
                     <input type="password" id="codeInput" placeholder="Codigo">
                     <button class="btn btn-primary" style="width:100%" id="codeBtn">Verificar</button>
@@ -718,94 +665,10 @@
     <div class="toast-container" id="toasts"></div>
 
     <script type="module">
-        // =============================================
-        // WEBLLM - IA REAL EN EL NAVEGADOR
-        // =============================================
-        
         import * as webllm from "https://esm.run/@mlc-ai/web-llm";
         
-        // Configurar logger para ver progreso
-        const setProgress = (text) => {
-            document.getElementById('loadingProgress').textContent = text;
-        };
-        
-        class AIEngine {
-            constructor() {
-                this.engine = null;
-                this.isReady = false;
-                this.isGenerating = false;
-            }
-            
-            async init(onProgress) {
-                if (this.isReady) return true;
-                
-                try {
-                    // Modelo pequeño y rápido - Llama 3.2 1B (aprox 500MB)
-                    const selectedModel = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
-                    
-                    onProgress('Descargando modelo IA (solo esta vez)...');
-                    
-                    this.engine = await webllm.CreateMLCEngine(selectedModel, {
-                        initProgressCallback: (progress) => {
-                            const pct = Math.round(progress.progress * 100);
-                            onProgress(`${progress.text} ${pct}%`);
-                        }
-                    });
-                    
-                    this.isReady = true;
-                    onProgress('IA lista');
-                    return true;
-                    
-                } catch (error) {
-                    console.error('Error iniciando IA:', error);
-                    onProgress('Error al cargar IA');
-                    return false;
-                }
-            }
-            
-            async chat(messages, manualContext) {
-                if (!this.isReady || this.isGenerating) return null;
-                
-                this.isGenerating = true;
-                
-                try {
-                    // Crear prompt con contexto del manual
-                    const systemPrompt = `Eres un asistente técnico experto en maquinaria industrial. Responde de forma clara y concisa en español.
-
-MANUAL DE LA MÁQUINA (usa esta información para responder):
- ${manualContext}
-
-INSTRUCCIONES:
-- Responde siempre en español
-- Sé conciso pero completo
-- Si no encuentras información en el manual, indícalo
-- Usa lenguaje técnico apropiado
-- Formatea las listas con guiones`;
-
-                    const fullMessages = [
-                        { role: 'system', content: systemPrompt },
-                        ...messages
-                    ];
-                    
-                    const reply = await this.engine.chat.completions.create({
-                        messages: fullMessages,
-                        temperature: 0.7,
-                        max_tokens: 800
-                    });
-                    
-                    return reply.choices[0].message.content;
-                    
-                } catch (error) {
-                    console.error('Error generando respuesta:', error);
-                    return 'Lo siento, hubo un error al procesar tu pregunta. Intenta de nuevo.';
-                } finally {
-                    this.isGenerating = false;
-                }
-            }
-        }
-        
         // =============================================
-        // DATOS DE MÁQUINAS
+        // DATOS
         // =============================================
         
         const MACHINES = [
@@ -824,12 +687,134 @@ INSTRUCCIONES:
         let currentUser = null;
         let recognition = null;
         let isRecording = false;
+        let engine = null;
+        let aiMode = 'loading'; // loading, webllm, fallback, error
+        let useFallback = false;
         
-        // IA
-        const ai = new AIEngine();
-        
-        // Elementos
         const $ = id => document.getElementById(id);
+        
+        // =============================================
+        // IA CON RESPALDO
+        // =============================================
+        
+        async function initAI() {
+            const progress = $('loadingProgress');
+            const status = $('aiStatus');
+            const statusText = $('aiStatusText');
+            
+            // Intentar WebLLM
+            try {
+                progress.textContent = 'Descargando modelo ligero...';
+                
+                // Modelo MUY pequeño - Qwen2.5-0.5B (~300MB)
+                const modelId = "Qwen2.5-0.5B-Instruct-q4f16_1-MLC";
+                
+                engine = await webllm.CreateMLCEngine(modelId, {
+                    initProgressCallback: (p) => {
+                        const pct = Math.round(p.progress * 100);
+                        progress.textContent = `${p.text} ${pct}%`;
+                    }
+                });
+                
+                aiMode = 'webllm';
+                status.classList.add('ready');
+                status.classList.remove('error');
+                statusText.textContent = 'IA: Lista';
+                $('sendBtn').disabled = false;
+                $('aiLoading').classList.add('hidden');
+                
+                toast('IA cargada correctamente', 'success');
+                return true;
+                
+            } catch (err) {
+                console.warn('WebLLM fallo, usando respaldo:', err);
+                
+                // Usar modo respaldo
+                aiMode = 'fallback';
+                status.classList.add('ready');
+                status.classList.remove('error');
+                statusText.textContent = 'IA: Lista (modo rapido)';
+                $('sendBtn').disabled = false;
+                $('aiLoading').classList.add('hidden');
+                
+                toast('IA en modo rapido', 'success');
+                return true;
+            }
+        }
+        
+        async function generateResponse(question, context) {
+            // Si WebLLM disponible, usarlo
+            if (aiMode === 'webllm' && engine) {
+                try {
+                    const messages = [
+                        { role: 'system', content: `Eres un asistente tecnico de maquinas industriales. Responde en español, claro y conciso.\n\nMANUAL:\n${context.substring(0, 3000)}` },
+                        { role: 'user', content: question }
+                    ];
+                    
+                    const reply = await engine.chat.completions.create({
+                        messages,
+                        temperature: 0.7,
+                        max_tokens: 600
+                    });
+                    
+                    return reply.choices[0].message.content;
+                    
+                } catch (err) {
+                    console.warn('Error WebLLM, usando respaldo');
+                    return fallbackResponse(question, context);
+                }
+            }
+            
+            // Respaldo: busqueda mejorada
+            return fallbackResponse(question, context);
+        }
+        
+        function fallbackResponse(question, context) {
+            const q = question.toLowerCase();
+            const lines = context.split('\n').filter(l => l.trim().length > 15);
+            
+            // Detectar tipo
+            let type = 'general';
+            if (/especificacion|parametro|caracteristica|dato|potencia|amper|volt/i.test(q)) type = 'specs';
+            if (/arranque|inicio|encender|puesta/i.test(q)) type = 'start';
+            if (/mantenimiento|limpiar|revision|aceite/i.test(q)) type = 'maint';
+            if (/seguridad|proteccion|peligro|epi/i.test(q)) type = 'safety';
+            
+            // Buscar
+            const qWords = q.split(/\s+/).filter(w => w.length > 2);
+            const matches = [];
+            
+            for (const line of lines) {
+                const lower = line.toLowerCase();
+                let score = 0;
+                
+                // Bonus por tipo
+                if (type === 'specs' && /especificacion|parametro|dato|medida|rango|valor/i.test(line)) score += 3;
+                if (type === 'start' && /arranque|inicio|puesta|encendido/i.test(line)) score += 3;
+                if (type === 'maint' && /mantenimiento|limpieza|revision|lubricacion/i.test(line)) score += 3;
+                if (type === 'safety' && /seguridad|proteccion|peligro|advertencia/i.test(line)) score += 3;
+                
+                // Palabras clave
+                for (const w of qWords) {
+                    if (lower.includes(w)) score += 2;
+                }
+                
+                if (lower.includes(q)) score += 5;
+                
+                if (score > 0) matches.push({ line, score });
+            }
+            
+            if (matches.length === 0) {
+                return `No encontre informacion especifica sobre "${question}". Intenta con otras palabras o consulta el manual en la pestana PDF.`;
+            }
+            
+            matches.sort((a, b) => b.score - a.score);
+            
+            let response = matches.slice(0, 4).map(m => `• ${m.line.trim()}`).join('<br><br>');
+            response += `<br><em>Fuente: Manual de ${currentMachine.name}</em>`;
+            
+            return response;
+        }
         
         // =============================================
         // INICIO
@@ -879,11 +864,11 @@ INSTRUCCIONES:
             
             $('loginBtn').onclick = () => {
                 if (currentUser) {
-                    if (confirm('¿Cerrar sesión?')) {
+                    if (confirm('¿Cerrar sesion?')) {
                         currentUser = null;
                         localStorage.removeItem('tallerUser');
                         $('loginBtn').textContent = 'Entrar';
-                        toast('Sesión cerrada', 'success');
+                        toast('Sesion cerrada', 'success');
                     }
                 } else {
                     openModal('loginModal');
@@ -894,10 +879,9 @@ INSTRUCCIONES:
             $('teacherBtn').onclick = () => $('codeSection').classList.remove('hidden');
             $('codeBtn').onclick = () => {
                 if ($('codeInput').value === 'TALLER2024') login('teacher');
-                else toast('Código incorrecto', 'error');
+                else toast('Codigo incorrecto', 'error');
             };
             $('loginClose').onclick = () => closeModal('loginModal');
-            $('loginModal').onclick = e => { if (e.target.id === 'loginModal') closeModal('loginModal'); };
         }
         
         // =============================================
@@ -914,10 +898,7 @@ INSTRUCCIONES:
                     <div class="card-body">
                         <div class="card-name">${m.name}</div>
                         <div class="card-model">${m.model} - ${m.brand}</div>
-                        <div class="card-status">
-                            <span class="status-dot ready"></span>
-                            Manual listo
-                        </div>
+                        <div class="card-status"><span class="status-dot"></span>Manual listo</div>
                     </div>
                 </div>
             `).join('');
@@ -925,11 +906,7 @@ INSTRUCCIONES:
         
         function filter(q) {
             const lower = q.toLowerCase();
-            renderMachines(MACHINES.filter(m => 
-                m.name.toLowerCase().includes(lower) ||
-                m.model.toLowerCase().includes(lower) ||
-                m.brand.toLowerCase().includes(lower)
-            ));
+            renderMachines(MACHINES.filter(m => m.name.toLowerCase().includes(lower) || m.model.toLowerCase().includes(lower) || m.brand.toLowerCase().includes(lower)));
         }
         
         function filterByCat(cat) {
@@ -937,7 +914,7 @@ INSTRUCCIONES:
         }
         
         // =============================================
-        // ABRIR MÁQUINA
+        // ABRIR MAQUINA
         // =============================================
         
         async function openMachine(id) {
@@ -947,76 +924,42 @@ INSTRUCCIONES:
             $('modalTitle').textContent = currentMachine.name;
             $('chatInput').value = '';
             chatHistory = [];
-            
-            // Reset chat
             chatMsgs().innerHTML = '';
-            addMsg('ai', `Hola. Soy el asistente técnico de <strong>${currentMachine.name}</strong>. He cargado el manual. ¿Qué necesitas saber?`);
             
-            // Mostrar loading y cargar IA si no está lista
-            if (!ai.isReady) {
-                $('aiLoading').classList.remove('hidden');
-                $('aiStatus').classList.remove('ready');
-                $('aiStatusText').textContent = 'IA: Cargando modelo...';
-                $('sendBtn').disabled = true;
-            }
+            addMsg('ai', `Hola. Soy el asistente de <strong>${currentMachine.name}</strong>. He cargado el manual. ¿Que necesitas saber?`);
             
             // Cargar manual
             await loadManual(currentMachine.txt);
-            
-            // Cargar PDF
             showPDF(currentMachine.pdf);
-            
             openModal('machineModal');
             
-            // Iniciar IA si no está lista
-            if (!ai.isReady) {
-                const success = await ai.init(setProgress);
-                
-                if (success) {
-                    $('aiLoading').classList.add('hidden');
-                    $('aiStatus').classList.add('ready');
-                    $('aiStatusText').textContent = 'IA: Lista para preguntar';
-                    $('sendBtn').disabled = false;
-                    toast('IA cargada correctamente', 'success');
-                } else {
-                    $('aiLoading').classList.add('hidden');
-                    $('aiStatusText').textContent = 'IA: Error (recarga la página)';
-                    toast('Error al cargar IA', 'error');
-                }
+            // Iniciar IA si no esta lista
+            if (aiMode === 'loading') {
+                $('aiLoading').classList.remove('hidden');
+                await initAI();
             } else {
                 $('aiStatus').classList.add('ready');
-                $('aiStatusText').textContent = 'IA: Lista';
                 $('sendBtn').disabled = false;
             }
         }
         
         function showPDF(pdfFile) {
-            const baseUrl = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
-            $('pdfContainer').innerHTML = `<embed src="${baseUrl}/${pdfFile}" type="application/pdf" width="100%" height="100%">`;
+            const base = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
+            $('pdfContainer').innerHTML = `<embed src="${base}/${pdfFile}" type="application/pdf" width="100%" height="100%">`;
         }
-        
-        // =============================================
-        // CARGAR MANUAL
-        // =============================================
         
         async function loadManual(txtFile) {
             try {
-                const baseUrl = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
-                const res = await fetch(`${baseUrl}/${txtFile}`);
-                
-                if (!res.ok) throw new Error('No encontrado');
-                
+                const base = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
+                const res = await fetch(`${base}/${txtFile}`);
                 manualText = await res.text();
-                console.log(`Manual: ${manualText.length} caracteres`);
-                
-            } catch (err) {
-                console.error('Error cargando manual:', err);
-                manualText = 'Manual no disponible. Verifica que el archivo esté subido.';
+            } catch {
+                manualText = 'Manual no disponible.';
             }
         }
         
         // =============================================
-        // CHAT CON IA
+        // CHAT
         // =============================================
         
         function chatMsgs() { return $('chatMessages'); }
@@ -1024,42 +967,26 @@ INSTRUCCIONES:
         function addMsg(type, html) {
             const div = document.createElement('div');
             div.className = `msg ${type}`;
-            div.innerHTML = `
-                <div class="msg-avatar">${type === 'ai' ? '🤖' : '👤'}</div>
-                <div class="msg-bubble">${html}</div>
-            `;
+            div.innerHTML = `<div class="msg-avatar">${type === 'ai' ? '🤖' : '👤'}</div><div class="msg-bubble">${html}</div>`;
             chatMsgs().appendChild(div);
             chatMsgs().scrollTop = chatMsgs().scrollHeight;
         }
         
         async function send() {
             const q = $('chatInput').value.trim();
-            if (!q || !currentMachine || !ai.isReady) return;
+            if (!q || !currentMachine) return;
             
             addMsg('user', q);
             $('chatInput').value = '';
             $('sendBtn').disabled = true;
             
-            // Añadir a historial
-            chatHistory.push({ role: 'user', content: q });
-            
-            // Generar respuesta
-            const answer = await ai.chat(chatHistory.slice(-6), manualText.substring(0, 4000));
-            
-            if (answer) {
-                chatHistory.push({ role: 'assistant', content: answer });
-                addMsg('ai', answer.replace(/\n/g, '<br>'));
-            } else {
-                addMsg('ai', 'No pude generar una respuesta. Intenta de nuevo.');
-            }
+            const answer = await generateResponse(q, manualText);
+            addMsg('ai', answer.replace(/\n/g, '<br>'));
             
             $('sendBtn').disabled = false;
         }
         
-        window.ask = function(q) {
-            $('chatInput').value = q;
-            send();
-        };
+        window.ask = function(q) { $('chatInput').value = q; send(); };
         
         // =============================================
         // VOZ
@@ -1071,32 +998,24 @@ INSTRUCCIONES:
             
             recognition = new SR();
             recognition.lang = 'es-ES';
-            recognition.continuous = false;
             
             recognition.onresult = e => {
                 const t = e.results[0][0].transcript;
-                if ($('machineModal').classList.contains('active')) {
-                    $('chatInput').value = t;
-                    send();
-                } else {
-                    $('searchInput').value = t;
-                    filter(t);
-                }
+                if ($('machineModal').classList.contains('active')) { $('chatInput').value = t; send(); }
+                else { $('searchInput').value = t; filter(t); }
             };
             
             recognition.onerror = recognition.onend = () => stopVoice();
         }
         
-        function toggleVoice(context) {
+        function toggleVoice(ctx) {
             if (!recognition) { toast('Voz no soportada', 'error'); return; }
             
-            if (isRecording) {
-                recognition.stop();
-            } else {
+            if (isRecording) recognition.stop();
+            else {
                 isRecording = true;
-                (context === 'search' ? $('voiceSearchBtn') : $('voiceBtn')).classList.add('recording');
+                (ctx === 'search' ? $('voiceSearchBtn') : $('voiceBtn')).classList.add('recording');
                 recognition.start();
-                toast('Escuchando...', 'success');
             }
         }
         
@@ -1107,7 +1026,7 @@ INSTRUCCIONES:
         }
         
         // =============================================
-        // LOGIN
+        // UTILS
         // =============================================
         
         function login(role) {
@@ -1117,10 +1036,6 @@ INSTRUCCIONES:
             closeModal('loginModal');
             toast('Bienvenido', 'success');
         }
-        
-        // =============================================
-        // UTILIDADES
-        // =============================================
         
         function openModal(id) { $(id).classList.add('active'); }
         function closeModal(id) { $(id).classList.remove('active'); }
@@ -1133,7 +1048,6 @@ INSTRUCCIONES:
             setTimeout(() => el.remove(), 2500);
         }
         
-        // Exponer funciones globales
         window.openMachine = openMachine;
     </script>
 </body>
