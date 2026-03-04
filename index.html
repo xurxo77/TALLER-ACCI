@@ -301,7 +301,7 @@
         .pdf-container embed { width: 100%; height: 100%; border: none; }
         
         /* CHAT */
-        .chat-box { display: flex; flex-direction: column; height: 420px; }
+        .chat-box { display: flex; flex-direction: column; height: 450px; }
         
         .chat-messages {
             flex: 1;
@@ -312,42 +312,57 @@
             gap: 0.85rem;
         }
         
-        .msg { display: flex; gap: 0.6rem; max-width: 88%; }
+        .msg { display: flex; gap: 0.6rem; max-width: 90%; }
         .msg.user { align-self: flex-end; flex-direction: row-reverse; }
         
         .msg-avatar {
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 700;
         }
         
         .msg.ai .msg-avatar { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
         .msg.user .msg-avatar { background: var(--accent); color: white; }
         
-        .msg-bubble { padding: 0.85rem 1rem; border-radius: 14px; font-size: 0.9rem; line-height: 1.6; }
+        .msg-bubble { padding: 0.9rem 1.1rem; border-radius: 16px; font-size: 0.92rem; line-height: 1.65; }
         .msg.ai .msg-bubble { background: #f1f5f9; border-bottom-left-radius: 4px; }
         .msg.user .msg-bubble { background: var(--primary); color: white; border-bottom-right-radius: 4px; }
         
+        .msg-bubble p { margin-bottom: 0.5rem; }
+        .msg-bubble p:last-child { margin-bottom: 0; }
+        
         .msg-bubble strong { color: var(--accent); }
         .msg.user .msg-bubble strong { color: #fef3c7; }
+        
+        .msg-bubble ul, .msg-bubble ol { padding-left: 1.2rem; margin: 0.5rem 0; }
+        .msg-bubble li { margin-bottom: 0.3rem; }
+        
+        .msg-bubble em {
+            display: block;
+            margin-top: 0.6rem;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            font-style: normal;
+        }
         
         .chat-input-box { padding: 0.75rem 0; border-top: 1px solid var(--border); }
         
         .quick-btns { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.6rem; }
         
         .quick-btn {
-            padding: 0.45rem 0.75rem;
+            padding: 0.5rem 0.85rem;
             background: #f8fafc;
             border: 1px solid var(--border);
             border-radius: 16px;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             cursor: pointer;
+            transition: all 0.2s;
         }
         
         .quick-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
@@ -356,7 +371,7 @@
         
         .chat-input {
             flex: 1;
-            padding: 0.85rem 1rem;
+            padding: 0.9rem 1rem;
             border: 1px solid var(--border);
             border-radius: 12px;
             font-size: 0.95rem;
@@ -366,8 +381,8 @@
         .chat-input:focus { outline: none; border-color: var(--primary); }
         
         .chat-btn {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border: none;
             border-radius: 12px;
             cursor: pointer;
@@ -377,47 +392,9 @@
         }
         
         .chat-btn.send { background: var(--primary); color: white; }
-        .chat-btn.send:disabled { background: #94a3b8; }
+        .chat-btn.send:hover { background: var(--primary-dark); }
         .chat-btn.voice { background: #f8fafc; border: 1px solid var(--border); color: var(--text2); }
         .chat-btn.voice.recording { background: var(--error); border-color: var(--error); color: white; animation: pulse 1s infinite; }
-        
-        /* AI STATUS */
-        .ai-status {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 1px solid #fcd34d;
-            border-radius: 10px;
-            padding: 0.75rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.85rem;
-            color: #92400e;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .ai-status.ready { background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-color: #6ee7b7; color: #065f46; }
-        .ai-status.error { background: linear-gradient(135deg, #fee2e2, #fecaca); border-color: #fca5a5; color: #991b1b; }
-        
-        /* LOADING */
-        .loading-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.98);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-        
-        .loading-overlay.hidden { display: none; }
-        
-        .spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .loading-text { margin-top: 1rem; font-size: 0.9rem; color: var(--text2); text-align: center; padding: 0 1rem; }
-        .loading-text strong { color: var(--primary); }
         
         /* TOAST */
         .toast-container {
@@ -431,10 +408,11 @@
         .toast {
             background: var(--text);
             color: white;
-            padding: 0.75rem 1.25rem;
+            padding: 0.8rem 1.3rem;
             border-radius: 10px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             animation: fadeIn 0.3s;
+            text-align: center;
         }
         
         .toast.success { background: var(--success); }
@@ -512,7 +490,7 @@
                 </div>
                 <div>
                     <h1>Taller IES ACCI</h1>
-                    <span>Asistente IA</span>
+                    <span>Asistente Inteligente</span>
                 </div>
             </div>
             <button class="btn" id="loginBtn">Entrar</button>
@@ -546,15 +524,7 @@
     </div>
     
     <div class="modal" id="machineModal">
-        <div class="modal-box" style="position: relative;">
-            <div class="loading-overlay hidden" id="aiLoading">
-                <div class="spinner"></div>
-                <div class="loading-text">
-                    <strong>Cargando IA</strong><br>
-                    <span id="loadingProgress">Preparando...</span>
-                </div>
-            </div>
-            
+        <div class="modal-box">
             <div class="modal-header">
                 <h3 class="modal-title" id="modalTitle">-</h3>
                 <button class="modal-close" id="modalClose">
@@ -571,23 +541,14 @@
             
             <div class="modal-body">
                 <div id="chatContent" class="tab-content active">
-                    <div class="ai-status" id="aiStatus">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="8" x2="12" y2="12"/>
-                            <line x1="12" y1="16" x2="12.01" y2="16"/>
-                        </svg>
-                        <span id="aiStatusText">IA: Iniciando...</span>
-                    </div>
-                    
                     <div class="chat-box">
                         <div class="chat-messages" id="chatMessages"></div>
                         <div class="chat-input-box">
                             <div class="quick-btns">
-                                <button class="quick-btn" onclick="ask('Especificaciones')">Especificaciones</button>
-                                <button class="quick-btn" onclick="ask('Arranque')">Arranque</button>
-                                <button class="quick-btn" onclick="ask('Mantenimiento')">Mantenimiento</button>
-                                <button class="quick-btn" onclick="ask('Seguridad')">Seguridad</button>
+                                <button class="quick-btn" onclick="ask('¿Cuales son las especificaciones tecnicas?">Especificaciones</button>
+                                <button class="quick-btn" onclick="ask('¿Como se pone en marcha?')">Arranque</button>
+                                <button class="quick-btn" onclick="ask('¿Que mantenimiento necesita?')">Mantenimiento</button>
+                                <button class="quick-btn" onclick="ask('¿Que medidas de seguridad debo tomar?')">Seguridad</button>
                             </div>
                             <div class="input-row">
                                 <input type="text" id="chatInput" class="chat-input" placeholder="Escribe tu pregunta...">
@@ -597,7 +558,7 @@
                                         <path d="M19 10v2a7 7 0 01-14 0v-2"/>
                                     </svg>
                                 </button>
-                                <button class="chat-btn send" id="sendBtn" disabled>
+                                <button class="chat-btn send" id="sendBtn">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <line x1="22" y1="2" x2="11" y2="13"/>
                                         <polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -664,11 +625,9 @@
     
     <div class="toast-container" id="toasts"></div>
 
-    <script type="module">
-        import * as webllm from "https://esm.run/@mlc-ai/web-llm";
-        
+    <script>
         // =============================================
-        // DATOS
+        // DATOS DE MÁQUINAS
         // =============================================
         
         const MACHINES = [
@@ -683,137 +642,216 @@
         // Estado
         let currentMachine = null;
         let manualText = '';
-        let chatHistory = [];
+        let manualSections = [];
         let currentUser = null;
         let recognition = null;
         let isRecording = false;
-        let engine = null;
-        let aiMode = 'loading'; // loading, webllm, fallback, error
-        let useFallback = false;
         
         const $ = id => document.getElementById(id);
         
         // =============================================
-        // IA CON RESPALDO
+        // IA MEJORADA - SIN DESCARGAS
         // =============================================
         
-        async function initAI() {
-            const progress = $('loadingProgress');
-            const status = $('aiStatus');
-            const statusText = $('aiStatusText');
-            
-            // Intentar WebLLM
-            try {
-                progress.textContent = 'Descargando modelo ligero...';
-                
-                // Modelo MUY pequeño - Qwen2.5-0.5B (~300MB)
-                const modelId = "Qwen2.5-0.5B-Instruct-q4f16_1-MLC";
-                
-                engine = await webllm.CreateMLCEngine(modelId, {
-                    initProgressCallback: (p) => {
-                        const pct = Math.round(p.progress * 100);
-                        progress.textContent = `${p.text} ${pct}%`;
-                    }
-                });
-                
-                aiMode = 'webllm';
-                status.classList.add('ready');
-                status.classList.remove('error');
-                statusText.textContent = 'IA: Lista';
-                $('sendBtn').disabled = false;
-                $('aiLoading').classList.add('hidden');
-                
-                toast('IA cargada correctamente', 'success');
-                return true;
-                
-            } catch (err) {
-                console.warn('WebLLM fallo, usando respaldo:', err);
-                
-                // Usar modo respaldo
-                aiMode = 'fallback';
-                status.classList.add('ready');
-                status.classList.remove('error');
-                statusText.textContent = 'IA: Lista (modo rapido)';
-                $('sendBtn').disabled = false;
-                $('aiLoading').classList.add('hidden');
-                
-                toast('IA en modo rapido', 'success');
-                return true;
-            }
-        }
-        
-        async function generateResponse(question, context) {
-            // Si WebLLM disponible, usarlo
-            if (aiMode === 'webllm' && engine) {
-                try {
-                    const messages = [
-                        { role: 'system', content: `Eres un asistente tecnico de maquinas industriales. Responde en español, claro y conciso.\n\nMANUAL:\n${context.substring(0, 3000)}` },
-                        { role: 'user', content: question }
-                    ];
-                    
-                    const reply = await engine.chat.completions.create({
-                        messages,
-                        temperature: 0.7,
-                        max_tokens: 600
-                    });
-                    
-                    return reply.choices[0].message.content;
-                    
-                } catch (err) {
-                    console.warn('Error WebLLM, usando respaldo');
-                    return fallbackResponse(question, context);
-                }
-            }
-            
-            // Respaldo: busqueda mejorada
-            return fallbackResponse(question, context);
-        }
-        
-        function fallbackResponse(question, context) {
-            const q = question.toLowerCase();
-            const lines = context.split('\n').filter(l => l.trim().length > 15);
-            
-            // Detectar tipo
-            let type = 'general';
-            if (/especificacion|parametro|caracteristica|dato|potencia|amper|volt/i.test(q)) type = 'specs';
-            if (/arranque|inicio|encender|puesta/i.test(q)) type = 'start';
-            if (/mantenimiento|limpiar|revision|aceite/i.test(q)) type = 'maint';
-            if (/seguridad|proteccion|peligro|epi/i.test(q)) type = 'safety';
-            
-            // Buscar
-            const qWords = q.split(/\s+/).filter(w => w.length > 2);
-            const matches = [];
+        function parseManual(text) {
+            const sections = [];
+            const lines = text.split('\n');
+            let currentSection = null;
+            let currentContent = [];
             
             for (const line of lines) {
-                const lower = line.toLowerCase();
-                let score = 0;
+                const trimmed = line.trim();
                 
-                // Bonus por tipo
-                if (type === 'specs' && /especificacion|parametro|dato|medida|rango|valor/i.test(line)) score += 3;
-                if (type === 'start' && /arranque|inicio|puesta|encendido/i.test(line)) score += 3;
-                if (type === 'maint' && /mantenimiento|limpieza|revision|lubricacion/i.test(line)) score += 3;
-                if (type === 'safety' && /seguridad|proteccion|peligro|advertencia/i.test(line)) score += 3;
-                
-                // Palabras clave
-                for (const w of qWords) {
-                    if (lower.includes(w)) score += 2;
+                // Detectar títulos (líneas cortas, mayúsculas, o con :)
+                if (trimmed.length > 3 && trimmed.length < 80) {
+                    const isTitle = /^[A-ZÁÉÍÓÚÑ0-9\s\:\-\.]+$/.test(trimmed) || 
+                                   trimmed.endsWith(':') ||
+                                   (trimmed === trimmed.toUpperCase() && trimmed.length > 5);
+                    
+                    if (isTitle && !/^\d+$/.test(trimmed)) {
+                        // Guardar sección anterior
+                        if (currentSection && currentContent.length > 0) {
+                            sections.push({
+                                title: currentSection,
+                                content: currentContent.join('\n').trim()
+                            });
+                        }
+                        currentSection = trimmed.replace(/[:]+$/, '').trim();
+                        currentContent = [];
+                        continue;
+                    }
                 }
                 
-                if (lower.includes(q)) score += 5;
+                if (trimmed.length > 5) {
+                    currentContent.push(trimmed);
+                }
+            }
+            
+            // Última sección
+            if (currentSection && currentContent.length > 0) {
+                sections.push({
+                    title: currentSection,
+                    content: currentContent.join('\n').trim()
+                });
+            }
+            
+            return sections;
+        }
+        
+        function detectIntent(question) {
+            const q = question.toLowerCase();
+            
+            const intents = {
+                specs: {
+                    keywords: ['especificacion', 'parametro', 'caracteristica', 'dato', 'potencia', 'amper', 'volt', 'voltaje', 'medida', 'rango', 'capacidad', 'dimension', 'peso', 'modelo'],
+                    sections: ['especificacion', 'parametro', 'caracteristica', 'dato tecnico', 'ficha tecnica']
+                },
+                start: {
+                    keywords: ['arranque', 'inicio', 'encender', 'puesta', 'marcha', 'empezar', 'funcionar', 'operar'],
+                    sections: ['arranque', 'inicio', 'puesta en marcha', 'operacion', 'instruccione', 'procedimiento']
+                },
+                maint: {
+                    keywords: ['mantenimiento', 'limpiar', 'limpieza', 'revision', 'aceite', 'lubricar', 'cambiar', 'ajustar', 'conservar'],
+                    sections: ['mantenimiento', 'limpieza', 'revision', 'conservacion', 'cuidado']
+                },
+                safety: {
+                    keywords: ['seguridad', 'proteccion', 'peligro', 'cuidado', 'precaucion', 'epi', 'riesgo', 'advertencia', 'norma'],
+                    sections: ['seguridad', 'proteccion', 'peligro', 'advertencia', 'precaucion', 'norma']
+                },
+                trouble: {
+                    keywords: ['problema', 'averia', 'falla', 'error', 'no funciona', 'averia', 'defecto', 'reparar'],
+                    sections: ['problema', 'averia', 'falla', 'defecto', 'solucion', 'reparacion']
+                }
+            };
+            
+            let bestMatch = { intent: 'general', score: 0 };
+            
+            for (const [intent, data] of Object.entries(intents)) {
+                let score = 0;
                 
-                if (score > 0) matches.push({ line, score });
+                for (const kw of data.keywords) {
+                    if (q.includes(kw)) score += 2;
+                }
+                
+                if (score > bestMatch.score) {
+                    bestMatch = { intent, score };
+                }
             }
             
-            if (matches.length === 0) {
-                return `No encontre informacion especifica sobre "${question}". Intenta con otras palabras o consulta el manual en la pestana PDF.`;
+            return bestMatch.intent;
+        }
+        
+        function findRelevantSections(question, sections) {
+            const intent = detectIntent(question);
+            const q = question.toLowerCase();
+            const qWords = q.split(/\s+/).filter(w => w.length > 2);
+            
+            const intentKeywords = {
+                specs: ['especificacion', 'parametro', 'caracteristica', 'dato', 'amper', 'volt', 'potencia'],
+                start: ['arranque', 'inicio', 'puesta', 'marcha', 'operacion', 'instruccion'],
+                maint: ['mantenimiento', 'limpieza', 'revision', 'lubricacion', 'aceite'],
+                safety: ['seguridad', 'proteccion', 'peligro', 'advertencia', 'precaucion'],
+                trouble: ['problema', 'averia', 'falla', 'error', 'solucion']
+            };
+            
+            const scored = sections.map(section => {
+                let score = 0;
+                const titleLower = section.title.toLowerCase();
+                const contentLower = section.content.toLowerCase();
+                
+                // Bonus por intención
+                if (intentKeywords[intent]) {
+                    for (const kw of intentKeywords[intent]) {
+                        if (titleLower.includes(kw)) score += 15;
+                        if (contentLower.includes(kw)) score += 5;
+                    }
+                }
+                
+                // Palabras de la pregunta
+                for (const word of qWords) {
+                    if (titleLower.includes(word)) score += 10;
+                    if (contentLower.includes(word)) score += 3;
+                }
+                
+                // Frase exacta
+                if (contentLower.includes(q)) score += 20;
+                
+                return { ...section, score };
+            });
+            
+            return scored
+                .filter(s => s.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 3);
+        }
+        
+        function formatResponse(question, relevantSections) {
+            if (relevantSections.length === 0) {
+                return `<p>No he encontrado informacion especifica sobre "<strong>${question}</strong>" en el manual.</p>
+                <p>Te sugiero:</p>
+                <ul>
+                    <li>Reformular la pregunta con otras palabras</li>
+                    <li>Consultar el manual completo en la pestana PDF</li>
+                    <li>Preguntar sobre: especificaciones, arranque, mantenimiento o seguridad</li>
+                </ul>`;
             }
             
-            matches.sort((a, b) => b.score - a.score);
+            let response = '';
             
-            let response = matches.slice(0, 4).map(m => `• ${m.line.trim()}`).join('<br><br>');
-            response += `<br><em>Fuente: Manual de ${currentMachine.name}</em>`;
+            // Título si hay sección clara
+            if (relevantSections[0].score >= 10) {
+                response += `<p><strong>${relevantSections[0].title}</strong></p>`;
+            }
+            
+            // Contenido principal
+            const mainContent = relevantSections[0].content;
+            
+            // Formatear el contenido
+            const lines = mainContent.split('\n').filter(l => l.trim());
+            
+            if (lines.length === 1) {
+                response += `<p>${lines[0]}</p>`;
+            } else {
+                // Detectar si es lista
+                const isList = lines.every(l => /^[-•*]\s|^\d+[.\)]\s/.test(l.trim()));
+                
+                if (isList) {
+                    response += '<ul>';
+                    for (const line of lines.slice(0, 6)) {
+                        const clean = line.replace(/^[-•*\d.\)]+\s*/, '');
+                        response += `<li>${clean}</li>`;
+                    }
+                    if (lines.length > 6) response += `<li>... y ${lines.length - 6} elementos mas</li>`;
+                    response += '</ul>';
+                } else {
+                    // Párrafos
+                    for (const line of lines.slice(0, 4)) {
+                        response += `<p>${line}</p>`;
+                    }
+                    if (lines.length > 4) {
+                        response += `<p><em>(Continua en el manual...)</em></p>`;
+                    }
+                }
+            }
+            
+            // Sección adicional si es relevante
+            if (relevantSections.length > 1 && relevantSections[1].score > relevantSections[0].score * 0.5) {
+                response += `<p><strong>Tambien relacionado:</strong></p>`;
+                response += `<p>${relevantSections[1].content.split('\n')[0]}</p>`;
+            }
+            
+            response += `<em>Extraido del manual de ${currentMachine.name}</em>`;
             
             return response;
+        }
+        
+        function generateAnswer(question) {
+            if (!manualText) {
+                return '<p>El manual no esta cargado. Verifica que el archivo TXT este disponible.</p>';
+            }
+            
+            const relevant = findRelevantSections(question, manualSections);
+            return formatResponse(question, relevant);
         }
         
         // =============================================
@@ -914,7 +952,7 @@
         }
         
         // =============================================
-        // ABRIR MAQUINA
+        // ABRIR MÁQUINA
         // =============================================
         
         async function openMachine(id) {
@@ -923,24 +961,13 @@
             
             $('modalTitle').textContent = currentMachine.name;
             $('chatInput').value = '';
-            chatHistory = [];
+            
             chatMsgs().innerHTML = '';
+            addMsg('ai', `Hola. Soy el asistente tecnico de <strong>${currentMachine.name}</strong>.<p>He analizado el manual y puedo responder tus consultas. ¿Que necesitas saber?</p>`);
             
-            addMsg('ai', `Hola. Soy el asistente de <strong>${currentMachine.name}</strong>. He cargado el manual. ¿Que necesitas saber?`);
-            
-            // Cargar manual
             await loadManual(currentMachine.txt);
             showPDF(currentMachine.pdf);
             openModal('machineModal');
-            
-            // Iniciar IA si no esta lista
-            if (aiMode === 'loading') {
-                $('aiLoading').classList.remove('hidden');
-                await initAI();
-            } else {
-                $('aiStatus').classList.add('ready');
-                $('sendBtn').disabled = false;
-            }
         }
         
         function showPDF(pdfFile) {
@@ -952,9 +979,18 @@
             try {
                 const base = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
                 const res = await fetch(`${base}/${txtFile}`);
+                
+                if (!res.ok) throw new Error('No encontrado');
+                
                 manualText = await res.text();
-            } catch {
+                manualSections = parseManual(manualText);
+                
+                console.log(`Manual: ${manualText.length} chars, ${manualSections.length} secciones`);
+                
+            } catch (err) {
+                console.error('Error cargando manual:', err);
                 manualText = 'Manual no disponible.';
+                manualSections = [];
             }
         }
         
@@ -972,18 +1008,17 @@
             chatMsgs().scrollTop = chatMsgs().scrollHeight;
         }
         
-        async function send() {
+        function send() {
             const q = $('chatInput').value.trim();
             if (!q || !currentMachine) return;
             
             addMsg('user', q);
             $('chatInput').value = '';
-            $('sendBtn').disabled = true;
             
-            const answer = await generateResponse(q, manualText);
-            addMsg('ai', answer.replace(/\n/g, '<br>'));
-            
-            $('sendBtn').disabled = false;
+            setTimeout(() => {
+                const answer = generateAnswer(q);
+                addMsg('ai', answer);
+            }, 200);
         }
         
         window.ask = function(q) { $('chatInput').value = q; send(); };
