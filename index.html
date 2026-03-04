@@ -43,7 +43,6 @@
         
         .app { position: relative; z-index: 1; }
         
-        /* HEADER */
         .header {
             padding: 1rem;
             display: flex;
@@ -70,14 +69,11 @@
         }
         
         .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        
         .btn-primary { background: var(--primary); color: white; }
         .btn-accent { background: var(--accent); color: white; }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
         
-        /* MAQUINAS */
-        .machines-section {
-            padding: 1rem;
-        }
+        .machines-section { padding: 1rem; }
         
         .section-title {
             font-family: 'Space Grotesk', sans-serif;
@@ -233,7 +229,7 @@
         .chat-box {
             display: flex;
             flex-direction: column;
-            height: 400px;
+            height: 420px;
         }
         
         .chat-messages {
@@ -279,7 +275,6 @@
         .msg-bubble strong { color: var(--accent); }
         .msg.user .msg-bubble strong { color: #fef3c7; }
         
-        /* INPUT GRANDE Y VISIBLE */
         .chat-input-box {
             padding: 1rem;
             background: white;
@@ -324,10 +319,7 @@
             transform: scale(1.05);
         }
         
-        .chat-send:active {
-            transform: scale(0.95);
-        }
-        
+        .chat-send:active { transform: scale(0.95); }
         .chat-send svg { width: 24px; height: 24px; }
         
         .chat-voice {
@@ -344,10 +336,7 @@
             transition: all 0.2s;
         }
         
-        .chat-voice:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
+        .chat-voice:hover { border-color: var(--accent); color: var(--accent); }
         
         .chat-voice.recording {
             background: var(--error);
@@ -361,7 +350,6 @@
             50% { transform: scale(1.05); }
         }
         
-        /* QUICK BUTTONS */
         .quick-btns {
             display: flex;
             flex-wrap: wrap;
@@ -385,7 +373,6 @@
             color: white;
         }
         
-        /* INSTRUCTIONS */
         .instructions {
             background: #fef3c7;
             border: 1px solid #fcd34d;
@@ -396,7 +383,6 @@
             color: #92400e;
         }
         
-        /* TABS */
         .tabs {
             display: flex;
             border-bottom: 1px solid var(--border);
@@ -422,14 +408,20 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        /* EMPTY */
-        .empty {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text2);
+        .empty { text-align: center; padding: 2rem; color: var(--text2); }
+        
+        .manual-text {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
         }
         
-        /* TOAST */
         .toast-container {
             position: fixed;
             bottom: 1rem;
@@ -489,7 +481,7 @@
             <div class="modal-body">
                 <div id="chatTab" class="tab-content active">
                     <div class="instructions">
-                        <strong>Como usar:</strong> Escribe tu pregunta abajo y pulsa el boton azul con la flecha.
+                        <strong>Como usar:</strong> Escribe tu pregunta y pulsa ENVIAR (boton azul).
                     </div>
                     
                     <div class="chat-box">
@@ -558,16 +550,281 @@
 
     <script>
         // =============================================
-        // DATOS
+        // MAQUINAS CON MANUALES PRECARGADOS
         // =============================================
         
         const MACHINES = [
-            { id: 'rustler', name: 'Rustler EM', model: 'EM', brand: 'ESAB', cat: 'soldadura', img: 'rustler.jpg', hasManual: false },
-            { id: 'buddy', name: 'Buddy ARC 180', model: 'ARC 180', brand: 'ESAB', cat: 'soldadura', img: 'buddy.jpg', hasManual: false },
-            { id: 'buddytig', name: 'Buddy TIG 160', model: 'TIG 160', brand: 'ESAB', cat: 'soldadura', img: 'buddytig.jpg', hasManual: false },
-            { id: 'sierra', name: 'Sierra de Cinta', model: 'FAT 280', brand: 'FAT', cat: 'corte', img: 'FAT280.jpg', hasManual: false },
-            { id: 'curvadora', name: 'Curvadora', model: 'RBM 1050-22', brand: 'RBM', cat: 'conformado', img: 'RBMCURVADORA.jpg', hasManual: false },
-            { id: 'biseladora', name: 'Biseladora', model: 'KRBS 101', brand: 'KRBS', cat: 'corte', img: 'biseladoratubos.jpg', hasManual: false }
+            {
+                id: 'rustler',
+                name: 'Rustler EM',
+                model: 'EM',
+                brand: 'ESAB',
+                cat: 'soldadura',
+                img: 'rustler.jpg',
+                manual: `MAQUINA DE SOLDAR RUSTLER EM - ESAB
+
+ESPECIFICACIONES TECNICAS
+- Tipo: Soldadora MIG/MAG semiautomatica
+- Rango de corriente: 30-350 A
+- Factor de marcha: 60% a 350A
+- Tension en vacio: 48V
+- Diametro de hilo: 0.6 - 1.2 mm
+- Alimentacion: 400V trifasica
+- Velocidad de hilo: 1.5 - 18 m/min
+- Peso: 85 kg
+
+PROCEDIMIENTO DE ARRANQUE
+1. Verificar conexion de gas protector (Ar o mezcla)
+2. Comprobar que el carrete de hilo esta cargado
+3. Ajustar tension del rodillo de arrastre
+4. Seleccionar tipo de material y espesor
+5. Ajustar voltaje y velocidad de hilo
+6. Purgar gas antes de soldar (2-3 segundos)
+7. Probar en chapa de desecho
+
+PARAMETROS RECOMENDADOS
+- Acero suave 1mm: 80-100A, 17-18V
+- Acero suave 3mm: 140-160A, 20-21V
+- Acero suave 6mm: 200-240A, 24-26V
+
+MANTENIMIENTO
+- Diario: Limpiar boquilla y difusor
+- Diario: Verificar estado de la punta de contacto
+- Semanal: Limpiar conducto de hilo con aire
+- Mensual: Comprobar rodillos de arrastre
+- Trimestral: Limpiar interior de la maquina
+
+SEGURIDAD
+- USO OBLIGATORIO de mascara de soldar
+- Guantes de cuero para soldador
+- Mandil y polainas
+- Proteccion respiratoria en espacios cerrados
+- NUNCA mirar el arco sin proteccion
+- Ventilacion adecuada del area`
+            },
+            {
+                id: 'buddy',
+                name: 'Buddy ARC 180',
+                model: 'ARC 180',
+                brand: 'ESAB',
+                cat: 'soldadura',
+                img: 'buddy.jpg',
+                manual: `SOLDADORA POR ELECTRODO BUDDY ARC 180 - ESAB
+
+ESPECIFICACIONES TECNICAS
+- Tipo: Soldadora MMA (electrodo revestido)
+- Rango de corriente: 10-180 A
+- Factor de marcha: 60% a 180A
+- Tension en vacio: 65V
+- Diametro de electrodo: 1.6 - 4.0 mm
+- Alimentacion: 230V monofasica
+- Peso: 6.5 kg
+- Clase de aislamiento: H
+
+TABLA DE PARAMETROS
+- Electrodo 2.0 mm: 40-70 A
+- Electrodo 2.5 mm: 50-90 A
+- Electrodo 3.2 mm: 80-130 A
+- Electrodo 4.0 mm: 110-160 A
+
+PROCEDIMIENTO DE ARRANQUE
+1. Verificar cables en buen estado
+2. Conectar pinza de masa cerca de la zona de soldadura
+3. Seleccionar electrodo adecuado
+4. Ajustar corriente segun diametro
+5. Probar en material similar
+
+MANTENIMIENTO
+- Diario: Revisar cables y conexiones
+- Semanal: Limpiar bornes
+- Mensual: Comprobar aislamiento
+- Anual: Revision tecnica
+
+SEGURIDAD
+- NUNCA soldar en ambientes humedos
+- Gafas/mascara con filtro minimo DIN 10
+- Guantes de cuero secos
+- Ropa de algodon
+- Electrodos guardar en lugar seco`
+            },
+            {
+                id: 'buddytig',
+                name: 'Buddy TIG 160',
+                model: 'TIG 160',
+                brand: 'ESAB',
+                cat: 'soldadura',
+                img: 'buddytig.jpg',
+                manual: `SOLDADORA TIG DC BUDDY TIG 160 - ESAB
+
+ESPECIFICACIONES TECNICAS
+- Tipo: Soldadora TIG DC
+- Rango de corriente: 5-160 A
+- Factor de marcha: 60% a 160A
+- Tension en vacio: 65V
+- Corriente de alta frecuencia: Si, HF start
+- Alimentacion: 230V monofasica
+- Peso: 8 kg
+- Gas: Argon 100%
+
+PROCEDIMIENTO DE ARRANQUE
+1. Verificar conexion del gas argon (6-12 l/min)
+2. Instalar antorcha TIG correcta
+3. Afilar electrodo de tungsteno (punta conica 30-45 grados)
+4. Seleccionar diametro de electrodo segun corriente
+5. Ajustar corriente segun espesor
+6. Activar alta frecuencia para inicio sin contacto
+
+ELECTRODOS DE TUNGSTENO
+- Punto rojo (Torio): Acero al carbono
+- Punto verde (Puro): Aluminio (no recomendado para DC)
+- Punto dorado (Lantano): Uso general
+
+MANTENIMIENTO
+- Diario: Limpiar boquilla de ceramica
+- Verificar estado del electrodo
+- Semanal: Revisar mangueras de gas
+
+SEGURIDAD
+- Filtro minimo DIN 10-12
+- El tungsteno es toxico: no inhalar polvo al afilar
+- Ventilacion por humos metalicos
+- Cuidado con quemaduras`
+            },
+            {
+                id: 'sierra',
+                name: 'Sierra de Cinta',
+                model: 'FAT 280',
+                brand: 'FAT',
+                cat: 'corte',
+                img: 'FAT280.jpg',
+                manual: `SIERRA DE CINTA FAT 280M ECO
+
+ESPECIFICACIONES TECNICAS
+- Capacidad de corte redondo: 280 mm
+- Capacidad de corte cuadrado: 280x280 mm
+- Velocidad de cinta: 40/60/80 m/min
+- Potencia del motor: 1.1 kW
+- Tension: 400V trifasica
+- Dimensiones: 1400 x 700 x 1200 mm
+- Peso: 280 kg
+- Sistema de refrigeracion: Incluido
+
+PROCEDIMIENTO DE ARRANQUE
+1. Verificar cinta correctamente tensada
+2. Comprobar estado de rodillos guia
+3. Revisar nivel de refrigerante
+4. Encender motor con interruptor principal
+5. Seleccionar velocidad segun material
+6. Esperar a velocidad nominal
+7. Aplicar presion constante
+
+VELOCIDADES SEGUN MATERIAL
+- Acero suave: 60-80 m/min
+- Acero inoxidable: 40-50 m/min
+- Aluminio: 80 m/min
+- Fundicion: 40-50 m/min
+
+MANTENIMIENTO
+- Diario: Limpiar virutas
+- Diario: Verificar nivel de refrigerante
+- Semanal: Comprobar tension de cinta
+- Mensual: Revisar estado de dientes
+- Trimestral: Cambiar aceite reductor
+
+SEGURIDAD
+- Gafas de seguridad obligatorias
+- Guantes contra cortes
+- No operar con manos cerca de cinta
+- Mantener protecciones instaladas
+- Asegurar pieza con mordazas`
+            },
+            {
+                id: 'curvadora',
+                name: 'Curvadora de Rodillos',
+                model: 'RBM 1050-22',
+                brand: 'RBM',
+                cat: 'conformado',
+                img: 'RBMCURVADORA.jpg',
+                manual: `CURVADORA DE RODILLOS RBM 1050-22
+
+ESPECIFICACIONES TECNICAS
+- Ancho de trabajo: 1050 mm
+- Espesor maximo acero: 22 mm
+- Diametro minimo de cilindro: 450 mm
+- Diametro de rodillos: 180 mm
+- Velocidad de avance: 4.5 m/min
+- Potencia: 5.5 kW
+- Alimentacion: 400V trifasica
+- Peso: 1800 kg
+
+PROCEDIMIENTO DE ARRANQUE
+1. Verificar rodillos limpios
+2. Ajustar posicion del rodillo superior
+3. Introducir chapa entre rodillos
+4. Encender motor de avance
+5. Pasar chapa aumentando presion gradualmente
+6. Verificar curvatura con plantilla
+
+CALCULO DE PASADAS
+- Radio grande: 3-4 pasadas con incrementos pequenos
+- Radio medio: 4-6 pasadas
+- Radio pequeno: 6-8 pasadas con incrementos minimos
+
+MANTENIMIENTO
+- Diario: Limpiar rodillos
+- Semanal: Lubricar cojinetes
+- Mensual: Comprobar alineacion
+- Trimestral: Revisar sistema hidraulico
+
+SEGURIDAD
+- No tocar rodillos en movimiento
+- Manos alejadas de puntos de pellizco
+- No llevar ropa suelta
+- Parada emergencia accesible`
+            },
+            {
+                id: 'biseladora',
+                name: 'Biseladora de Tubos',
+                model: 'KRBS 101',
+                brand: 'KRBS',
+                cat: 'corte',
+                img: 'biseladoratubos.jpg',
+                manual: `BISELADORA DE TUBOS KRBS 101
+
+ESPECIFICACIONES TECNICAS
+- Diametro de tubo: 20-101 mm
+- Espesor maximo: 8 mm
+- Angulo de bisel: 0-45 grados
+- Velocidad de giro: 2800 RPM
+- Potencia: 1.5 kW
+- Alimentacion: 230V monofasica
+- Peso: 35 kg
+
+PROCEDIMIENTO DE ARRANQUE
+1. Fijar tubo en soporte
+2. Ajustar angulo de bisel
+3. Seleccionar velocidad de avance
+4. Encender maquina
+5. Acercar herramienta gradualmente
+6. Realizar biselado en pasadas sucesivas
+
+TIPOS DE BISEL
+- Bisel en V: Para uniones a tope
+- Bisel en J: Para espesores gruesos
+- Bisel simple: 30-45 grados tipico
+
+MANTENIMIENTO
+- Diario: Limpiar residuos
+- Semanal: Lubricar partes moviles
+- Mensual: Verificar estado de fresas
+- Trimestral: Ajustar correas
+
+SEGURIDAD
+- Gafas de seguridad
+- No tocar zona de corte
+- Asegurar pieza correctamente
+- Desconectar antes de ajustes`
+            }
         ];
         
         let currentMachine = null;
@@ -579,24 +836,17 @@
         // INICIO
         // =============================================
         
-        // Cargar sesión
         const saved = localStorage.getItem('tallerUser');
         if (saved) {
             currentUser = JSON.parse(saved);
             updateLoginBtn();
         }
         
-        // Renderizar máquinas
         renderMachines();
-        
-        // Configurar voz
         setupVoice();
         
-        // Evento Enter en input
         document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+            if (e.key === 'Enter') sendMessage();
         });
         
         // =============================================
@@ -616,8 +866,8 @@
                         <div class="machine-name">${m.name}</div>
                         <div class="machine-model">${m.model} - ${m.brand}</div>
                         <div class="machine-status">
-                            <span class="status-dot ${m.hasManual ? 'yes' : 'no'}"></span>
-                            ${m.hasManual ? 'Con manual' : 'Sin manual'}
+                            <span class="status-dot yes"></span>
+                            Con manual
                         </div>
                     </div>
                 </div>
@@ -633,8 +883,6 @@
             
             resetChat();
             renderManual();
-            
-            // Mostrar tab chat
             showTab('chat');
             
             document.getElementById('machineModal').classList.add('active');
@@ -647,12 +895,10 @@
         function showTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
             document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
             document.getElementById(tab + 'Tab').classList.add('active');
         }
         
-        // Tabs
         document.querySelectorAll('.tab').forEach(t => {
             t.addEventListener('click', () => showTab(t.dataset.tab));
         });
@@ -670,28 +916,22 @@
                     </div>
                     <div class="msg-bubble">
                         Soy el asistente de <strong>${name}</strong>.<br>
-                        Preguntame lo que necesites saber.
+                        Tengo el manual cargado. Preguntame lo que necesites.
                     </div>
                 </div>`;
         }
         
         function renderManual() {
             const el = document.getElementById('manualContent');
-            
-            if (!currentMachine.hasManual) {
-                el.innerHTML = `
-                    <div class="empty">
-                        <p>Sin manual cargado</p>
-                        ${currentUser?.role === 'teacher' ? `<button class="btn btn-primary" style="margin-top:1rem;" onclick="alert('Funcion de subida disponible para profesores')">Subir manual</button>` : ''}
-                    </div>`;
-                return;
+            if (currentMachine && currentMachine.manual) {
+                el.innerHTML = `<div class="manual-text">${currentMachine.manual}</div>`;
+            } else {
+                el.innerHTML = '<div class="empty">Sin manual</div>';
             }
-            
-            el.innerHTML = '<p>Manual cargado</p>';
         }
         
         // =============================================
-        // CHAT - FUNCIONA SIEMPRE
+        // CHAT
         // =============================================
         
         function sendMessage() {
@@ -708,15 +948,13 @@
                 return;
             }
             
-            // Añadir mensaje usuario
             addMessage('user', question);
             input.value = '';
             
-            // Generar respuesta
             setTimeout(() => {
                 const answer = generateAnswer(question);
                 addMessage('ai', answer);
-            }, 400);
+            }, 300);
         }
         
         function addMessage(type, text) {
@@ -739,94 +977,37 @@
         
         function generateAnswer(q) {
             const question = q.toLowerCase();
-            const m = currentMachine;
+            const manual = currentMachine.manual;
             
-            // Soldadura
-            if (m.cat === 'soldadura') {
-                if (question.includes('especificacion') || question.includes('parametro') || question.includes('caracteristica')) {
-                    return `<strong>Especificaciones para ${m.name}:</strong><br>
-                    - Marca: ${m.brand}<br>
-                    - Modelo: ${m.model}<br>
-                    - Tipo: Maquina de soldar<br>
-                    - Rango tipico: 20-200A<br>
-                    - Tension: 230V monofasica<br>
-                    <br><em>Carga el manual para datos exactos.</em>`;
+            if (!manual) {
+                return 'No tengo manual cargado para esta maquina.';
+            }
+            
+            // Buscar en el manual
+            const lines = manual.split('\n').filter(l => l.trim().length > 10);
+            const keywords = question.split(/\s+/).filter(w => w.length > 2);
+            
+            const matches = [];
+            
+            for (const line of lines) {
+                const lower = line.toLowerCase();
+                let score = 0;
+                for (const kw of keywords) {
+                    if (lower.includes(kw)) score++;
                 }
-                
-                if (question.includes('arranque') || question.includes('inicio') || question.includes('encender')) {
-                    return `<strong>Procedimiento de arranque:</strong><br>
-                    1. Verificar conexiones electricas<br>
-                    2. Comprobar estado de cables y pinza<br>
-                    3. Ajustar amperaje segun trabajo<br>
-                    4. Usar proteccion visual obligatoria<br>
-                    5. Probar en material de desecho`;
-                }
-                
-                if (question.includes('mantenimiento') || question.includes('limpiar')) {
-                    return `<strong>Mantenimiento:</strong><br>
-                    - Diario: Limpiar boquilla<br>
-                    - Semanal: Revisar cables<br>
-                    - Mensual: Comprobar aislamiento<br>
-                    - Anual: Revision tecnica`;
-                }
-                
-                if (question.includes('seguridad') || question.includes('peligro') || question.includes('proteccion')) {
-                    return `<strong>Medidas de seguridad:</strong><br>
-                    - MASCARA de soldar obligatoria<br>
-                    - Guantes y ropa ignifuga<br>
-                    - Ventilacion adecuada<br>
-                    - NUNCA mirar el arco sin proteccion<br>
-                    - No soldar con manos mojadas`;
+                if (score > 0) {
+                    matches.push({ line, score });
                 }
             }
             
-            // Corte
-            if (m.cat === 'corte') {
-                if (question.includes('especificacion') || question.includes('capacidad')) {
-                    return `<strong>Capacidades:</strong><br>
-                    - Maquina: ${m.name}<br>
-                    - Marca: ${m.brand}<br>
-                    - Tipo: Maquina de corte<br>
-                    <em>Ver manual para capacidades exactas.</em>`;
-                }
-                
-                if (question.includes('mantenimiento')) {
-                    return `<strong>Mantenimiento:</strong><br>
-                    - Limpiar virutas diario<br>
-                    - Verificar hoja/cuchilla<br>
-                    - Lubricar guias semanales`;
-                }
-                
-                if (question.includes('seguridad')) {
-                    return `<strong>Seguridad:</strong><br>
-                    - Gafas de seguridad obligatorias<br>
-                    - Guantes de proteccion<br>
-                    - No operar sin protecciones`;
-                }
+            if (matches.length > 0) {
+                matches.sort((a, b) => b.score - a.score);
+                const top = matches.slice(0, 5);
+                return `<strong>Encontre esto:</strong><br><br>${top.map(m => m.line).join('<br><br>')}`;
             }
             
-            // Conformado
-            if (m.cat === 'conformado') {
-                if (question.includes('especificacion') || question.includes('capacidad')) {
-                    return `<strong>Informacion:</strong><br>
-                    - Maquina: ${m.name}<br>
-                    - Marca: ${m.brand}<br>
-                    - Tipo: Maquina de conformado<br>
-                    <em>Carga el manual para detalles.</em>`;
-                }
-                
-                if (question.includes('mantenimiento')) {
-                    return `<strong>Mantenimiento:</strong><br>
-                    - Limpiar rodillos<br>
-                    - Lubricar partes moviles<br>
-                    - Verificar desgastes`;
-                }
-            }
-            
-            // Respuesta por defecto
-            return `No tengo informacion especifica sobre "${q}" para ${m.name}.<br><br>
-            Prueba con: especificaciones, arranque, mantenimiento o seguridad.<br>
-            O carga el manual para mejores respuestas.`;
+            return `No encontre informacion especifica sobre "${q}". Prueba con otras palabras.<br><br>
+            Puedes ver el manual completo en la pestana "Manual".`;
         }
         
         function quickQuestion(topic) {
@@ -839,10 +1020,9 @@
         // =============================================
         
         function setupVoice() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
-            if (SpeechRecognition) {
-                recognition = new SpeechRecognition();
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SR) {
+                recognition = new SR();
                 recognition.lang = 'es-ES';
                 recognition.continuous = false;
                 
@@ -852,11 +1032,7 @@
                     sendMessage();
                 };
                 
-                recognition.onerror = function() {
-                    stopVoice();
-                };
-                
-                recognition.onend = function() {
+                recognition.onerror = recognition.onend = function() {
                     stopVoice();
                 };
             }
@@ -905,7 +1081,7 @@
         }
         
         function login(role) {
-            currentUser = { role: role };
+            currentUser = { role };
             localStorage.setItem('tallerUser', JSON.stringify(currentUser));
             updateLoginBtn();
             closeLoginModal();
@@ -917,8 +1093,7 @@
         }
         
         function verifyCode() {
-            const code = document.getElementById('codeInputField').value;
-            if (code === 'TALLER2024') {
+            if (document.getElementById('codeInputField').value === 'TALLER2024') {
                 login('teacher');
             } else {
                 showToast('Codigo incorrecto', 'error');
@@ -927,16 +1102,8 @@
         
         function updateLoginBtn() {
             const btn = document.getElementById('loginBtn');
-            if (currentUser) {
-                btn.textContent = currentUser.role === 'teacher' ? 'Profesor' : 'Alumno';
-            } else {
-                btn.textContent = 'Entrar';
-            }
+            btn.textContent = currentUser ? (currentUser.role === 'teacher' ? 'Profesor' : 'Alumno') : 'Entrar';
         }
-        
-        // =============================================
-        // TOAST
-        // =============================================
         
         function showToast(msg, type) {
             const container = document.getElementById('toastContainer');
