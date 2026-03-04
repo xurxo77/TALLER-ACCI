@@ -134,7 +134,7 @@
         <header class="header">
             <div class="header-brand">
                 <div class="header-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
-                <div><h1>Taller IES ACCI</h1><span>Asistente IA</span></div>
+                <div><h1>Taller IES ACCI</h1><span>Asistente IA con PDF</span></div>
             </div>
             <button class="btn" id="loginBtn">Entrar</button>
         </header>
@@ -171,7 +171,7 @@
                         <div class="chat-messages" id="msgs"></div>
                         <div class="chat-input-box">
                             <div class="quick-btns">
-                                <button class="quick-btn" onclick="ask('Especificaciones tecnicas')">Especificaciones</button>
+                                <button class="quick-btn" onclick="ask('Cuales son las especificaciones tecnicas?')">Especificaciones</button>
                                 <button class="quick-btn" onclick="ask('Como se pone en marcha?')">Arranque</button>
                                 <button class="quick-btn" onclick="ask('Que mantenimiento necesita?')">Mantenimiento</button>
                                 <button class="quick-btn" onclick="ask('Que medidas de seguridad debo tomar?')">Seguridad</button>
@@ -216,17 +216,17 @@
 
     <script>
         const MACHINES = [
-            {id:'rustler',name:'Rustler EM',model:'EM',brand:'ESAB',cat:'soldadura',img:'rustler.jpg',pdf:'rustler.pdf',txt:'rustler.txt'},
-            {id:'buddy',name:'Buddy ARC 180',model:'ARC 180',brand:'ESAB',cat:'soldadura',img:'buddy.jpg',pdf:'buddy.pdf',txt:'buddy.txt'},
-            {id:'buddytig',name:'Buddy TIG 160',model:'TIG 160',brand:'ESAB',cat:'soldadura',img:'buddytig.jpg',pdf:'buddytig.pdf',txt:'buddytig.txt'},
-            {id:'sierra',name:'Sierra de Cinta',model:'FAT 280',brand:'FAT',cat:'corte',img:'FAT280.jpg',pdf:'FAT280.pdf',txt:'FAT280.txt'},
-            {id:'curvadora',name:'Curvadora',model:'RBM 1050-22',brand:'RBM',cat:'conformado',img:'RBMCURVADORA.jpg',pdf:'RBMCURVADORA.pdf',txt:'RBMCURVADORA.txt'},
-            {id:'biseladora',name:'Biseladora',model:'KRBS 101',brand:'KRBS',cat:'corte',img:'biseladoratubos.jpg',pdf:'biseladoratubos.pdf',txt:'biseladoratubos.txt'}
+            {id:'rustler',name:'Rustler EM',model:'EM',brand:'ESAB',cat:'soldadura',img:'rustler.jpg',pdf:'rustler.pdf'},
+            {id:'buddy',name:'Buddy ARC 180',model:'ARC 180',brand:'ESAB',cat:'soldadura',img:'buddy.jpg',pdf:'buddy.pdf'},
+            {id:'buddytig',name:'Buddy TIG 160',model:'TIG 160',brand:'ESAB',cat:'soldadura',img:'buddytig.jpg',pdf:'buddytig.pdf'},
+            {id:'sierra',name:'Sierra de Cinta',model:'FAT 280',brand:'FAT',cat:'corte',img:'FAT280.jpg',pdf:'FAT280.pdf'},
+            {id:'curvadora',name:'Curvadora',model:'RBM 1050-22',brand:'RBM',cat:'conformado',img:'RBMCURVADORA.jpg',pdf:'RBMCURVADORA.pdf'},
+            {id:'biseladora',name:'Biseladora',model:'KRBS 101',brand:'KRBS',cat:'corte',img:'biseladoratubos.jpg',pdf:'biseladoratubos.pdf'}
         ];
 
         const $ = id => document.getElementById(id);
         
-        let machine = null, manualText = '', currentUser = null, recognition = null, recActive = false;
+        let machine = null, pdfBase64 = null, currentUser = null, recognition = null, recActive = false;
 
         const s = localStorage.getItem('tallerUser');
         if (s) { currentUser = JSON.parse(s); $('loginBtn').textContent = currentUser.role === 'teacher' ? 'Profesor' : 'Alumno'; }
@@ -265,7 +265,7 @@
             $('grid').innerHTML = list.map(m => `
                 <div class="card" onclick="openM('${m.id}')">
                     <div class="card-img"><img src="${m.img}" onerror="this.style.display='none'"><span class="card-badge badge-${m.cat}">${m.cat}</span></div>
-                    <div class="card-body"><div class="card-name">${m.name}</div><div class="card-model">${m.model} - ${m.brand}</div><div class="card-status"><span class="status-dot"></span>Manual listo</div></div>
+                    <div class="card-body"><div class="card-name">${m.name}</div><div class="card-model">${m.model} - ${m.brand}</div><div class="card-status"><span class="status-dot"></span>PDF listo</div></div>
                 </div>
             `).join('');
         }
@@ -278,78 +278,97 @@
             $('title').textContent = machine.name;
             $('input').value = '';
             $('msgs').innerHTML = '';
-            addMsg('ai', `Hola. Soy el asistente tecnico de <strong>${machine.name}</strong>.<p>He analizado el manual. ¿Que necesitas saber?</p>`);
-            await loadManual(machine.txt);
+            addMsg('ai', `Hola. Soy el asistente tecnico de <strong>${machine.name}</strong>.<p>Estoy analizando el manual PDF. ¿Que necesitas saber?</p>`);
+            
+            // Cargar PDF
+            await loadPDF(machine.pdf);
+            
+            // Mostrar PDF
             $('pdf').innerHTML = `<embed src="${machine.pdf}" type="application/pdf" width="100%" height="100%">`;
             $('machineModal').classList.add('active');
         };
 
-        async function loadManual(f) {
+        // =============================================
+        // CARGAR PDF Y CONVERTIR A BASE64
+        // =============================================
+
+        async function loadPDF(pdfFile) {
             try {
+                addMsg('ai', '<em>Cargando manual PDF...</em>');
+                
                 const base = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
-                const r = await fetch(`${base}/${f}`);
-                manualText = await r.text();
-            } catch { manualText = ''; }
+                const response = await fetch(`${base}/${pdfFile}`);
+                
+                if (!response.ok) throw new Error('No se pudo cargar el PDF');
+                
+                const arrayBuffer = await response.arrayBuffer();
+                pdfBase64 = arrayBufferToBase64(arrayBuffer);
+                
+                console.log(`PDF cargado: ${pdfBase64.length} caracteres en base64`);
+                
+                // Quitar mensaje de carga
+                const msgs = $('msgs');
+                if (msgs.lastChild && msgs.lastChild.querySelector && msgs.lastChild.querySelector('em')) {
+                    msgs.removeChild(msgs.lastChild);
+                }
+                
+            } catch (error) {
+                console.error('Error cargando PDF:', error);
+                pdfBase64 = null;
+                addMsg('ai', '<em>No se pudo cargar el PDF. Verifica que el archivo existe.</em>');
+            }
+        }
+
+        function arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
         }
 
         // =============================================
-        // IA CON GEMINI
+        // CHAT CON GEMINI + PDF
         // =============================================
 
-        async function generateAnswer(question) {
-            if (!manualText) return '<p>El manual no esta cargado.</p>';
+        async function chat() {
+            const q = $('input').value.trim();
+            if (!q || !machine) return;
+            
+            addMsg('user', q);
+            $('input').value = '';
+            $('send').disabled = true;
+            
+            if (!pdfBase64) {
+                addMsg('ai', 'El PDF no se ha cargado correctamente. Cierra y vuelve a abrir la maquina.');
+                $('send').disabled = false;
+                return;
+            }
             
             try {
                 const response = await fetch('https://taller-acci-ducu.vercel.app/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        question: question,
-                        manual: manualText.substring(0, 8000),
-                        machineName: machine?.name || 'esta maquina'
+                        question: q,
+                        pdfBase64: pdfBase64,
+                        machineName: machine.name
                     })
                 });
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    return data.answer.replace(/\n/g, '<br>');
+                const data = await response.json();
+                
+                if (response.ok && data.answer) {
+                    addMsg('ai', data.answer.replace(/\n/g, '<br>'));
+                } else {
+                    addMsg('ai', 'Error: ' + (data.error || 'No se pudo procesar la consulta'));
                 }
             } catch (e) {
-                console.log('Gemini no disponible, usando respaldo');
+                console.error('Error:', e);
+                addMsg('ai', 'Error de conexion. Intenta de nuevo.');
             }
             
-            return fallbackAnswer(question);
-        }
-
-        function fallbackAnswer(question) {
-            const q = question.toLowerCase();
-            const lines = manualText.split('\n').filter(l => l.trim().length > 15);
-            const matches = [];
-            
-            for (const line of lines) {
-                let score = 0;
-                const lower = line.toLowerCase();
-                const words = q.split(/\s+/).filter(w => w.length > 2);
-                for (const w of words) if (lower.includes(w)) score += 2;
-                if (lower.includes(q)) score += 5;
-                if (score > 0) matches.push({ line, score });
-            }
-            
-            if (!matches.length) return '<p>No encontre informacion especifica. Intenta con otras palabras.</p>';
-            
-            matches.sort((a, b) => b.score - a.score);
-            return matches.slice(0, 3).map(m => `• ${m.line.trim()}`).join('<br>') + `<br><em>Manual de ${machine.name}</em>`;
-        }
-
-        async function chat() {
-            const q = $('input').value.trim();
-            if (!q || !machine) return;
-            addMsg('user', q);
-            $('input').value = '';
-            $('send').disabled = true;
-            
-            const answer = await generateAnswer(q);
-            addMsg('ai', answer);
             $('send').disabled = false;
         }
 
