@@ -8,12 +8,12 @@ export default async function handler(req, res) {
     
     const { question, pdfBase64, machineName } = req.body;
     
-    if (!question) return res.status(400).json({ error: 'Question required' });
-    if (!pdfBase64) return res.status(400).json({ error: 'PDF required' });
+    if (!question) return res.status(400).json({ error: 'Pregunta requerida' });
+    if (!pdfBase64) return res.status(400).json({ error: 'PDF requerido' });
     
     try {
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -27,13 +27,13 @@ export default async function handler(req, res) {
                                 }
                             },
                             {
-                                text: `Eres un experto tecnico en maquinaria industrial. Analiza el manual PDF y responde en español de forma clara y natural.
+                                text: `Eres un experto técnico en maquinaria industrial. Responde SIEMPRE en español de forma clara y natural.
 
-Maquina: ${machineName || 'industrial'}
+Máquina: ${machineName || 'industrial'}
 
 PREGUNTA: ${question}
 
-Responde de forma practica y directa usando la informacion del manual.`
+Analiza el manual PDF y responde usando esa información.`
                             }
                         ]
                     }],
