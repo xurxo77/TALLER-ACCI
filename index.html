@@ -30,7 +30,7 @@
         .app { position: relative; z-index: 1; }
         .header { padding: 1rem; display: flex; align-items: center; justify-content: space-between; }
         .header-brand { display: flex; align-items: center; gap: 0.75rem; }
-        .header-logo { width: 44px; height: 44px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .header-logo { width: 44px; height: 44px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .header-logo svg { width: 24px; height: 24px; color: var(--primary); }
         .header h1 { font-family: 'Space Grotesk', sans-serif; color: white; font-size: 1.1rem; font-weight: 700; }
         .header span { font-size: 0.7rem; color: rgba(255,255,255,0.8); }
@@ -93,6 +93,7 @@
         .msg-bubble p:last-child { margin-bottom: 0; }
         .msg-bubble ul { padding-left: 1.1rem; margin: 0.4rem 0; }
         .msg-bubble li { margin-bottom: 0.2rem; }
+        .msg-bubble em { display: block; margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.7; font-style: normal; }
         .chat-input-box { padding: 0.6rem 0; border-top: 1px solid var(--border); }
         .quick-btns { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem; }
         .quick-btn { padding: 0.4rem 0.7rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; font-size: 0.72rem; cursor: pointer; }
@@ -105,16 +106,6 @@
         .chat-btn.send:disabled { background: #94a3b8; }
         .chat-btn.voice { background: #f8fafc; border: 1px solid var(--border); color: var(--text2); }
         .chat-btn.voice.recording { background: var(--error); border-color: var(--error); color: white; animation: pulse 1s infinite; }
-        .ai-status { padding: 0.6rem 0.8rem; border-radius: 8px; margin-bottom: 0.6rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.5rem; }
-        .ai-status.loading { background: #fef3c7; color: #92400e; }
-        .ai-status.ready { background: #d1fae5; color: #065f46; }
-        .ai-status.error { background: #fee2e2; color: #991b1b; }
-        .loading-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.98); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
-        .loading-overlay.hidden { display: none; }
-        .spinner { width: 36px; height: 36px; border: 3px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { margin-top: 0.8rem; font-size: 0.85rem; color: var(--text2); text-align: center; }
-        .loading-progress { font-weight: 600; color: var(--primary); }
         .toast-container { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); z-index: 2000; }
         .toast { background: #0f172a; color: white; padding: 0.7rem 1.1rem; border-radius: 8px; font-size: 0.85rem; animation: fadeIn 0.3s; }
         .toast.success { background: var(--success); }
@@ -165,38 +156,30 @@
     </div>
 
     <div class="modal" id="machineModal">
-        <div class="modal-box" style="position:relative">
-            <div class="loading-overlay hidden" id="loading">
-                <div class="spinner"></div>
-                <div class="loading-text">
-                    <strong>Cargando modelo IA</strong><br>
-                    <span id="progress">Iniciando...</span>
-                </div>
-            </div>
+        <div class="modal-box">
             <div class="modal-header">
                 <h3 class="modal-title" id="title">-</h3>
                 <button class="modal-close" id="close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
             <div class="tabs">
-                <button class="tab active" data-tab="chat">IA</button>
-                <button class="tab" data-tab="pdf">PDF</button>
+                <button class="tab active" data-tab="chat">Consultar IA</button>
+                <button class="tab" data-tab="pdf">Ver Manual PDF</button>
             </div>
             <div class="modal-body">
                 <div id="chatTab" class="tab-content active">
-                    <div class="ai-status loading" id="status"><span id="statusText">Preparando IA...</span></div>
                     <div class="chat-box">
                         <div class="chat-messages" id="msgs"></div>
                         <div class="chat-input-box">
                             <div class="quick-btns">
-                                <button class="quick-btn" onclick="ask('Especificaciones')">Especificaciones</button>
-                                <button class="quick-btn" onclick="ask('Arranque')">Arranque</button>
-                                <button class="quick-btn" onclick="ask('Mantenimiento')">Mantenimiento</button>
-                                <button class="quick-btn" onclick="ask('Seguridad')">Seguridad</button>
+                                <button class="quick-btn" onclick="ask('Especificaciones tecnicas')">Especificaciones</button>
+                                <button class="quick-btn" onclick="ask('Como se pone en marcha?')">Arranque</button>
+                                <button class="quick-btn" onclick="ask('Que mantenimiento necesita?')">Mantenimiento</button>
+                                <button class="quick-btn" onclick="ask('Que medidas de seguridad debo tomar?')">Seguridad</button>
                             </div>
                             <div class="input-row">
-                                <input type="text" id="input" class="chat-input" placeholder="Pregunta lo que necesites...">
+                                <input type="text" id="input" class="chat-input" placeholder="Escribe tu pregunta...">
                                 <button class="chat-btn voice" id="voiceBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></button>
-                                <button class="chat-btn send" id="send" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+                                <button class="chat-btn send" id="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -231,9 +214,7 @@
 
     <div class="toast-container" id="toasts"></div>
 
-    <script type="module">
-        import * as webllm from "https://esm.run/@mlc-ai/web-llm";
-
+    <script>
         const MACHINES = [
             {id:'rustler',name:'Rustler EM',model:'EM',brand:'ESAB',cat:'soldadura',img:'rustler.jpg',pdf:'rustler.pdf',txt:'rustler.txt'},
             {id:'buddy',name:'Buddy ARC 180',model:'ARC 180',brand:'ESAB',cat:'soldadura',img:'buddy.jpg',pdf:'buddy.pdf',txt:'buddy.txt'},
@@ -245,11 +226,10 @@
 
         const $ = id => document.getElementById(id);
         
-        let machine = null, manual = '', engine = null, aiReady = false, user = null, rec = null, recActive = false;
+        let machine = null, manualText = '', currentUser = null, recognition = null, recActive = false;
 
-        // Session
         const s = localStorage.getItem('tallerUser');
-        if (s) { user = JSON.parse(s); $('loginBtn').textContent = user.role === 'teacher' ? 'Profesor' : 'Alumno'; }
+        if (s) { currentUser = JSON.parse(s); $('loginBtn').textContent = currentUser.role === 'teacher' ? 'Profesor' : 'Alumno'; }
 
         render();
         setupVoice();
@@ -274,7 +254,7 @@
             $('send').onclick = chat;
             $('input').onkeypress = e => { if (e.key === 'Enter') chat(); };
             $('voiceBtn').onclick = () => vToggle('chat');
-            $('loginBtn').onclick = () => { if (user) { if (confirm('Cerrar sesion?')) { user = null; localStorage.removeItem('tallerUser'); $('loginBtn').textContent = 'Entrar'; toast('Sesion cerrada', 'success'); } } else $('loginModal').classList.add('active'); };
+            $('loginBtn').onclick = () => { if (currentUser) { if (confirm('Cerrar sesion?')) { currentUser = null; localStorage.removeItem('tallerUser'); $('loginBtn').textContent = 'Entrar'; toast('Sesion cerrada', 'success'); } } else $('loginModal').classList.add('active'); };
             $('studentBtn').onclick = () => login('student');
             $('teacherBtn').onclick = () => $('codeSection').classList.remove('hidden');
             $('codeBtn').onclick = () => { if ($('code').value === 'TALLER2024') login('teacher'); else toast('Codigo incorrecto', 'error'); };
@@ -285,55 +265,80 @@
             $('grid').innerHTML = list.map(m => `
                 <div class="card" onclick="openM('${m.id}')">
                     <div class="card-img"><img src="${m.img}" onerror="this.style.display='none'"><span class="card-badge badge-${m.cat}">${m.cat}</span></div>
-                    <div class="card-body"><div class="card-name">${m.name}</div><div class="card-model">${m.model} - ${m.brand}</div><div class="card-status"><span class="status-dot"></span>OK</div></div>
+                    <div class="card-body"><div class="card-name">${m.name}</div><div class="card-model">${m.model} - ${m.brand}</div><div class="card-status"><span class="status-dot"></span>Manual listo</div></div>
                 </div>
             `).join('');
         }
 
         function filter(q) { const l = q.toLowerCase(); render(MACHINES.filter(m => m.name.toLowerCase().includes(l) || m.model.toLowerCase().includes(l) || m.brand.toLowerCase().includes(l))); }
+
         window.openM = async id => {
             machine = MACHINES.find(m => m.id === id);
             if (!machine) return;
             $('title').textContent = machine.name;
             $('input').value = '';
             $('msgs').innerHTML = '';
-            addMsg('ai', `Hola. Soy el asistente tecnico de <strong>${machine.name}</strong>.<p>He analizado el manual. ¿Que quieres saber?</p>`);
+            addMsg('ai', `Hola. Soy el asistente tecnico de <strong>${machine.name}</strong>.<p>He analizado el manual. ¿Que necesitas saber?</p>`);
             await loadManual(machine.txt);
             $('pdf').innerHTML = `<embed src="${machine.pdf}" type="application/pdf" width="100%" height="100%">`;
             $('machineModal').classList.add('active');
-            if (!aiReady) { $('loading').classList.remove('hidden'); await initAI(); }
-            else { $('status').className = 'ai-status ready'; $('statusText').textContent = 'IA lista'; $('send').disabled = false; }
         };
 
         async function loadManual(f) {
             try {
                 const base = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
                 const r = await fetch(`${base}/${f}`);
-                manual = await r.text();
-            } catch { manual = ''; }
+                manualText = await r.text();
+            } catch { manualText = ''; }
         }
 
-        async function initAI() {
+        // =============================================
+        // IA CON GEMINI
+        // =============================================
+
+        async function generateAnswer(question) {
+            if (!manualText) return '<p>El manual no esta cargado.</p>';
+            
             try {
-                $('statusText').textContent = 'Descargando IA (~300MB)...';
-                const model = "Qwen2.5-0.5B-Instruct-q4f16_1-MLC";
-                engine = await webllm.CreateMLCEngine(model, {
-                    initProgressCallback: p => { $('progress').textContent = `${Math.round(p.progress * 100)}% - ${p.text}`; }
+                const response = await fetch('https://taller-acci-ducu.vercel.app/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question: question,
+                        manual: manualText.substring(0, 8000),
+                        machineName: machine?.name || 'esta maquina'
+                    })
                 });
-                aiReady = true;
-                $('loading').classList.add('hidden');
-                $('status').className = 'ai-status ready';
-                $('statusText').textContent = 'IA lista';
-                $('send').disabled = false;
-                toast('IA cargada', 'success');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.answer.replace(/\n/g, '<br>');
+                }
             } catch (e) {
-                console.error(e);
-                $('loading').classList.add('hidden');
-                $('status').className = 'ai-status error';
-                $('statusText').textContent = 'Error: dispositivo no compatible';
-                $('send').disabled = false;
-                toast('IA no disponible en este dispositivo', 'error');
+                console.log('Gemini no disponible, usando respaldo');
             }
+            
+            return fallbackAnswer(question);
+        }
+
+        function fallbackAnswer(question) {
+            const q = question.toLowerCase();
+            const lines = manualText.split('\n').filter(l => l.trim().length > 15);
+            const matches = [];
+            
+            for (const line of lines) {
+                let score = 0;
+                const lower = line.toLowerCase();
+                const words = q.split(/\s+/).filter(w => w.length > 2);
+                for (const w of words) if (lower.includes(w)) score += 2;
+                if (lower.includes(q)) score += 5;
+                if (score > 0) matches.push({ line, score });
+            }
+            
+            if (!matches.length) return '<p>No encontre informacion especifica. Intenta con otras palabras.</p>';
+            
+            matches.sort((a, b) => b.score - a.score);
+            return matches.slice(0, 3).map(m => `• ${m.line.trim()}`).join('<br>') + `<br><em>Manual de ${machine.name}</em>`;
         }
 
         async function chat() {
@@ -341,39 +346,11 @@
             if (!q || !machine) return;
             addMsg('user', q);
             $('input').value = '';
+            $('send').disabled = true;
             
-            if (aiReady && engine) {
-                try {
-                    const resp = await engine.chat.completions.create({
-                        messages: [
-                            {role: 'system', content: `Eres un experto tecnico en maquinaria industrial. Responde en español de forma clara y natural.\n\nMANUAL DE ${machine.name}:\n${manual.substring(0, 3500)}`},
-                            {role: 'user', content: q}
-                        ],
-                        temperature: 0.7, max_tokens: 500
-                    });
-                    addMsg('ai', resp.choices[0].message.content.replace(/\n/g, '<br>'));
-                    return;
-                } catch (e) { console.error(e); }
-            }
-            // Fallback
-            addMsg('ai', fallback(q));
-        }
-
-        function fallback(q) {
-            if (!manual) return '<p>Manual no disponible.</p>';
-            const lines = manual.split('\n').filter(l => l.trim().length > 15);
-            const words = q.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-            const matches = [];
-            for (const line of lines) {
-                let score = 0;
-                const lower = line.toLowerCase();
-                for (const w of words) if (lower.includes(w)) score += 2;
-                if (lower.includes(q.toLowerCase())) score += 5;
-                if (score > 0) matches.push({line, score});
-            }
-            if (!matches.length) return '<p>No encontre informacion. Intenta con otras palabras.</p>';
-            matches.sort((a, b) => b.score - a.score);
-            return matches.slice(0, 4).map(m => `• ${m.line.trim()}`).join('<br>') + `<br><em>Manual de ${machine.name}</em>`;
+            const answer = await generateAnswer(q);
+            addMsg('ai', answer);
+            $('send').disabled = false;
         }
 
         function addMsg(type, html) {
@@ -389,25 +366,25 @@
         function setupVoice() {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SR) return;
-            rec = new SR();
-            rec.lang = 'es-ES';
-            rec.onresult = e => {
+            recognition = new SR();
+            recognition.lang = 'es-ES';
+            recognition.onresult = e => {
                 const t = e.results[0][0].transcript;
                 if ($('machineModal').classList.contains('active')) { $('input').value = t; chat(); }
                 else { $('searchInput').value = t; filter(t); }
             };
-            rec.onerror = rec.onend = () => { recActive = false; $('voiceSearchBtn').classList.remove('recording'); $('voiceBtn').classList.remove('recording'); };
+            recognition.onerror = recognition.onend = () => { recActive = false; $('voiceSearchBtn').classList.remove('recording'); $('voiceBtn').classList.remove('recording'); };
         }
 
         function vToggle(ctx) {
-            if (!rec) { toast('Voz no soportada', 'error'); return; }
-            if (recActive) rec.stop();
-            else { recActive = true; (ctx === 'search' ? $('voiceSearchBtn') : $('voiceBtn')).classList.add('recording'); rec.start(); }
+            if (!recognition) { toast('Voz no soportada', 'error'); return; }
+            if (recActive) recognition.stop();
+            else { recActive = true; (ctx === 'search' ? $('voiceSearchBtn') : $('voiceBtn')).classList.add('recording'); recognition.start(); }
         }
 
         function login(role) {
-            user = {role};
-            localStorage.setItem('tallerUser', JSON.stringify(user));
+            currentUser = {role};
+            localStorage.setItem('tallerUser', JSON.stringify(currentUser));
             $('loginBtn').textContent = role === 'teacher' ? 'Profesor' : 'Alumno';
             $('loginModal').classList.remove('active');
             toast('Bienvenido', 'success');
