@@ -12,8 +12,9 @@ export default async function handler(req, res) {
     if (!pdfBase64) return res.status(400).json({ error: 'PDF requerido' });
     
     try {
+        // Usar gemini-2.5-flash (tu modelo más moderno)
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
