@@ -5,1085 +5,421 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1e3a5f">
     <title>Taller IES ACCI</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --accent: #f97316;
             --success: #10b981;
-            --warning: #f59e0b;
             --error: #ef4444;
             --bg: #f8fafc;
-            --bg-card: #ffffff;
+            --bg-card: #fff;
             --text: #0f172a;
             --text2: #64748b;
             --border: #e2e8f0;
         }
-        
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-        }
-        
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            height: 220px;
+            content: ''; position: fixed; top: 0; left: 0; right: 0; height: 200px;
             background: linear-gradient(135deg, #1e3a5f, #2563eb);
-            border-radius: 0 0 50% 50% / 0 0 50px 50px;
-            z-index: 0;
+            border-radius: 0 0 50% 50% / 0 0 40px 40px; z-index: 0;
         }
-        
         .app { position: relative; z-index: 1; }
-        
-        .header {
-            padding: 1.25rem 1rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
+        .header { padding: 1rem; display: flex; align-items: center; justify-content: space-between; }
         .header-brand { display: flex; align-items: center; gap: 0.75rem; }
-        
-        .header-logo {
-            width: 48px;
-            height: 48px;
-            background: white;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .header-logo svg { width: 28px; height: 28px; color: var(--primary); }
-        
-        .header h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-        
-        .header span { font-size: 0.7rem; color: rgba(255,255,255,0.8); display: block; }
-        
-        .btn {
-            padding: 0.6rem 1.2rem;
-            background: white;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-        .btn-primary { background: var(--primary); color: white; }
-        
+        .header-logo { width: 44px; height: 44px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .header-logo svg { width: 24px; height: 24px; color: var(--primary); }
+        .header h1 { font-family: 'Space Grotesk', sans-serif; color: white; font-size: 1.1rem; font-weight: 700; }
+        .header span { font-size: 0.7rem; color: rgba(255,255,255,0.8); }
+        .btn { padding: 0.55rem 1rem; background: white; border: none; border-radius: 8px; font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
         .content { padding: 0.5rem 1rem 1.5rem; }
-        
-        .search-box {
-            background: white;
-            border-radius: 14px;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            margin-bottom: 1.25rem;
-        }
-        
-        .search-box svg { width: 20px; height: 20px; color: var(--text2); }
-        
-        .search-box input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            font-size: 0.95rem;
-            font-family: 'Outfit', sans-serif;
-            color: var(--text);
-        }
-        
+        .search-box { background: white; border-radius: 12px; padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.7rem; box-shadow: 0 4px 16px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+        .search-box input { flex: 1; border: none; background: transparent; font-size: 0.95rem; }
         .search-box input:focus { outline: none; }
-        
-        .voice-btn {
-            width: 40px;
-            height: 40px;
-            background: #f1f5f9;
-            border: none;
-            border-radius: 10px;
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .voice-btn.recording { background: var(--error); color: white; animation: pulse 1.5s infinite; }
-        
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-        
-        .filters {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.25rem;
-            overflow-x: auto;
-        }
-        
-        .filters::-webkit-scrollbar { display: none; }
-        
-        .filter {
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.9);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-        
+        .voice-btn { width: 38px; height: 38px; background: #f1f5f9; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .voice-btn.recording { background: var(--error); color: white; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+        .filters { display: flex; gap: 0.4rem; margin-bottom: 1rem; overflow-x: auto; }
+        .filter { padding: 0.45rem 0.9rem; background: rgba(255,255,255,0.9); border: none; border-radius: 16px; font-size: 0.78rem; font-weight: 500; cursor: pointer; white-space: nowrap; }
         .filter.active { background: var(--primary); color: white; }
-        
-        .section-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-        }
-        
-        .machines-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-        
+        .section-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+        .machines-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
         @media (min-width: 480px) { .machines-grid { grid-template-columns: repeat(3, 1fr); } }
-        
-        .card {
-            background: var(--bg-card);
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-            cursor: pointer;
-            transition: all 0.25s;
-        }
-        
-        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
-        
-        .card-img {
-            height: 90px;
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            position: relative;
-        }
-        
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .card-img { height: 85px; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); position: relative; }
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .card-badge {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        
+        .card-badge { position: absolute; top: 0.4rem; right: 0.4rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.55rem; font-weight: 700; text-transform: uppercase; }
         .badge-soldadura { background: #fecaca; color: #991b1b; }
         .badge-corte { background: #bfdbfe; color: #1e40af; }
         .badge-conformado { background: #bbf7d0; color: #166534; }
-        
-        .card-body { padding: 0.75rem; }
-        .card-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.9rem; }
-        .card-model { font-size: 0.75rem; color: var(--text2); margin-top: 0.15rem; }
-        
-        .card-status { display: flex; align-items: center; gap: 0.3rem; margin-top: 0.4rem; font-size: 0.7rem; color: var(--text2); }
-        
-        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
-        
-        /* MODAL */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            display: none;
-            align-items: flex-end;
-            justify-content: center;
-            z-index: 1000;
-            padding: 0.5rem;
-        }
-        
+        .card-body { padding: 0.6rem; }
+        .card-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.88rem; }
+        .card-model { font-size: 0.72rem; color: var(--text2); margin-top: 0.1rem; }
+        .card-status { display: flex; align-items: center; gap: 0.25rem; margin-top: 0.3rem; font-size: 0.68rem; color: var(--text2); }
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: flex-end; justify-content: center; z-index: 1000; }
         .modal.active { display: flex; }
-        
-        .modal-box {
-            background: white;
-            width: 100%;
-            max-width: 520px;
-            max-height: 92vh;
-            border-radius: 20px 20px 0 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        @media (min-width: 600px) {
-            .modal { align-items: center; padding: 1rem; }
-            .modal-box { border-radius: 16px; max-height: 90vh; }
-        }
-        
-        .modal-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; }
-        
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            background: #f1f5f9;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
+        .modal-box { background: white; width: 100%; max-width: 500px; max-height: 92vh; border-radius: 16px 16px 0 0; overflow: hidden; display: flex; flex-direction: column; }
+        @media (min-width: 600px) { .modal { align-items: center; padding: 1rem; } .modal-box { border-radius: 12px; } }
+        .modal-header { padding: 0.9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; }
+        .modal-close { width: 32px; height: 32px; background: #f1f5f9; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .modal-close:hover { background: var(--error); color: white; }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .tab {
-            flex: 1;
-            padding: 0.85rem;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid transparent;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--text2);
-        }
-        
+        .tabs { display: flex; border-bottom: 1px solid var(--border); }
+        .tab { flex: 1; padding: 0.75rem; background: transparent; border: none; border-bottom: 2px solid transparent; font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: var(--text2); }
         .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-        
-        .modal-body { flex: 1; overflow-y: auto; padding: 1rem; }
+        .modal-body { flex: 1; overflow-y: auto; padding: 0.9rem; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
-        .pdf-container {
-            background: #1e293b;
-            border-radius: 12px;
-            height: 450px;
-            overflow: hidden;
-        }
-        
+        .pdf-container { background: #1e293b; border-radius: 8px; height: 400px; }
         .pdf-container embed { width: 100%; height: 100%; border: none; }
-        
-        /* CHAT */
-        .chat-box { display: flex; flex-direction: column; height: 450px; }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.85rem;
-        }
-        
-        .msg { display: flex; gap: 0.6rem; max-width: 90%; }
+        .chat-box { display: flex; flex-direction: column; height: 380px; }
+        .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.7rem; padding: 0.25rem; }
+        .msg { display: flex; gap: 0.5rem; max-width: 88%; }
         .msg.user { align-self: flex-end; flex-direction: row-reverse; }
-        
-        .msg-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-        
+        .msg-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.75rem; font-weight: 700; }
         .msg.ai .msg-avatar { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
         .msg.user .msg-avatar { background: var(--accent); color: white; }
-        
-        .msg-bubble { padding: 0.9rem 1.1rem; border-radius: 16px; font-size: 0.92rem; line-height: 1.65; }
+        .msg-bubble { padding: 0.75rem 0.9rem; border-radius: 12px; font-size: 0.88rem; line-height: 1.55; }
         .msg.ai .msg-bubble { background: #f1f5f9; border-bottom-left-radius: 4px; }
         .msg.user .msg-bubble { background: var(--primary); color: white; border-bottom-right-radius: 4px; }
-        
-        .msg-bubble p { margin-bottom: 0.5rem; }
-        .msg-bubble p:last-child { margin-bottom: 0; }
-        
         .msg-bubble strong { color: var(--accent); }
         .msg.user .msg-bubble strong { color: #fef3c7; }
-        
-        .msg-bubble ul, .msg-bubble ol { padding-left: 1.2rem; margin: 0.5rem 0; }
-        .msg-bubble li { margin-bottom: 0.3rem; }
-        
-        .msg-bubble em {
-            display: block;
-            margin-top: 0.6rem;
-            font-size: 0.8rem;
-            opacity: 0.7;
-            font-style: normal;
-        }
-        
-        .chat-input-box { padding: 0.75rem 0; border-top: 1px solid var(--border); }
-        
-        .quick-btns { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.6rem; }
-        
-        .quick-btn {
-            padding: 0.5rem 0.85rem;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            font-size: 0.78rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
+        .msg-bubble p { margin-bottom: 0.4rem; }
+        .msg-bubble p:last-child { margin-bottom: 0; }
+        .msg-bubble ul { padding-left: 1.1rem; margin: 0.4rem 0; }
+        .msg-bubble li { margin-bottom: 0.2rem; }
+        .chat-input-box { padding: 0.6rem 0; border-top: 1px solid var(--border); }
+        .quick-btns { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem; }
+        .quick-btn { padding: 0.4rem 0.7rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; font-size: 0.72rem; cursor: pointer; }
         .quick-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
-        
-        .input-row { display: flex; gap: 0.5rem; }
-        
-        .chat-input {
-            flex: 1;
-            padding: 0.9rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-family: 'Outfit', sans-serif;
-        }
-        
+        .input-row { display: flex; gap: 0.4rem; }
+        .chat-input { flex: 1; padding: 0.75rem 0.9rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; font-family: inherit; }
         .chat-input:focus { outline: none; border-color: var(--primary); }
-        
-        .chat-btn {
-            width: 50px;
-            height: 50px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
+        .chat-btn { width: 44px; height: 44px; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .chat-btn.send { background: var(--primary); color: white; }
-        .chat-btn.send:hover { background: var(--primary-dark); }
+        .chat-btn.send:disabled { background: #94a3b8; }
         .chat-btn.voice { background: #f8fafc; border: 1px solid var(--border); color: var(--text2); }
         .chat-btn.voice.recording { background: var(--error); border-color: var(--error); color: white; animation: pulse 1s infinite; }
-        
-        /* TOAST */
-        .toast-container {
-            position: fixed;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2000;
-        }
-        
-        .toast {
-            background: var(--text);
-            color: white;
-            padding: 0.8rem 1.3rem;
-            border-radius: 10px;
-            font-size: 0.88rem;
-            animation: fadeIn 0.3s;
-            text-align: center;
-        }
-        
+        .ai-status { padding: 0.6rem 0.8rem; border-radius: 8px; margin-bottom: 0.6rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.5rem; }
+        .ai-status.loading { background: #fef3c7; color: #92400e; }
+        .ai-status.ready { background: #d1fae5; color: #065f46; }
+        .ai-status.error { background: #fee2e2; color: #991b1b; }
+        .loading-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.98); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+        .loading-overlay.hidden { display: none; }
+        .spinner { width: 36px; height: 36px; border: 3px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { margin-top: 0.8rem; font-size: 0.85rem; color: var(--text2); text-align: center; }
+        .loading-progress { font-weight: 600; color: var(--primary); }
+        .toast-container { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); z-index: 2000; }
+        .toast { background: #0f172a; color: white; padding: 0.7rem 1.1rem; border-radius: 8px; font-size: 0.85rem; animation: fadeIn 0.3s; }
         .toast.success { background: var(--success); }
         .toast.error { background: var(--error); }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* LOGIN */
-        .login-content { padding: 1.5rem; text-align: center; }
-        
-        .login-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-            border-radius: 16px;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .login-icon svg { width: 36px; height: 36px; color: var(--primary); }
-        
-        .login-content h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; margin-bottom: 0.25rem; }
-        .login-content > p { color: var(--text2); margin-bottom: 1.25rem; }
-        
-        .login-options { display: flex; flex-direction: column; gap: 0.6rem; }
-        
-        .login-option {
-            display: flex;
-            align-items: center;
-            gap: 0.85rem;
-            padding: 1rem;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: left;
-        }
-        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .login-content { padding: 1.2rem; text-align: center; }
+        .login-icon { width: 60px; height: 60px; background: linear-gradient(135deg, #e0e7ff, #c7d2fe); border-radius: 12px; margin: 0 auto 0.8rem; display: flex; align-items: center; justify-content: center; }
+        .login-icon svg { width: 30px; height: 30px; color: var(--primary); }
+        .login-content h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-bottom: 0.2rem; }
+        .login-content > p { color: var(--text2); margin-bottom: 1rem; font-size: 0.88rem; }
+        .login-options { display: flex; flex-direction: column; gap: 0.5rem; }
+        .login-option { display: flex; align-items: center; gap: 0.7rem; padding: 0.85rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; text-align: left; }
         .login-option:hover { border-color: var(--primary); }
-        
-        .login-option-icon {
-            width: 44px;
-            height: 44px;
-            background: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .login-option-icon svg { width: 22px; height: 22px; color: var(--primary); }
-        
-        .login-option-info h3 { font-size: 0.95rem; }
-        .login-option-info p { font-size: 0.8rem; color: var(--text2); }
-        
-        .code-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-        .code-section input {
-            width: 100%; padding: 0.75rem; background: #f8fafc; border: 1px solid var(--border);
-            border-radius: 10px; font-size: 1rem; text-align: center; letter-spacing: 0.15em; margin-bottom: 0.5rem;
-        }
+        .login-option-icon { width: 38px; height: 38px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .login-option-icon svg { width: 20px; height: 20px; color: var(--primary); }
+        .login-option-info h3 { font-size: 0.9rem; }
+        .login-option-info p { font-size: 0.75rem; color: var(--text2); }
+        .code-section { margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid var(--border); }
+        .code-section input { width: 100%; padding: 0.65rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; text-align: center; margin-bottom: 0.4rem; }
         .code-section input:focus { outline: none; border-color: var(--primary); }
-        .code-hint { font-size: 0.75rem; color: var(--text2); }
+        .code-hint { font-size: 0.7rem; color: var(--text2); }
     </style>
 </head>
 <body>
     <div class="app">
         <header class="header">
             <div class="header-brand">
-                <div class="header-logo">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h1>Taller IES ACCI</h1>
-                    <span>Asistente Inteligente</span>
-                </div>
+                <div class="header-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+                <div><h1>Taller IES ACCI</h1><span>Asistente IA</span></div>
             </div>
             <button class="btn" id="loginBtn">Entrar</button>
         </header>
-        
         <main class="content">
             <div class="search-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="M21 21l-4.35-4.35"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                 <input type="text" id="searchInput" placeholder="Buscar maquina...">
-                <button class="voice-btn" id="voiceSearchBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
-                        <path d="M19 10v2a7 7 0 01-14 0v-2"/>
-                    </svg>
-                </button>
+                <button class="voice-btn" id="voiceSearchBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></button>
             </div>
-            
             <div class="filters">
                 <button class="filter active" data-filter="all">Todas</button>
                 <button class="filter" data-filter="soldadura">Soldadura</button>
                 <button class="filter" data-filter="corte">Corte</button>
                 <button class="filter" data-filter="conformado">Conformado</button>
             </div>
-            
             <h2 class="section-title">Maquinas</h2>
-            <div class="machines-grid" id="machinesGrid"></div>
+            <div class="machines-grid" id="grid"></div>
         </main>
     </div>
-    
+
     <div class="modal" id="machineModal">
-        <div class="modal-box">
+        <div class="modal-box" style="position:relative">
+            <div class="loading-overlay hidden" id="loading">
+                <div class="spinner"></div>
+                <div class="loading-text">
+                    <strong>Cargando modelo IA</strong><br>
+                    <span id="progress">Iniciando...</span>
+                </div>
+            </div>
             <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">-</h3>
-                <button class="modal-close" id="modalClose">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
+                <h3 class="modal-title" id="title">-</h3>
+                <button class="modal-close" id="close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
-            
             <div class="tabs">
-                <button class="tab active" data-tab="chat">Consultar IA</button>
-                <button class="tab" data-tab="pdf">Ver Manual PDF</button>
+                <button class="tab active" data-tab="chat">IA</button>
+                <button class="tab" data-tab="pdf">PDF</button>
             </div>
-            
             <div class="modal-body">
-                <div id="chatContent" class="tab-content active">
+                <div id="chatTab" class="tab-content active">
+                    <div class="ai-status loading" id="status"><span id="statusText">Preparando IA...</span></div>
                     <div class="chat-box">
-                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-messages" id="msgs"></div>
                         <div class="chat-input-box">
                             <div class="quick-btns">
-                                <button class="quick-btn" onclick="ask('¿Cuales son las especificaciones tecnicas?">Especificaciones</button>
-                                <button class="quick-btn" onclick="ask('¿Como se pone en marcha?')">Arranque</button>
-                                <button class="quick-btn" onclick="ask('¿Que mantenimiento necesita?')">Mantenimiento</button>
-                                <button class="quick-btn" onclick="ask('¿Que medidas de seguridad debo tomar?')">Seguridad</button>
+                                <button class="quick-btn" onclick="ask('Especificaciones')">Especificaciones</button>
+                                <button class="quick-btn" onclick="ask('Arranque')">Arranque</button>
+                                <button class="quick-btn" onclick="ask('Mantenimiento')">Mantenimiento</button>
+                                <button class="quick-btn" onclick="ask('Seguridad')">Seguridad</button>
                             </div>
                             <div class="input-row">
-                                <input type="text" id="chatInput" class="chat-input" placeholder="Escribe tu pregunta...">
-                                <button class="chat-btn voice" id="voiceBtn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
-                                        <path d="M19 10v2a7 7 0 01-14 0v-2"/>
-                                    </svg>
-                                </button>
-                                <button class="chat-btn send" id="sendBtn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="22" y1="2" x2="11" y2="13"/>
-                                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                                    </svg>
-                                </button>
+                                <input type="text" id="input" class="chat-input" placeholder="Pregunta lo que necesites...">
+                                <button class="chat-btn voice" id="voiceBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></button>
+                                <button class="chat-btn send" id="send" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div id="pdfContent" class="tab-content">
-                    <div class="pdf-container" id="pdfContainer"></div>
-                </div>
+                <div id="pdfTab" class="tab-content"><div class="pdf-container" id="pdf"></div></div>
             </div>
         </div>
     </div>
-    
+
     <div class="modal" id="loginModal">
         <div class="modal-box">
             <div class="modal-header">
                 <h3 class="modal-title">Acceso</h3>
-                <button class="modal-close" id="loginClose">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
+                <button class="modal-close" id="loginClose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
             <div class="login-content">
-                <div class="login-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2"/>
-                        <path d="M7 11V7a5 5 0 0110 0v4"/>
-                    </svg>
-                </div>
+                <div class="login-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
                 <h2>Bienvenido</h2>
                 <p>Selecciona tu rol</p>
                 <div class="login-options">
-                    <button class="login-option" id="studentBtn">
-                        <div class="login-option-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                            </svg>
-                        </div>
-                        <div class="login-option-info"><h3>Alumno</h3><p>Consultar</p></div>
-                    </button>
-                    <button class="login-option" id="teacherBtn">
-                        <div class="login-option-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                            </svg>
-                        </div>
-                        <div class="login-option-info"><h3>Profesor</h3><p>Acceso completo</p></div>
-                    </button>
+                    <button class="login-option" id="studentBtn"><div class="login-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div class="login-option-info"><h3>Alumno</h3><p>Consultar</p></div></button>
+                    <button class="login-option" id="teacherBtn"><div class="login-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="login-option-info"><h3>Profesor</h3><p>Control total</p></div></button>
                 </div>
                 <div class="code-section hidden" id="codeSection">
-                    <input type="password" id="codeInput" placeholder="Codigo">
+                    <input type="password" id="code" placeholder="Codigo">
                     <button class="btn btn-primary" style="width:100%" id="codeBtn">Verificar</button>
                     <p class="code-hint">Codigo: TALLER2024</p>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="toast-container" id="toasts"></div>
 
-    <script>
-        // =============================================
-        // DATOS DE MÁQUINAS
-        // =============================================
-        
+    <script type="module">
+        import * as webllm from "https://esm.run/@mlc-ai/web-llm";
+
         const MACHINES = [
-            { id: 'rustler', name: 'Rustler EM', model: 'EM', brand: 'ESAB', cat: 'soldadura', img: 'rustler.jpg', pdf: 'rustler.pdf', txt: 'rustler.txt' },
-            { id: 'buddy', name: 'Buddy ARC 180', model: 'ARC 180', brand: 'ESAB', cat: 'soldadura', img: 'buddy.jpg', pdf: 'buddy.pdf', txt: 'buddy.txt' },
-            { id: 'buddytig', name: 'Buddy TIG 160', model: 'TIG 160', brand: 'ESAB', cat: 'soldadura', img: 'buddytig.jpg', pdf: 'buddytig.pdf', txt: 'buddytig.txt' },
-            { id: 'sierra', name: 'Sierra de Cinta', model: 'FAT 280', brand: 'FAT', cat: 'corte', img: 'FAT280.jpg', pdf: 'FAT280.pdf', txt: 'FAT280.txt' },
-            { id: 'curvadora', name: 'Curvadora', model: 'RBM 1050-22', brand: 'RBM', cat: 'conformado', img: 'RBMCURVADORA.jpg', pdf: 'RBMCURVADORA.pdf', txt: 'RBMCURVADORA.txt' },
-            { id: 'biseladora', name: 'Biseladora', model: 'KRBS 101', brand: 'KRBS', cat: 'corte', img: 'biseladoratubos.jpg', pdf: 'biseladoratubos.pdf', txt: 'biseladoratubos.txt' }
+            {id:'rustler',name:'Rustler EM',model:'EM',brand:'ESAB',cat:'soldadura',img:'rustler.jpg',pdf:'rustler.pdf',txt:'rustler.txt'},
+            {id:'buddy',name:'Buddy ARC 180',model:'ARC 180',brand:'ESAB',cat:'soldadura',img:'buddy.jpg',pdf:'buddy.pdf',txt:'buddy.txt'},
+            {id:'buddytig',name:'Buddy TIG 160',model:'TIG 160',brand:'ESAB',cat:'soldadura',img:'buddytig.jpg',pdf:'buddytig.pdf',txt:'buddytig.txt'},
+            {id:'sierra',name:'Sierra de Cinta',model:'FAT 280',brand:'FAT',cat:'corte',img:'FAT280.jpg',pdf:'FAT280.pdf',txt:'FAT280.txt'},
+            {id:'curvadora',name:'Curvadora',model:'RBM 1050-22',brand:'RBM',cat:'conformado',img:'RBMCURVADORA.jpg',pdf:'RBMCURVADORA.pdf',txt:'RBMCURVADORA.txt'},
+            {id:'biseladora',name:'Biseladora',model:'KRBS 101',brand:'KRBS',cat:'corte',img:'biseladoratubos.jpg',pdf:'biseladoratubos.pdf',txt:'biseladoratubos.txt'}
         ];
-        
-        // Estado
-        let currentMachine = null;
-        let manualText = '';
-        let manualSections = [];
-        let currentUser = null;
-        let recognition = null;
-        let isRecording = false;
-        
+
         const $ = id => document.getElementById(id);
         
-        // =============================================
-        // IA MEJORADA - SIN DESCARGAS
-        // =============================================
-        
-        function parseManual(text) {
-            const sections = [];
-            const lines = text.split('\n');
-            let currentSection = null;
-            let currentContent = [];
-            
-            for (const line of lines) {
-                const trimmed = line.trim();
-                
-                // Detectar títulos (líneas cortas, mayúsculas, o con :)
-                if (trimmed.length > 3 && trimmed.length < 80) {
-                    const isTitle = /^[A-ZÁÉÍÓÚÑ0-9\s\:\-\.]+$/.test(trimmed) || 
-                                   trimmed.endsWith(':') ||
-                                   (trimmed === trimmed.toUpperCase() && trimmed.length > 5);
-                    
-                    if (isTitle && !/^\d+$/.test(trimmed)) {
-                        // Guardar sección anterior
-                        if (currentSection && currentContent.length > 0) {
-                            sections.push({
-                                title: currentSection,
-                                content: currentContent.join('\n').trim()
-                            });
-                        }
-                        currentSection = trimmed.replace(/[:]+$/, '').trim();
-                        currentContent = [];
-                        continue;
-                    }
-                }
-                
-                if (trimmed.length > 5) {
-                    currentContent.push(trimmed);
-                }
-            }
-            
-            // Última sección
-            if (currentSection && currentContent.length > 0) {
-                sections.push({
-                    title: currentSection,
-                    content: currentContent.join('\n').trim()
-                });
-            }
-            
-            return sections;
-        }
-        
-        function detectIntent(question) {
-            const q = question.toLowerCase();
-            
-            const intents = {
-                specs: {
-                    keywords: ['especificacion', 'parametro', 'caracteristica', 'dato', 'potencia', 'amper', 'volt', 'voltaje', 'medida', 'rango', 'capacidad', 'dimension', 'peso', 'modelo'],
-                    sections: ['especificacion', 'parametro', 'caracteristica', 'dato tecnico', 'ficha tecnica']
-                },
-                start: {
-                    keywords: ['arranque', 'inicio', 'encender', 'puesta', 'marcha', 'empezar', 'funcionar', 'operar'],
-                    sections: ['arranque', 'inicio', 'puesta en marcha', 'operacion', 'instruccione', 'procedimiento']
-                },
-                maint: {
-                    keywords: ['mantenimiento', 'limpiar', 'limpieza', 'revision', 'aceite', 'lubricar', 'cambiar', 'ajustar', 'conservar'],
-                    sections: ['mantenimiento', 'limpieza', 'revision', 'conservacion', 'cuidado']
-                },
-                safety: {
-                    keywords: ['seguridad', 'proteccion', 'peligro', 'cuidado', 'precaucion', 'epi', 'riesgo', 'advertencia', 'norma'],
-                    sections: ['seguridad', 'proteccion', 'peligro', 'advertencia', 'precaucion', 'norma']
-                },
-                trouble: {
-                    keywords: ['problema', 'averia', 'falla', 'error', 'no funciona', 'averia', 'defecto', 'reparar'],
-                    sections: ['problema', 'averia', 'falla', 'defecto', 'solucion', 'reparacion']
-                }
-            };
-            
-            let bestMatch = { intent: 'general', score: 0 };
-            
-            for (const [intent, data] of Object.entries(intents)) {
-                let score = 0;
-                
-                for (const kw of data.keywords) {
-                    if (q.includes(kw)) score += 2;
-                }
-                
-                if (score > bestMatch.score) {
-                    bestMatch = { intent, score };
-                }
-            }
-            
-            return bestMatch.intent;
-        }
-        
-        function findRelevantSections(question, sections) {
-            const intent = detectIntent(question);
-            const q = question.toLowerCase();
-            const qWords = q.split(/\s+/).filter(w => w.length > 2);
-            
-            const intentKeywords = {
-                specs: ['especificacion', 'parametro', 'caracteristica', 'dato', 'amper', 'volt', 'potencia'],
-                start: ['arranque', 'inicio', 'puesta', 'marcha', 'operacion', 'instruccion'],
-                maint: ['mantenimiento', 'limpieza', 'revision', 'lubricacion', 'aceite'],
-                safety: ['seguridad', 'proteccion', 'peligro', 'advertencia', 'precaucion'],
-                trouble: ['problema', 'averia', 'falla', 'error', 'solucion']
-            };
-            
-            const scored = sections.map(section => {
-                let score = 0;
-                const titleLower = section.title.toLowerCase();
-                const contentLower = section.content.toLowerCase();
-                
-                // Bonus por intención
-                if (intentKeywords[intent]) {
-                    for (const kw of intentKeywords[intent]) {
-                        if (titleLower.includes(kw)) score += 15;
-                        if (contentLower.includes(kw)) score += 5;
-                    }
-                }
-                
-                // Palabras de la pregunta
-                for (const word of qWords) {
-                    if (titleLower.includes(word)) score += 10;
-                    if (contentLower.includes(word)) score += 3;
-                }
-                
-                // Frase exacta
-                if (contentLower.includes(q)) score += 20;
-                
-                return { ...section, score };
-            });
-            
-            return scored
-                .filter(s => s.score > 0)
-                .sort((a, b) => b.score - a.score)
-                .slice(0, 3);
-        }
-        
-        function formatResponse(question, relevantSections) {
-            if (relevantSections.length === 0) {
-                return `<p>No he encontrado informacion especifica sobre "<strong>${question}</strong>" en el manual.</p>
-                <p>Te sugiero:</p>
-                <ul>
-                    <li>Reformular la pregunta con otras palabras</li>
-                    <li>Consultar el manual completo en la pestana PDF</li>
-                    <li>Preguntar sobre: especificaciones, arranque, mantenimiento o seguridad</li>
-                </ul>`;
-            }
-            
-            let response = '';
-            
-            // Título si hay sección clara
-            if (relevantSections[0].score >= 10) {
-                response += `<p><strong>${relevantSections[0].title}</strong></p>`;
-            }
-            
-            // Contenido principal
-            const mainContent = relevantSections[0].content;
-            
-            // Formatear el contenido
-            const lines = mainContent.split('\n').filter(l => l.trim());
-            
-            if (lines.length === 1) {
-                response += `<p>${lines[0]}</p>`;
-            } else {
-                // Detectar si es lista
-                const isList = lines.every(l => /^[-•*]\s|^\d+[.\)]\s/.test(l.trim()));
-                
-                if (isList) {
-                    response += '<ul>';
-                    for (const line of lines.slice(0, 6)) {
-                        const clean = line.replace(/^[-•*\d.\)]+\s*/, '');
-                        response += `<li>${clean}</li>`;
-                    }
-                    if (lines.length > 6) response += `<li>... y ${lines.length - 6} elementos mas</li>`;
-                    response += '</ul>';
-                } else {
-                    // Párrafos
-                    for (const line of lines.slice(0, 4)) {
-                        response += `<p>${line}</p>`;
-                    }
-                    if (lines.length > 4) {
-                        response += `<p><em>(Continua en el manual...)</em></p>`;
-                    }
-                }
-            }
-            
-            // Sección adicional si es relevante
-            if (relevantSections.length > 1 && relevantSections[1].score > relevantSections[0].score * 0.5) {
-                response += `<p><strong>Tambien relacionado:</strong></p>`;
-                response += `<p>${relevantSections[1].content.split('\n')[0]}</p>`;
-            }
-            
-            response += `<em>Extraido del manual de ${currentMachine.name}</em>`;
-            
-            return response;
-        }
-        
-        function generateAnswer(question) {
-            if (!manualText) {
-                return '<p>El manual no esta cargado. Verifica que el archivo TXT este disponible.</p>';
-            }
-            
-            const relevant = findRelevantSections(question, manualSections);
-            return formatResponse(question, relevant);
-        }
-        
-        // =============================================
-        // INICIO
-        // =============================================
-        
-        const saved = localStorage.getItem('tallerUser');
-        if (saved) {
-            currentUser = JSON.parse(saved);
-            $('loginBtn').textContent = currentUser.role === 'teacher' ? 'Profesor' : 'Alumno';
-        }
-        
-        renderMachines();
+        let machine = null, manual = '', engine = null, aiReady = false, user = null, rec = null, recActive = false;
+
+        // Session
+        const s = localStorage.getItem('tallerUser');
+        if (s) { user = JSON.parse(s); $('loginBtn').textContent = user.role === 'teacher' ? 'Profesor' : 'Alumno'; }
+
+        render();
         setupVoice();
-        setupEvents();
-        
-        // =============================================
-        // EVENTOS
-        // =============================================
-        
-        function setupEvents() {
+        events();
+
+        function events() {
             $('searchInput').oninput = e => filter(e.target.value);
-            $('voiceSearchBtn').onclick = () => toggleVoice('search');
-            
-            document.querySelectorAll('.filter').forEach(f => {
-                f.onclick = () => {
-                    document.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
-                    f.classList.add('active');
-                    filterByCat(f.dataset.filter);
-                };
+            $('voiceSearchBtn').onclick = () => vToggle('search');
+            document.querySelectorAll('.filter').forEach(f => f.onclick = () => {
+                document.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
+                f.classList.add('active');
+                filter(f.dataset.filter);
             });
-            
-            $('modalClose').onclick = () => closeModal('machineModal');
-            $('machineModal').onclick = e => { if (e.target.id === 'machineModal') closeModal('machineModal'); };
-            
-            document.querySelectorAll('.tab').forEach(t => {
-                t.onclick = () => {
-                    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
-                    t.classList.add('active');
-                    $(t.dataset.tab + 'Content').classList.add('active');
-                };
+            $('close').onclick = () => $('machineModal').classList.remove('active');
+            $('machineModal').onclick = e => { if (e.target.id === 'machineModal') $('machineModal').classList.remove('active'); };
+            document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+                document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                $(t.dataset.tab + 'Tab').classList.add('active');
             });
-            
-            $('sendBtn').onclick = send;
-            $('chatInput').onkeypress = e => { if (e.key === 'Enter') send(); };
-            $('voiceBtn').onclick = () => toggleVoice('chat');
-            
-            $('loginBtn').onclick = () => {
-                if (currentUser) {
-                    if (confirm('¿Cerrar sesion?')) {
-                        currentUser = null;
-                        localStorage.removeItem('tallerUser');
-                        $('loginBtn').textContent = 'Entrar';
-                        toast('Sesion cerrada', 'success');
-                    }
-                } else {
-                    openModal('loginModal');
-                }
-            };
-            
+            $('send').onclick = chat;
+            $('input').onkeypress = e => { if (e.key === 'Enter') chat(); };
+            $('voiceBtn').onclick = () => vToggle('chat');
+            $('loginBtn').onclick = () => { if (user) { if (confirm('Cerrar sesion?')) { user = null; localStorage.removeItem('tallerUser'); $('loginBtn').textContent = 'Entrar'; toast('Sesion cerrada', 'success'); } } else $('loginModal').classList.add('active'); };
             $('studentBtn').onclick = () => login('student');
             $('teacherBtn').onclick = () => $('codeSection').classList.remove('hidden');
-            $('codeBtn').onclick = () => {
-                if ($('codeInput').value === 'TALLER2024') login('teacher');
-                else toast('Codigo incorrecto', 'error');
-            };
-            $('loginClose').onclick = () => closeModal('loginModal');
+            $('codeBtn').onclick = () => { if ($('code').value === 'TALLER2024') login('teacher'); else toast('Codigo incorrecto', 'error'); };
+            $('loginClose').onclick = () => $('loginModal').classList.remove('active');
         }
-        
-        // =============================================
-        // RENDER
-        // =============================================
-        
-        function renderMachines(list = MACHINES) {
-            $('machinesGrid').innerHTML = list.map(m => `
-                <div class="card" onclick="openMachine('${m.id}')">
-                    <div class="card-img">
-                        <img src="${m.img}" alt="${m.name}" onerror="this.style.display='none'">
-                        <span class="card-badge badge-${m.cat}">${m.cat}</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-name">${m.name}</div>
-                        <div class="card-model">${m.model} - ${m.brand}</div>
-                        <div class="card-status"><span class="status-dot"></span>Manual listo</div>
-                    </div>
+
+        function render(list = MACHINES) {
+            $('grid').innerHTML = list.map(m => `
+                <div class="card" onclick="openM('${m.id}')">
+                    <div class="card-img"><img src="${m.img}" onerror="this.style.display='none'"><span class="card-badge badge-${m.cat}">${m.cat}</span></div>
+                    <div class="card-body"><div class="card-name">${m.name}</div><div class="card-model">${m.model} - ${m.brand}</div><div class="card-status"><span class="status-dot"></span>OK</div></div>
                 </div>
             `).join('');
         }
-        
-        function filter(q) {
-            const lower = q.toLowerCase();
-            renderMachines(MACHINES.filter(m => m.name.toLowerCase().includes(lower) || m.model.toLowerCase().includes(lower) || m.brand.toLowerCase().includes(lower)));
-        }
-        
-        function filterByCat(cat) {
-            renderMachines(cat === 'all' ? MACHINES : MACHINES.filter(m => m.cat === cat));
-        }
-        
-        // =============================================
-        // ABRIR MÁQUINA
-        // =============================================
-        
-        async function openMachine(id) {
-            currentMachine = MACHINES.find(m => m.id === id);
-            if (!currentMachine) return;
-            
-            $('modalTitle').textContent = currentMachine.name;
-            $('chatInput').value = '';
-            
-            chatMsgs().innerHTML = '';
-            addMsg('ai', `Hola. Soy el asistente tecnico de <strong>${currentMachine.name}</strong>.<p>He analizado el manual y puedo responder tus consultas. ¿Que necesitas saber?</p>`);
-            
-            await loadManual(currentMachine.txt);
-            showPDF(currentMachine.pdf);
-            openModal('machineModal');
-        }
-        
-        function showPDF(pdfFile) {
-            const base = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
-            $('pdfContainer').innerHTML = `<embed src="${base}/${pdfFile}" type="application/pdf" width="100%" height="100%">`;
-        }
-        
-        async function loadManual(txtFile) {
+
+        function filter(q) { const l = q.toLowerCase(); render(MACHINES.filter(m => m.name.toLowerCase().includes(l) || m.model.toLowerCase().includes(l) || m.brand.toLowerCase().includes(l))); }
+        window.openM = async id => {
+            machine = MACHINES.find(m => m.id === id);
+            if (!machine) return;
+            $('title').textContent = machine.name;
+            $('input').value = '';
+            $('msgs').innerHTML = '';
+            addMsg('ai', `Hola. Soy el asistente tecnico de <strong>${machine.name}</strong>.<p>He analizado el manual. ¿Que quieres saber?</p>`);
+            await loadManual(machine.txt);
+            $('pdf').innerHTML = `<embed src="${machine.pdf}" type="application/pdf" width="100%" height="100%">`;
+            $('machineModal').classList.add('active');
+            if (!aiReady) { $('loading').classList.remove('hidden'); await initAI(); }
+            else { $('status').className = 'ai-status ready'; $('statusText').textContent = 'IA lista'; $('send').disabled = false; }
+        };
+
+        async function loadManual(f) {
             try {
                 const base = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
-                const res = await fetch(`${base}/${txtFile}`);
-                
-                if (!res.ok) throw new Error('No encontrado');
-                
-                manualText = await res.text();
-                manualSections = parseManual(manualText);
-                
-                console.log(`Manual: ${manualText.length} chars, ${manualSections.length} secciones`);
-                
-            } catch (err) {
-                console.error('Error cargando manual:', err);
-                manualText = 'Manual no disponible.';
-                manualSections = [];
+                const r = await fetch(`${base}/${f}`);
+                manual = await r.text();
+            } catch { manual = ''; }
+        }
+
+        async function initAI() {
+            try {
+                $('statusText').textContent = 'Descargando IA (~300MB)...';
+                const model = "Qwen2.5-0.5B-Instruct-q4f16_1-MLC";
+                engine = await webllm.CreateMLCEngine(model, {
+                    initProgressCallback: p => { $('progress').textContent = `${Math.round(p.progress * 100)}% - ${p.text}`; }
+                });
+                aiReady = true;
+                $('loading').classList.add('hidden');
+                $('status').className = 'ai-status ready';
+                $('statusText').textContent = 'IA lista';
+                $('send').disabled = false;
+                toast('IA cargada', 'success');
+            } catch (e) {
+                console.error(e);
+                $('loading').classList.add('hidden');
+                $('status').className = 'ai-status error';
+                $('statusText').textContent = 'Error: dispositivo no compatible';
+                $('send').disabled = false;
+                toast('IA no disponible en este dispositivo', 'error');
             }
         }
-        
-        // =============================================
-        // CHAT
-        // =============================================
-        
-        function chatMsgs() { return $('chatMessages'); }
-        
-        function addMsg(type, html) {
-            const div = document.createElement('div');
-            div.className = `msg ${type}`;
-            div.innerHTML = `<div class="msg-avatar">${type === 'ai' ? '🤖' : '👤'}</div><div class="msg-bubble">${html}</div>`;
-            chatMsgs().appendChild(div);
-            chatMsgs().scrollTop = chatMsgs().scrollHeight;
-        }
-        
-        function send() {
-            const q = $('chatInput').value.trim();
-            if (!q || !currentMachine) return;
-            
+
+        async function chat() {
+            const q = $('input').value.trim();
+            if (!q || !machine) return;
             addMsg('user', q);
-            $('chatInput').value = '';
+            $('input').value = '';
             
-            setTimeout(() => {
-                const answer = generateAnswer(q);
-                addMsg('ai', answer);
-            }, 200);
+            if (aiReady && engine) {
+                try {
+                    const resp = await engine.chat.completions.create({
+                        messages: [
+                            {role: 'system', content: `Eres un experto tecnico en maquinaria industrial. Responde en español de forma clara y natural.\n\nMANUAL DE ${machine.name}:\n${manual.substring(0, 3500)}`},
+                            {role: 'user', content: q}
+                        ],
+                        temperature: 0.7, max_tokens: 500
+                    });
+                    addMsg('ai', resp.choices[0].message.content.replace(/\n/g, '<br>'));
+                    return;
+                } catch (e) { console.error(e); }
+            }
+            // Fallback
+            addMsg('ai', fallback(q));
         }
-        
-        window.ask = function(q) { $('chatInput').value = q; send(); };
-        
-        // =============================================
-        // VOZ
-        // =============================================
-        
+
+        function fallback(q) {
+            if (!manual) return '<p>Manual no disponible.</p>';
+            const lines = manual.split('\n').filter(l => l.trim().length > 15);
+            const words = q.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+            const matches = [];
+            for (const line of lines) {
+                let score = 0;
+                const lower = line.toLowerCase();
+                for (const w of words) if (lower.includes(w)) score += 2;
+                if (lower.includes(q.toLowerCase())) score += 5;
+                if (score > 0) matches.push({line, score});
+            }
+            if (!matches.length) return '<p>No encontre informacion. Intenta con otras palabras.</p>';
+            matches.sort((a, b) => b.score - a.score);
+            return matches.slice(0, 4).map(m => `• ${m.line.trim()}`).join('<br>') + `<br><em>Manual de ${machine.name}</em>`;
+        }
+
+        function addMsg(type, html) {
+            const d = document.createElement('div');
+            d.className = `msg ${type}`;
+            d.innerHTML = `<div class="msg-avatar">${type === 'ai' ? '🤖' : '👤'}</div><div class="msg-bubble">${html}</div>`;
+            $('msgs').appendChild(d);
+            $('msgs').scrollTop = $('msgs').scrollHeight;
+        }
+
+        window.ask = q => { $('input').value = q; chat(); };
+
         function setupVoice() {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SR) return;
-            
-            recognition = new SR();
-            recognition.lang = 'es-ES';
-            
-            recognition.onresult = e => {
+            rec = new SR();
+            rec.lang = 'es-ES';
+            rec.onresult = e => {
                 const t = e.results[0][0].transcript;
-                if ($('machineModal').classList.contains('active')) { $('chatInput').value = t; send(); }
+                if ($('machineModal').classList.contains('active')) { $('input').value = t; chat(); }
                 else { $('searchInput').value = t; filter(t); }
             };
-            
-            recognition.onerror = recognition.onend = () => stopVoice();
+            rec.onerror = rec.onend = () => { recActive = false; $('voiceSearchBtn').classList.remove('recording'); $('voiceBtn').classList.remove('recording'); };
         }
-        
-        function toggleVoice(ctx) {
-            if (!recognition) { toast('Voz no soportada', 'error'); return; }
-            
-            if (isRecording) recognition.stop();
-            else {
-                isRecording = true;
-                (ctx === 'search' ? $('voiceSearchBtn') : $('voiceBtn')).classList.add('recording');
-                recognition.start();
-            }
+
+        function vToggle(ctx) {
+            if (!rec) { toast('Voz no soportada', 'error'); return; }
+            if (recActive) rec.stop();
+            else { recActive = true; (ctx === 'search' ? $('voiceSearchBtn') : $('voiceBtn')).classList.add('recording'); rec.start(); }
         }
-        
-        function stopVoice() {
-            isRecording = false;
-            $('voiceSearchBtn').classList.remove('recording');
-            $('voiceBtn').classList.remove('recording');
-        }
-        
-        // =============================================
-        // UTILS
-        // =============================================
-        
+
         function login(role) {
-            currentUser = { role };
-            localStorage.setItem('tallerUser', JSON.stringify(currentUser));
+            user = {role};
+            localStorage.setItem('tallerUser', JSON.stringify(user));
             $('loginBtn').textContent = role === 'teacher' ? 'Profesor' : 'Alumno';
-            closeModal('loginModal');
+            $('loginModal').classList.remove('active');
             toast('Bienvenido', 'success');
         }
-        
-        function openModal(id) { $(id).classList.add('active'); }
-        function closeModal(id) { $(id).classList.remove('active'); }
-        
+
         function toast(msg, type = 'info') {
-            const el = document.createElement('div');
-            el.className = `toast ${type}`;
-            el.textContent = msg;
-            $('toasts').appendChild(el);
-            setTimeout(() => el.remove(), 2500);
+            const d = document.createElement('div');
+            d.className = `toast ${type}`;
+            d.textContent = msg;
+            $('toasts').appendChild(d);
+            setTimeout(() => d.remove(), 2500);
         }
-        
-        window.openMachine = openMachine;
     </script>
 </body>
 </html>
