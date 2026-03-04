@@ -58,14 +58,14 @@
         .filter.active { background: var(--primary); color: white; }
         .section-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; }
         
-        /* TARJETAS MÁS GRANDES */
+        /* TARJETAS GRANDES - IMAGEN QUE LLENA */
         .machines-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
             gap: 1rem; 
         }
         @media (min-width: 420px) { 
-            .machines-grid { grid-template-columns: repeat(2, 1fr); gap: 1.1rem; } 
+            .machines-grid { gap: 1.1rem; } 
         }
         @media (min-width: 600px) { 
             .machines-grid { grid-template-columns: repeat(3, 1fr); } 
@@ -73,40 +73,61 @@
         
         .card { 
             background: white; 
-            border-radius: 16px; 
+            border-radius: 18px; 
             overflow: hidden; 
             box-shadow: 0 3px 12px rgba(0,0,0,0.08); 
             cursor: pointer; 
             transition: transform 0.25s, box-shadow 0.25s; 
+            position: relative;
         }
         .card:hover { transform: translateY(-5px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
         
-        /* IMAGEN MÁS GRANDE Y SIN CORTAR */
+        /* IMAGEN QUE LLENA TODA LA TARJETA */
         .card-img { 
-            height: 140px; 
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9); 
+            width: 100%;
+            height: 180px;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
         }
         .card-img img { 
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
-        .card-badge { position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.2rem 0.55rem; border-radius: 6px; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; }
+        .card-badge { position: absolute; top: 0.6rem; right: 0.6rem; padding: 0.25rem 0.6rem; border-radius: 8px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; z-index: 2; }
         .badge-soldadura { background: #fecaca; color: #991b1b; }
         .badge-corte { background: #bfdbfe; color: #1e40af; }
         .badge-conformado { background: #bbf7d0; color: #166534; }
         
-        .card-body { padding: 0.85rem; }
-        .card-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.15rem; }
-        .card-model { font-size: 0.78rem; color: var(--text2); margin-bottom: 0.35rem; }
-        .card-status { display: flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; color: var(--text2); }
+        /* TEXTO ENCIMA DE LA IMAGEN */
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 2rem 0.9rem 0.85rem;
+        }
+        .card-name { 
+            font-family: 'Space Grotesk', sans-serif; 
+            font-weight: 700; 
+            font-size: 1.05rem; 
+            color: white;
+            margin-bottom: 0.15rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .card-model { 
+            font-size: 0.8rem; 
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 0.3rem;
+        }
+        .card-status { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.3rem; 
+            font-size: 0.72rem; 
+            color: rgba(255,255,255,0.7);
+        }
         .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
         
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: flex-end; justify-content: center; z-index: 1000; }
@@ -319,8 +340,15 @@
         function render(list = MACHINES) {
             $('grid').innerHTML = list.map(m => `
                 <div class="card" onclick="openM('${m.id}')">
-                    <div class="card-img"><img src="${m.img}" alt="${m.name}" onerror="this.style.display='none'"><span class="card-badge badge-${m.cat}">${m.cat}</span></div>
-                    <div class="card-body"><div class="card-name">${m.name}</div><div class="card-model">${m.model} - ${m.brand}</div><div class="card-status"><span class="status-dot"></span>PDF listo</div></div>
+                    <div class="card-img">
+                        <img src="${m.img}" alt="${m.name}" onerror="this.style.display='none'">
+                        <span class="card-badge badge-${m.cat}">${m.cat}</span>
+                        <div class="card-overlay">
+                            <div class="card-name">${m.name}</div>
+                            <div class="card-model">${m.model} - ${m.brand}</div>
+                            <div class="card-status"><span class="status-dot"></span>PDF listo</div>
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }
