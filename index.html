@@ -2,11 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1e3a5f">
-    <title>Taller IES ACCI</title>
+    <title>Taller IES ACCI - Asistente IA</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- WebLLM -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@aspect-build/aspect-rules-system@0.0.5/dist/index.js"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -52,11 +55,7 @@
             justify-content: space-between;
         }
         
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
+        .header-brand { display: flex; align-items: center; gap: 0.75rem; }
         
         .header-logo {
             width: 48px;
@@ -67,20 +66,9 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            overflow: hidden;
         }
         
-        .header-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .header-logo svg {
-            width: 28px;
-            height: 28px;
-            color: var(--primary);
-        }
+        .header-logo svg { width: 28px; height: 28px; color: var(--primary); }
         
         .header h1 {
             font-family: 'Space Grotesk', sans-serif;
@@ -89,11 +77,7 @@
             font-weight: 700;
         }
         
-        .header span {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.8);
-            display: block;
-        }
+        .header span { font-size: 0.7rem; color: rgba(255,255,255,0.8); display: block; }
         
         .btn {
             padding: 0.6rem 1.2rem;
@@ -105,17 +89,12 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
         }
         
         .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-accent { background: var(--accent); color: white; }
-        .btn-sm { padding: 0.5rem 0.9rem; font-size: 0.8rem; }
         
-        /* CONTENIDO */
+        /* CONTENT */
         .content { padding: 0.5rem 1rem 1.5rem; }
         
         .search-box {
@@ -129,11 +108,7 @@
             margin-bottom: 1.25rem;
         }
         
-        .search-box svg {
-            width: 20px;
-            height: 20px;
-            color: var(--text2);
-        }
+        .search-box svg { width: 20px; height: 20px; color: var(--text2); }
         
         .search-box input {
             flex: 1;
@@ -164,12 +139,9 @@
         .voice-btn:hover { background: var(--primary); color: white; }
         .voice-btn.recording { background: var(--error); color: white; animation: pulse 1.5s infinite; }
         
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
         
-        /* FILTROS */
+        /* FILTERS */
         .filters {
             display: flex;
             gap: 0.5rem;
@@ -209,9 +181,7 @@
             gap: 0.75rem;
         }
         
-        @media (min-width: 480px) {
-            .machines-grid { grid-template-columns: repeat(3, 1fr); }
-        }
+        @media (min-width: 480px) { .machines-grid { grid-template-columns: repeat(3, 1fr); } }
         
         .card {
             background: var(--bg-card);
@@ -222,10 +192,7 @@
             transition: all 0.25s;
         }
         
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
         
         .card-img {
             height: 90px;
@@ -234,11 +201,7 @@
             overflow: hidden;
         }
         
-        .card-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; }
         
         .card-badge {
             position: absolute;
@@ -249,7 +212,6 @@
             font-size: 0.6rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.03em;
         }
         
         .badge-soldadura { background: #fecaca; color: #991b1b; }
@@ -257,35 +219,12 @@
         .badge-conformado { background: #bbf7d0; color: #166534; }
         
         .card-body { padding: 0.75rem; }
+        .card-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.9rem; }
+        .card-model { font-size: 0.75rem; color: var(--text2); margin-top: 0.15rem; }
         
-        .card-name {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
+        .card-status { display: flex; align-items: center; gap: 0.3rem; margin-top: 0.4rem; font-size: 0.7rem; color: var(--text2); }
         
-        .card-model {
-            font-size: 0.75rem;
-            color: var(--text2);
-            margin-top: 0.15rem;
-        }
-        
-        .card-status {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            margin-top: 0.4rem;
-            font-size: 0.7rem;
-            color: var(--text2);
-        }
-        
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #cbd5e1;
-        }
-        
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; }
         .status-dot.ready { background: var(--success); }
         
         /* MODAL */
@@ -327,11 +266,7 @@
             flex-shrink: 0;
         }
         
-        .modal-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
+        .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; }
         
         .modal-close {
             width: 36px;
@@ -371,16 +306,11 @@
         .tab:hover { color: var(--text); }
         .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
         
-        .modal-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-        
+        .modal-body { flex: 1; overflow-y: auto; padding: 1rem; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        /* PDF VIEWER */
+        /* PDF */
         .pdf-container {
             background: #1e293b;
             border-radius: 12px;
@@ -391,32 +321,10 @@
             overflow: hidden;
         }
         
-        .pdf-container embed,
-        .pdf-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        .pdf-error {
-            text-align: center;
-            padding: 2rem;
-            color: white;
-        }
-        
-        .pdf-error svg {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
+        .pdf-container embed { width: 100%; height: 100%; border: none; }
         
         /* CHAT */
-        .chat-box {
-            display: flex;
-            flex-direction: column;
-            height: 420px;
-        }
+        .chat-box { display: flex; flex-direction: column; height: 420px; }
         
         .chat-messages {
             flex: 1;
@@ -427,12 +335,7 @@
             gap: 0.85rem;
         }
         
-        .msg {
-            display: flex;
-            gap: 0.6rem;
-            max-width: 88%;
-        }
-        
+        .msg { display: flex; gap: 0.6rem; max-width: 88%; }
         .msg.user { align-self: flex-end; flex-direction: row-reverse; }
         
         .msg-avatar {
@@ -450,38 +353,18 @@
         .msg.ai .msg-avatar { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
         .msg.user .msg-avatar { background: var(--accent); color: white; }
         
-        .msg-bubble {
-            padding: 0.85rem 1rem;
-            border-radius: 14px;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
+        .msg-bubble { padding: 0.85rem 1rem; border-radius: 14px; font-size: 0.9rem; line-height: 1.6; }
         .msg.ai .msg-bubble { background: #f1f5f9; border-bottom-left-radius: 4px; }
         .msg.user .msg-bubble { background: var(--primary); color: white; border-bottom-right-radius: 4px; }
         
         .msg-bubble strong { color: var(--accent); }
         .msg.user .msg-bubble strong { color: #fef3c7; }
         
-        .msg-bubble em {
-            display: block;
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
+        .msg-bubble em { display: block; margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.6; }
         
-        .chat-input-box {
-            padding: 0.75rem 0;
-            border-top: 1px solid var(--border);
-            background: white;
-        }
+        .chat-input-box { padding: 0.75rem 0; border-top: 1px solid var(--border); background: white; }
         
-        .quick-btns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-bottom: 0.6rem;
-        }
+        .quick-btns { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.6rem; }
         
         .quick-btn {
             padding: 0.45rem 0.75rem;
@@ -493,16 +376,9 @@
             transition: all 0.2s;
         }
         
-        .quick-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
+        .quick-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
         
-        .input-row {
-            display: flex;
-            gap: 0.5rem;
-        }
+        .input-row { display: flex; gap: 0.5rem; }
         
         .chat-input {
             flex: 1;
@@ -514,11 +390,7 @@
             transition: all 0.2s;
         }
         
-        .chat-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
+        .chat-input:focus { outline: none; border-color: var(--primary); }
         
         .chat-btn {
             width: 48px;
@@ -533,15 +405,10 @@
         }
         
         .chat-btn svg { width: 20px; height: 20px; }
-        
         .chat-btn.send { background: var(--primary); color: white; }
-        .chat-btn.send:hover { background: var(--primary-dark); transform: scale(1.05); }
-        
-        .chat-btn.voice {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            color: var(--text2);
-        }
+        .chat-btn.send:hover { background: var(--primary-dark); }
+        .chat-btn.send:disabled { background: #94a3b8; cursor: not-allowed; }
+        .chat-btn.voice { background: #f8fafc; border: 1px solid var(--border); color: var(--text2); }
         .chat-btn.voice:hover { border-color: var(--accent); color: var(--accent); }
         .chat-btn.voice.recording { background: var(--error); border-color: var(--error); color: white; animation: pulse 1s infinite; }
         
@@ -565,15 +432,15 @@
             font-size: 0.85rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             animation: toastIn 0.3s ease;
+            max-width: 90vw;
+            text-align: center;
         }
         
         .toast.success { background: var(--success); }
         .toast.error { background: var(--error); }
+        .toast.warning { background: var(--warning); }
         
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* LOGIN */
         .login-content { padding: 1.5rem; text-align: center; }
@@ -619,7 +486,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         
         .login-option-icon svg { width: 22px; height: 22px; color: var(--primary); }
@@ -629,37 +495,51 @@
         
         .code-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
         .code-section input {
-            width: 100%;
-            padding: 0.75rem;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 1rem;
-            text-align: center;
-            letter-spacing: 0.15em;
-            margin-bottom: 0.5rem;
+            width: 100%; padding: 0.75rem; background: #f8fafc; border: 1px solid var(--border);
+            border-radius: 10px; font-size: 1rem; text-align: center; letter-spacing: 0.15em; margin-bottom: 0.5rem;
         }
         .code-section input:focus { outline: none; border-color: var(--primary); }
         .code-hint { font-size: 0.75rem; color: var(--text2); }
         
         /* LOADING */
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text2);
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
         }
         
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #e2e8f0;
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 0.75rem;
-        }
+        .loading-overlay.hidden { display: none; }
+        
+        .spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
         
         @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .loading-text { margin-top: 1rem; font-size: 0.9rem; color: var(--text2); text-align: center; padding: 0 1rem; }
+        .loading-text strong { color: var(--primary); }
+        .loading-progress { margin-top: 0.5rem; font-size: 0.8rem; color: var(--primary); font-weight: 600; }
+        
+        /* AI STATUS */
+        .ai-status {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .ai-status.ready { background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-color: #6ee7b7; color: #065f46; }
+        
+        .ai-status svg { width: 18px; height: 18px; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -673,7 +553,7 @@
                 </div>
                 <div>
                     <h1>Taller IES ACCI</h1>
-                    <span>Maquinas y Herramientas</span>
+                    <span>Asistente con IA</span>
                 </div>
             </div>
             <button class="btn" id="loginBtn">Entrar</button>
@@ -708,7 +588,16 @@
     
     <!-- Modal Principal -->
     <div class="modal" id="machineModal">
-        <div class="modal-box">
+        <div class="modal-box" style="position: relative;">
+            <div class="loading-overlay hidden" id="aiLoading">
+                <div class="spinner"></div>
+                <div class="loading-text">
+                    <strong>Cargando modelo de IA</strong><br>
+                    Esto solo ocurre la primera vez<br>
+                    <span class="loading-progress" id="loadingProgress">Iniciando...</span>
+                </div>
+            </div>
+            
             <div class="modal-header">
                 <h3 class="modal-title" id="modalTitle">-</h3>
                 <button class="modal-close" id="modalClose">
@@ -725,6 +614,15 @@
             
             <div class="modal-body">
                 <div id="chatContent" class="tab-content active">
+                    <div class="ai-status" id="aiStatus">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <span id="aiStatusText">IA: Cargando modelo...</span>
+                    </div>
+                    
                     <div class="chat-box">
                         <div class="chat-messages" id="chatMessages"></div>
                         <div class="chat-input-box">
@@ -742,7 +640,7 @@
                                         <path d="M19 10v2a7 7 0 01-14 0v-2"/>
                                     </svg>
                                 </button>
-                                <button class="chat-btn send" id="sendBtn">
+                                <button class="chat-btn send" id="sendBtn" disabled>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <line x1="22" y1="2" x2="11" y2="13"/>
                                         <polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -799,7 +697,6 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
                                 <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 00-3-3.87"/>
                             </svg>
                         </div>
                         <div class="login-option-info">
@@ -820,7 +717,93 @@
     
     <div class="toast-container" id="toasts"></div>
 
-    <script>
+    <script type="module">
+        // =============================================
+        // WEBLLM - IA REAL EN EL NAVEGADOR
+        // =============================================
+        
+        import * as webllm from "https://esm.run/@mlc-ai/web-llm";
+        
+        // Configurar logger para ver progreso
+        const setProgress = (text) => {
+            document.getElementById('loadingProgress').textContent = text;
+        };
+        
+        class AIEngine {
+            constructor() {
+                this.engine = null;
+                this.isReady = false;
+                this.isGenerating = false;
+            }
+            
+            async init(onProgress) {
+                if (this.isReady) return true;
+                
+                try {
+                    // Modelo pequeño y rápido - Llama 3.2 1B (aprox 500MB)
+                    const selectedModel = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
+                    
+                    onProgress('Descargando modelo IA (solo esta vez)...');
+                    
+                    this.engine = await webllm.CreateMLCEngine(selectedModel, {
+                        initProgressCallback: (progress) => {
+                            const pct = Math.round(progress.progress * 100);
+                            onProgress(`${progress.text} ${pct}%`);
+                        }
+                    });
+                    
+                    this.isReady = true;
+                    onProgress('IA lista');
+                    return true;
+                    
+                } catch (error) {
+                    console.error('Error iniciando IA:', error);
+                    onProgress('Error al cargar IA');
+                    return false;
+                }
+            }
+            
+            async chat(messages, manualContext) {
+                if (!this.isReady || this.isGenerating) return null;
+                
+                this.isGenerating = true;
+                
+                try {
+                    // Crear prompt con contexto del manual
+                    const systemPrompt = `Eres un asistente técnico experto en maquinaria industrial. Responde de forma clara y concisa en español.
+
+MANUAL DE LA MÁQUINA (usa esta información para responder):
+ ${manualContext}
+
+INSTRUCCIONES:
+- Responde siempre en español
+- Sé conciso pero completo
+- Si no encuentras información en el manual, indícalo
+- Usa lenguaje técnico apropiado
+- Formatea las listas con guiones`;
+
+                    const fullMessages = [
+                        { role: 'system', content: systemPrompt },
+                        ...messages
+                    ];
+                    
+                    const reply = await this.engine.chat.completions.create({
+                        messages: fullMessages,
+                        temperature: 0.7,
+                        max_tokens: 800
+                    });
+                    
+                    return reply.choices[0].message.content;
+                    
+                } catch (error) {
+                    console.error('Error generando respuesta:', error);
+                    return 'Lo siento, hubo un error al procesar tu pregunta. Intenta de nuevo.';
+                } finally {
+                    this.isGenerating = false;
+                }
+            }
+        }
+        
         // =============================================
         // DATOS DE MÁQUINAS
         // =============================================
@@ -837,10 +820,13 @@
         // Estado
         let currentMachine = null;
         let manualText = '';
-        let manualChunks = [];
+        let chatHistory = [];
         let currentUser = null;
         let recognition = null;
         let isRecording = false;
+        
+        // IA
+        const ai = new AIEngine();
         
         // Elementos
         const $ = id => document.getElementById(id);
@@ -849,14 +835,12 @@
         // INICIO
         // =============================================
         
-        // Cargar sesión
         const saved = localStorage.getItem('tallerUser');
         if (saved) {
             currentUser = JSON.parse(saved);
             $('loginBtn').textContent = currentUser.role === 'teacher' ? 'Profesor' : 'Alumno';
         }
         
-        // Renderizar
         renderMachines();
         setupVoice();
         setupEvents();
@@ -866,11 +850,9 @@
         // =============================================
         
         function setupEvents() {
-            // Búsqueda
             $('searchInput').oninput = e => filter(e.target.value);
             $('voiceSearchBtn').onclick = () => toggleVoice('search');
             
-            // Filtros
             document.querySelectorAll('.filter').forEach(f => {
                 f.onclick = () => {
                     document.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
@@ -879,11 +861,9 @@
                 };
             });
             
-            // Modal máquina
             $('modalClose').onclick = () => closeModal('machineModal');
             $('machineModal').onclick = e => { if (e.target.id === 'machineModal') closeModal('machineModal'); };
             
-            // Tabs
             document.querySelectorAll('.tab').forEach(t => {
                 t.onclick = () => {
                     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -893,12 +873,10 @@
                 };
             });
             
-            // Chat
             $('sendBtn').onclick = send;
             $('chatInput').onkeypress = e => { if (e.key === 'Enter') send(); };
             $('voiceBtn').onclick = () => toggleVoice('chat');
             
-            // Login
             $('loginBtn').onclick = () => {
                 if (currentUser) {
                     if (confirm('¿Cerrar sesión?')) {
@@ -968,33 +946,57 @@
             
             $('modalTitle').textContent = currentMachine.name;
             $('chatInput').value = '';
+            chatHistory = [];
             
             // Reset chat
             chatMsgs().innerHTML = '';
-            addMsg('ai', `Hola. Soy el asistente técnico de <strong>${currentMachine.name}</strong>.<br>He cargado el manual. ¿Qué necesitas saber?`);
+            addMsg('ai', `Hola. Soy el asistente técnico de <strong>${currentMachine.name}</strong>. He cargado el manual. ¿Qué necesitas saber?`);
             
-            // Cargar TXT para la IA
-            loadManual(currentMachine.txt);
+            // Mostrar loading y cargar IA si no está lista
+            if (!ai.isReady) {
+                $('aiLoading').classList.remove('hidden');
+                $('aiStatus').classList.remove('ready');
+                $('aiStatusText').textContent = 'IA: Cargando modelo...';
+                $('sendBtn').disabled = true;
+            }
+            
+            // Cargar manual
+            await loadManual(currentMachine.txt);
             
             // Cargar PDF
             showPDF(currentMachine.pdf);
             
             openModal('machineModal');
+            
+            // Iniciar IA si no está lista
+            if (!ai.isReady) {
+                const success = await ai.init(setProgress);
+                
+                if (success) {
+                    $('aiLoading').classList.add('hidden');
+                    $('aiStatus').classList.add('ready');
+                    $('aiStatusText').textContent = 'IA: Lista para preguntar';
+                    $('sendBtn').disabled = false;
+                    toast('IA cargada correctamente', 'success');
+                } else {
+                    $('aiLoading').classList.add('hidden');
+                    $('aiStatusText').textContent = 'IA: Error (recarga la página)';
+                    toast('Error al cargar IA', 'error');
+                }
+            } else {
+                $('aiStatus').classList.add('ready');
+                $('aiStatusText').textContent = 'IA: Lista';
+                $('sendBtn').disabled = false;
+            }
         }
         
         function showPDF(pdfFile) {
             const baseUrl = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
-            $('pdfContainer').innerHTML = `
-                <embed 
-                    src="${baseUrl}/${pdfFile}" 
-                    type="application/pdf" 
-                    width="100%" 
-                    height="100%">
-            `;
+            $('pdfContainer').innerHTML = `<embed src="${baseUrl}/${pdfFile}" type="application/pdf" width="100%" height="100%">`;
         }
         
         // =============================================
-        // CARGAR MANUAL (IA)
+        // CARGAR MANUAL
         // =============================================
         
         async function loadManual(txtFile) {
@@ -1005,204 +1007,19 @@
                 if (!res.ok) throw new Error('No encontrado');
                 
                 manualText = await res.text();
-                manualChunks = createChunks(manualText);
-                
-                console.log(`Manual cargado: ${manualChunks.length} fragmentos`);
+                console.log(`Manual: ${manualText.length} caracteres`);
                 
             } catch (err) {
                 console.error('Error cargando manual:', err);
-                manualText = '';
-                manualChunks = [];
+                manualText = 'Manual no disponible. Verifica que el archivo esté subido.';
             }
         }
         
         // =============================================
-        // IA MEJORADA
+        // CHAT CON IA
         // =============================================
         
-        function createChunks(text) {
-            // Dividir en párrafos
-            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 20);
-            
-            const chunks = [];
-            
-            paragraphs.forEach((p, i) => {
-                const lines = p.trim().split('\n');
-                
-                // Detectar títulos (líneas cortas en mayúsculas o con :)
-                let title = '';
-                let content = p;
-                
-                if (lines[0].length < 60 && (lines[0].match(/^[A-ZÁÉÍÓÚÑ\s:]+$/) || lines[0].includes(':'))) {
-                    title = lines[0].replace(/[:]+$/, '').trim();
-                    content = lines.slice(1).join('\n').trim();
-                }
-                
-                chunks.push({
-                    id: i,
-                    title: title,
-                    content: content,
-                    fullText: p.trim(),
-                    keywords: extractKeywords(p)
-                });
-            });
-            
-            return chunks;
-        }
-        
-        function extractKeywords(text) {
-            const stopWords = new Set([
-                'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'de', 'del', 'al', 'a', 'en', 'con', 'por', 'para', 
-                'que', 'qué', 'como', 'cómo', 'cuando', 'cuándo', 'donde', 'dónde', 'es', 'son', 'se', 'su', 'sus', 'y', 'o', 
-                'este', 'esta', 'estos', 'estas', 'muy', 'más', 'menos', 'si', 'no', 'lo', 'la', 'las', 'el', 'los', 'un',
-                'una', 'unos', 'unas', 'del', 'al', 'sobre', 'entre', 'durante', 'mediante', 'según', 'sin', 'sino', 'también',
-                'así', 'aunque', 'porque', 'puesto', 'pues', 'ya', 'siempre', 'nunca', 'tal', 'cual', 'cuales', 'quien', 'quienes',
-                'cuyo', 'cuya', 'cuyos', 'cuyas', 'esto', 'eso', 'aquello', 'aquí', 'ahí', 'allí', 'ser', 'estar', 'tener', 'hacer',
-                'poder', 'decir', 'ir', 'ver', 'dar', 'saber', 'querer', 'llegar', 'pasar', 'deber', 'poner', 'parecer', 'quedar',
-                'creer', 'hablar', 'llevar', 'dejar', 'seguir', 'encontrar', 'llamar', 'venir', 'pensar', 'salir', 'volver', 'tomar',
-                'conocer', 'llegar', 'entender', 'haber', 'he', 'has', 'ha', 'hemos', 'habéis', 'han', 'había', 'habías', 'habíamos',
-                'habíais', 'habían', 'habré', 'habrás', 'habrá', 'habremos', 'habréis', 'habrán', 'habría', 'habrías', 'habríamos',
-                'habríais', 'habrían', 'sea', 'seas', 'seamos', 'seáis', 'sean', 'era', 'eras', 'éramos', 'erais', 'eran', 'seré',
-                'serás', 'será', 'seremos', 'seréis', 'serán', 'sería', 'serías', 'seríamos', 'seríais', 'serían', 'estoy', 'estás',
-                'está', 'estamos', 'estáis', 'están', 'estaba', 'estabas', 'estábamos', 'estabais', 'estaban', 'estaré', 'estarás',
-                'estará', 'estaremos', 'estaréis', 'estarán', 'estaría', 'estarías', 'estaríamos', 'estaríais', 'estarían', 'tengo',
-                'tienes', 'tiene', 'tenemos', 'tenéis', 'tienen', 'tenía', 'tenías', 'teníamos', 'teníais', 'tenían', 'tendré'
-            ]);
-            
-            const words = text.toLowerCase()
-                .replace(/[^\wáéíóúñü\s]/g, ' ')
-                .split(/\s+/)
-                .filter(w => w.length > 2 && !stopWords.has(w));
-            
-            // Contar frecuencia
-            const freq = {};
-            words.forEach(w => freq[w] = (freq[w] || 0) + 1);
-            
-            return Object.entries(freq)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10)
-                .map(([w]) => w);
-        }
-        
-        function search(query) {
-            if (!manualChunks.length) return [];
-            
-            const queryWords = query.toLowerCase()
-                .replace(/[^\wáéíóúñü\s]/g, ' ')
-                .split(/\s+/)
-                .filter(w => w.length > 2);
-            
-            // Detectar tipo de pregunta
-            const questionType = detectQuestionType(query);
-            
-            // Puntuar chunks
-            const scored = manualChunks.map(chunk => {
-                let score = 0;
-                const lower = chunk.fullText.toLowerCase();
-                
-                // Bonificación por título relevante
-                if (chunk.title) {
-                    const titleLower = chunk.title.toLowerCase();
-                    queryWords.forEach(w => {
-                        if (titleLower.includes(w)) score += 5;
-                    });
-                    
-                    // Bonus por tipo de pregunta
-                    if (questionType === 'specs' && /especificacion|parametro|caracteristica|dato|medida|valor|rango/i.test(chunk.title)) score += 8;
-                    if (questionType === 'start' && /arranque|inicio|puesta|encendido|arrancar/i.test(chunk.title)) score += 8;
-                    if (questionType === 'maint' && /mantenimiento|limpieza|revision|lubricacion/i.test(chunk.title)) score += 8;
-                    if (questionType === 'safety' && /seguridad|proteccion|peligro|advertencia|precaucion/i.test(chunk.title)) score += 8;
-                }
-                
-                // Puntuar contenido
-                queryWords.forEach(w => {
-                    const regex = new RegExp(w, 'gi');
-                    const matches = lower.match(regex);
-                    if (matches) {
-                        score += matches.length * 2;
-                    }
-                });
-                
-                // Frase exacta
-                if (lower.includes(query.toLowerCase())) score += 10;
-                
-                // Keywords del chunk
-                chunk.keywords.forEach(kw => {
-                    if (queryWords.some(qw => kw.includes(qw) || qw.includes(kw))) score += 1;
-                });
-                
-                return { ...chunk, score };
-            });
-            
-            // Ordenar y devolver top
-            return scored
-                .filter(c => c.score > 0)
-                .sort((a, b) => b.score - a.score)
-                .slice(0, 3);
-        }
-        
-        function detectQuestionType(q) {
-            const lower = q.toLowerCase();
-            
-            if (/especificacion|parametro|caracteristica|dato|medida|cuanto|que potencia|que amper|que volt|capacidad/i.test(lower)) return 'specs';
-            if (/arranque|inicio|encender|puesta en marcha|arrancar|empezar/i.test(lower)) return 'start';
-            if (/mantenimiento|limpiar|limpieza|revision|lubricar|aceite|cambiar|ajustar/i.test(lower)) return 'maint';
-            if (/seguridad|proteccion|peligro|cuidado|precaucion|epi|proteger/i.test(lower)) return 'safety';
-            if (/problema|averia|falla|error|no funciona|no arranca|fallando/i.test(lower)) return 'trouble';
-            
-            return 'general';
-        }
-        
-        function generateAnswer(query) {
-            if (!manualChunks.length) {
-                return 'El manual no está cargado. Intenta recargar la página.';
-            }
-            
-            const results = search(query);
-            
-            if (!results.length) {
-                return `No encontré información específica sobre "<strong>${query}</strong>".<br><br>
-                    Intenta con palabras del manual como: <em>especificaciones, arranque, mantenimiento, seguridad</em>.`;
-            }
-            
-            // Construir respuesta
-            let answer = '';
-            
-            const top = results[0];
-            
-            if (top.title) {
-                answer += `<strong>${top.title}</strong><br><br>`;
-            }
-            
-            // Formatear contenido
-            const lines = top.content.split('\n').filter(l => l.trim());
-            
-            if (lines.length > 1) {
-                // Si hay múltiples líneas, mostrar como lista
-                answer += lines.map(l => `• ${l.trim()}`).join('<br>');
-            } else {
-                answer += top.content;
-            }
-            
-            // Añadir más contexto si hay otros resultados relevantes
-            if (results.length > 1 && results[1].score > results[0].score * 0.5) {
-                answer += '<br><br><strong>También relacionado:</strong><br>';
-                if (results[1].title) answer += `<em>${results[1].title}</em>: `;
-                answer += results[1].content.split('\n')[0].substring(0, 100) + '...';
-            }
-            
-            answer += `<em>Extraído del manual de ${currentMachine.name}</em>`;
-            
-            return answer;
-        }
-        
-        // =============================================
-        // CHAT
-        // =============================================
-        
-        function chatMsgs() {
-            return $('chatMessages');
-        }
+        function chatMsgs() { return $('chatMessages'); }
         
         function addMsg(type, html) {
             const div = document.createElement('div');
@@ -1215,23 +1032,34 @@
             chatMsgs().scrollTop = chatMsgs().scrollHeight;
         }
         
-        function send() {
+        async function send() {
             const q = $('chatInput').value.trim();
-            if (!q) return;
+            if (!q || !currentMachine || !ai.isReady) return;
             
             addMsg('user', q);
             $('chatInput').value = '';
+            $('sendBtn').disabled = true;
             
-            setTimeout(() => {
-                const a = generateAnswer(q);
-                addMsg('ai', a);
-            }, 200);
+            // Añadir a historial
+            chatHistory.push({ role: 'user', content: q });
+            
+            // Generar respuesta
+            const answer = await ai.chat(chatHistory.slice(-6), manualText.substring(0, 4000));
+            
+            if (answer) {
+                chatHistory.push({ role: 'assistant', content: answer });
+                addMsg('ai', answer.replace(/\n/g, '<br>'));
+            } else {
+                addMsg('ai', 'No pude generar una respuesta. Intenta de nuevo.');
+            }
+            
+            $('sendBtn').disabled = false;
         }
         
-        function ask(q) {
+        window.ask = function(q) {
             $('chatInput').value = q;
             send();
-        }
+        };
         
         // =============================================
         // VOZ
@@ -1294,13 +1122,8 @@
         // UTILIDADES
         // =============================================
         
-        function openModal(id) {
-            $(id).classList.add('active');
-        }
-        
-        function closeModal(id) {
-            $(id).classList.remove('active');
-        }
+        function openModal(id) { $(id).classList.add('active'); }
+        function closeModal(id) { $(id).classList.remove('active'); }
         
         function toast(msg, type = 'info') {
             const el = document.createElement('div');
@@ -1309,6 +1132,9 @@
             $('toasts').appendChild(el);
             setTimeout(() => el.remove(), 2500);
         }
+        
+        // Exponer funciones globales
+        window.openMachine = openMachine;
     </script>
 </body>
 </html>
