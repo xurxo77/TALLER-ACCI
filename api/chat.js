@@ -6,27 +6,14 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
     
-    const { question, pdfBase64, pdfUrl, machineName } = req.body;
+    const { question, pdfBase64, machineName } = req.body;
     
     if (!question) return res.status(400).json({ error: 'Question required' });
+    if (!pdfBase64) return res.status(400).json({ error: 'PDF required' });
     
     try {
-        let pdfData = pdfBase64;
-        
-        // Si viene URL del PDF, descargarlo
-        if (pdfUrl && !pdfData) {
-            const pdfResponse = await fetch(pdfUrl);
-            const arrayBuffer = await pdfResponse.arrayBuffer();
-            pdfData = Buffer.from(arrayBuffer).toString('base64');
-        }
-        
-        if (!pdfData) {
-            return res.status(400).json({ error: 'PDF data required' });
-        }
-        
-        // Llamar a Gemini con el PDF
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -36,18 +23,17 @@ export default async function handler(req, res) {
                             {
                                 inline_data: {
                                     mime_type: "application/pdf",
-                                    data: pdfData
+                                    data: pdfBase64
                                 }
                             },
                             {
-                                text: `Eres un experto técnico en maquinaria industrial. Analiza el manual PDF adjunto y responde a la pregunta del usuario de forma clara, precisa y natural en español.
+                                text: `Eres un experto tecnico en maquinaria industrial. Analiza el manual PDF y responde en español de forma clara y natural.
 
-La máquina es: ${machineName || 'una máquina industrial'}
+Maquina: ${machineName || 'industrial'}
 
-PREGUNTA DEL USUARIO:
- ${question}
+PREGUNTA: ${question}
 
-Responde de forma práctica y directa. Si encuentras la información en el manual, úsala. Cita especificaciones técnicas si las encuentras.`
+Responde de forma practica y directa usando la informacion del manual.`
                             }
                         ]
                     }],
@@ -62,16 +48,13 @@ Responde de forma práctica y directa. Si encuentras la información en el manua
         const data = await response.json();
         
         if (!response.ok) {
-            console.error('Gemini error:', JSON.stringify(data, null, 2));
             return res.status(response.status).json({ error: data.error?.message || 'Error de Gemini' });
         }
         
-        const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No pude analizar el manual.';
-        
+        const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sin respuesta';
         return res.status(200).json({ answer });
         
     } catch (error) {
-        console.error('Error:', error);
-        return res.status(500).json({ error: 'Error interno: ' + error.message });
+        return res.status(500).json({ error: 'Error: ' + error.message });
     }
 }
