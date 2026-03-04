@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1e3a5f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <title>Taller IES ACCI</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- PDF.js para leer PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --primary-bg: rgba(37, 99, 235, 0.08);
+            
+            --accent: #f97316;
+            --accent-light: #fb923c;
+            --accent-bg: rgba(249, 115, 22, 0.1);
+            
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.1);
+            --warning: #f59e0b;
+            --error: #ef4444;
+            
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-elevated: #ffffff;
+            --bg-overlay: rgba(15, 23, 42, 0.6);
+            
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --text-inverse: #ffffff;
+            
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+            --shadow-card: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 280px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #1e40af 100%);
+            z-index: 0;
+            border-radius: 0 0 50% 50% / 0 0 30px 30px;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Splash */
+        .splash {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.4s ease;
+        }
+        .splash.fade { opacity: 0; pointer-events: none; }
+
+        .splash-logo {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .splash-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .splash-logo svg { width: 56px; height: 56px; color: var(--primary); }
+
+        .splash-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.25rem;
+        }
+        .splash-subtitle {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: 400;
+        }
+
+        .splash-loader {
+            width: 120px;
+            height: 3px;
+            background: rgba(255,255,255,0.2);
+            border-radius: var(--radius-full);
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+        .splash-loader::after {
+            content: '';
+            display: block;
+            height: 100%;
+            width: 30%;
+            background: white;
+            border-radius: var(--radius-full);
+            animation: loading 1.2s ease-in-out infinite;
+        }
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(400%); }
+        }
+
+        /* App */
+        .app {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 1rem 1.25rem 0.75rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .header-logo {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .header-logo:hover { transform: scale(1.05); box-shadow: var(--shadow-lg); }
+        .header-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .header-logo svg { width: 24px; height: 24px; color: var(--primary); }
+
+        .header-text h1 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+        }
+        .header-text span {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: 400;
+        }
+
+        .header-actions { display: flex; gap: 0.5rem; }
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: var(--radius-md);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .icon-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-1px); }
+        .icon-btn svg { width: 20px; height: 20px; }
+
+        /* Search */
+        .search-section { padding: 0.5rem 1.25rem 1rem; }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 0.6rem 0.9rem;
+            gap: 0.6rem;
+            box-shadow: var(--shadow-md);
+            transition: box-shadow 0.2s;
+        }
+        .search-box:focus-within { box-shadow: var(--shadow-lg), 0 0 0 3px var(--primary-bg); }
+        .search-box svg { width: 20px; height: 20px; color: var(--text-muted); flex-shrink: 0; }
+        .search-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+        }
+        .search-box input:focus { outline: none; }
+        .search-box input::placeholder { color: var(--text-muted); }
+
+        .voice-btn {
+            width: 38px;
+            height: 38px;
+            background: var(--primary-bg);
+            border: none;
+            border-radius: var(--radius-md);
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .voice-btn:hover { background: var(--primary); color: white; }
+        .voice-btn.recording { background: var(--error); color: white; animation: pulse 1.5s ease-in-out infinite; }
+        .voice-btn.recording::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border: 2px solid var(--error);
+            border-radius: var(--radius-md);
+            animation: ring 1.5s ease-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes ring { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.4); opacity: 0; } }
+        .voice-btn svg { width: 18px; height: 18px; }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0 1.25rem 1rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .filters::-webkit-scrollbar { display: none; }
+        .filter-chip {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+        .filter-chip:hover { background: white; color: var(--primary); }
+        .filter-chip.active { background: var(--primary); border-color: var(--primary); color: white; box-shadow: var(--shadow-md); }
+
+        /* Main */
+        .main {
+            flex: 1;
+            padding: 0 1rem 1rem;
+            padding-bottom: calc(1rem + var(--safe-bottom));
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            padding: 0 0.25rem;
+        }
+
+        /* Machine Grid */
+        .machines-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        @media (min-width: 480px) {
+            .machines-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+        }
+
+        .machine-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 1px solid var(--border-light);
+        }
+        .machine-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .machine-card:active { transform: translateY(-2px); }
+
+        .machine-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .machine-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .machine-card:hover .machine-image img { transform: scale(1.05); }
+        .machine-image svg { width: 40px; height: 40px; color: var(--text-muted); }
+
+        .machine-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-full);
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        .machine-badge.soldadura { background: #fecaca; color: #991b1b; }
+        .machine-badge.corte { background: #bfdbfe; color: #1e40af; }
+        .machine-badge.conformado { background: #bbf7d0; color: #166534; }
+
+        .machine-status-badge {
+            position: absolute;
+            bottom: 0.5rem;
+            left: 0.5rem;
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-full);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .machine-status-badge svg { width: 14px; height: 14px; }
+        .machine-status-badge.ready svg { color: var(--success); }
+        .machine-status-badge.empty svg { color: var(--text-muted); }
+
+        .machine-body { padding: 0.75rem; }
+        .machine-name {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.1rem;
+            line-height: 1.2;
+        }
+        .machine-model { font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.1rem; }
+        .machine-brand { font-size: 0.65rem; color: var(--text-muted); font-weight: 500; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            padding: 0.5rem 1rem;
+            padding-bottom: calc(0.5rem + var(--safe-bottom));
+            gap: 0.5rem;
+            z-index: 100;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-md);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-item svg { width: 22px; height: 22px; transition: transform 0.2s; }
+        .nav-item:hover { color: var(--text-secondary); }
+        .nav-item.active { color: var(--primary); background: var(--primary-bg); }
+        .nav-item.active svg { transform: scale(1.1); }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-overlay);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+        .modal.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: white;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 92vh;
+            max-height: 92dvh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        .modal.active .modal-content { transform: translateY(0); }
+        @media (min-width: 768px) {
+            .modal { align-items: center; padding: 1rem; }
+            .modal-content { border-radius: var(--radius-xl); max-height: 90vh; }
+        }
+
+        .modal-handle {
+            width: 36px;
+            height: 4px;
+            background: var(--border);
+            border-radius: var(--radius-full);
+            margin: 0.75rem auto;
+        }
+        .modal-close {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 32px;
+            height: 32px;
+            background: var(--bg-main);
+            border: none;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.2s;
+        }
+        .modal-close:hover { background: var(--error); color: white; }
+        .modal-close svg { width: 16px; height: 16px; }
+
+        /* Detail */
+        .detail-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .detail-image img { width: 100%; height: 100%; object-fit: cover; }
+        .detail-image svg { width: 64px; height: 64px; color: var(--text-muted); }
+        .detail-body { padding: 1.25rem; }
+        .detail-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.3rem 0.6rem;
+            background: var(--primary-bg);
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .detail-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
+        }
+        .detail-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+        .detail-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .detail-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-main);
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        .detail-tag svg { width: 12px; height: 12px; }
+
+        .detail-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin: 0 1.25rem;
+        }
+        .detail-tab {
+            flex: 1;
+            padding: 0.85rem;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .detail-tab:hover { color: var(--text-secondary); }
+        .detail-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        .detail-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.25rem;
+        }
+        .detail-panel { display: none; }
+        .detail-panel.active { display: block; animation: fadeUp 0.3s ease; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: var(--bg-main);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .info-card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+        .info-card-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-bg);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .info-card-icon svg { width: 18px; height: 18px; color: var(--primary); }
+        .info-card-title { font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+        .info-card-content { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+        .info-card-content ul, .info-card-content ol { padding-left: 1.25rem; }
+        .info-card-content li { margin-bottom: 0.3rem; }
+        .spec-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border-light); }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-label { color: var(--text-muted); font-size: 0.75rem; }
+        .spec-value { font-weight: 500; color: var(--text-primary); font-size: 0.8rem; }
+
+        /* Chat */
+        .chat-container { display: flex; flex-direction: column; height: 300px; }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .chat-msg { display: flex; gap: 0.5rem; max-width: 88%; }
+        .chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+        .chat-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .chat-msg.ai .chat-avatar { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+        .chat-msg.ai .chat-avatar svg { width: 16px; height: 16px; color: white; }
+        .chat-msg.user .chat-avatar { background: var(--accent); }
+        .chat-msg.user .chat-avatar svg { width: 16px; height: 16px; color: white; }
+
+        .chat-bubble { padding: 0.6rem 0.75rem; border-radius: var(--radius-lg); font-size: 0.8rem; line-height: 1.5; }
+        .chat-msg.ai .chat-bubble { background: var(--bg-main); color: var(--text-primary); border-bottom-left-radius: var(--radius-sm); }
+        .chat-msg.user .chat-bubble { background: var(--primary); color: white; border-bottom-right-radius: var(--radius-sm); }
+        .chat-bubble strong { color: var(--primary); font-weight: 600; }
+        .chat-msg.user .chat-bubble strong { color: rgba(255,255,255,0.9); }
+
+        .chat-quick { display: flex; gap: 0.4rem; padding: 0.5rem; overflow-x: auto; border-top: 1px solid var(--border-light); }
+        .chat-quick::-webkit-scrollbar { display: none; }
+        .quick-btn {
+            padding: 0.35rem 0.7rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
+
+        .chat-input-area { display: flex; gap: 0.5rem; padding: 0.75rem; border-top: 1px solid var(--border); background: white; }
+        .chat-input-area input {
+            flex: 1;
+            padding: 0.65rem 0.9rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+        .chat-input-area input:focus { outline: none; border-color: var(--primary); background: white; }
+        .chat-btn {
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .chat-btn svg { width: 18px; height: 18px; }
+        .chat-btn.send { background: var(--primary); color: white; }
+        .chat-btn.send:hover { background: var(--primary-dark); transform: scale(1.05); }
+        .chat-btn.voice { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-muted); }
+        .chat-btn.voice:hover { border-color: var(--primary); color: var(--primary); }
+        .chat-btn.voice.recording { background: var(--error); border-color: var(--error); color: white; animation: pulse 1s ease-in-out infinite; }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 2rem 1.5rem; }
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-main);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .empty-icon svg { width: 40px; height: 40px; color: var(--text-muted); }
+        .empty-state h3 { font-family: var(--font-display); font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem; }
+        .empty-state p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+        /* Forms */
+        .form-section { padding: 1.25rem; }
+        .form-section h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem; }
+        .form-group { margin-bottom: 0.85rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.35rem; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 0.9rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px var(--primary-bg);
+        }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+
+        .image-upload {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg-main);
+        }
+        .image-upload:hover { border-color: var(--primary); background: var(--primary-bg); }
+        .image-upload.has-image { padding: 0; border-style: solid; overflow: hidden; }
+        .image-upload img { width: 100%; height: 140px; object-fit: cover; }
+        .image-upload svg { width: 36px; height: 36px; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .image-upload p { font-size: 0.8rem; color: var(--text-muted); }
+        .image-upload .filename { font-size: 0.75rem; color: var(--primary); font-weight: 500; margin-top: 0.25rem; }
+
+        .form-actions { display: flex; gap: 0.75rem; padding-top: 1rem; margin-top: 1rem; border-top: 1px solid var(--border); }
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn-primary { background: var(--primary); border: none; color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-secondary { background: white; border: 1px solid var(--border); color: var(--text-primary); }
+        .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-block { width: 100%; }
+
+        /* Admin List */
+        .admin-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .admin-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--bg-main);
+            border-radius: var(--radius-md);
+            transition: background 0.2s;
+        }
+        .admin-item:hover { background: var(--primary-bg); }
+        .admin-item-info h4 { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.1rem; }
+        .admin-item-info p { font-size: 0.75rem; color: var(--text-muted); }
+        .admin-item-actions { display: flex; gap: 0.4rem; }
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-icon svg { width: 16px; height: 16px; }
+        .btn-icon:hover { background: var(--primary); border-color: var(--primary); color: white; }
+        .btn-icon.danger:hover { background: var(--error); border-color: var(--error); }
+
+        /* Toast */
+        .toasts {
+            position: fixed;
+            bottom: calc(5rem + var(--safe-bottom));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--text-primary);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+            pointer-events: auto;
+        }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--error); }
+        .toast.warning { background: var(--warning); }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+
+        /* Login */
+        .login-content { padding: 1.5rem; text-align: center; }
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            background: var(--primary-bg);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+        .login-logo svg { width: 36px; height: 36px; color: var(--primary); }
+        .login-content h2 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; }
+        .login-content > p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+
+        .login-options { display: flex; flex-direction: column; gap: 0.6rem; }
+        .login-option {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.9rem 1rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .login-option:hover { border-color: var(--primary); background: var(--primary-bg); transform: translateX(4px); }
+        .login-option-icon {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .login-option-icon svg { width: 22px; height: 22px; color: var(--primary); }
+        .login-option-info h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.1rem; }
+        .login-option-info p { font-size: 0.8rem; color: var(--text-muted); }
+
+        .code-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .code-section input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            text-align: center;
+            letter-spacing: 0.2em;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .code-section input:focus { outline: none; border-color: var(--primary); }
+        .code-hint { font-size: 0.7rem; color: var(--text-muted); text-align: center; }
+
+        /* History */
+        .history-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .history-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 0.75rem; }
+        .history-header { display: flex; justify-content: space-between; margin-bottom: 0.75rem; }
+        .history-header h2 { font-family: var(--font-display); font-size: 1.1rem; }
+        .history-item-head { display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
+        .history-machine { font-size: 0.7rem; font-weight: 600; color: var(--primary); }
+        .history-date { font-size: 0.65rem; color: var(--text-muted); }
+        .history-q { font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.35rem; font-weight: 500; }
+        .history-a { font-size: 0.75rem; color: var(--text-secondary); background: var(--bg-main); padding: 0.5rem; border-radius: var(--radius-sm); line-height: 1.5; }
+
+        /* Processing overlay */
+        .processing-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        .processing-overlay.hidden { display: none; }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .processing-text { margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary); }
+
+        /* Responsive */
+        @media (max-width: 360px) {
+            .machines-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+            .machine-body { padding: 0.6rem; }
+            .machine-name { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash -->
+    <div id="splash" class="splash">
+        <div class="splash-logo" id="splashLogo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+            </svg>
+        </div>
+        <h1 class="splash-title">Taller IES ACCI</h1>
+        <p class="splash-subtitle">Maquinas y Herramientas</p>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- App -->
+    <div id="app" class="app hidden">
+        <header class="header">
+            <div class="header-inner">
+                <div class="header-brand">
+                    <div class="header-logo" id="headerLogo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                    </div>
+                    <div class="header-text">
+                        <h1 id="headerTitle">Taller IES ACCI</h1>
+                        <span id="headerSubtitle">Maquinas y Herramientas</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="syncBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 4v6h-6M1 20v-6h6"/>
+                            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" id="profileBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="search-section">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Buscar maquina...">
+                <button class="voice-btn" id="voiceSearchBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+                        <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="filters" id="filtersContainer">
+            <button class="filter-chip active" data-filter="all">Todas</button>
+            <button class="filter-chip" data-filter="soldadura">Soldadura</button>
+            <button class="filter-chip" data-filter="corte">Corte</button>
+            <button class="filter-chip" data-filter="conformado">Conformado</button>
+        </div>
+
+        <main class="main" id="mainContent">
+            <h2 class="section-title" id="sectionTitle">Maquinas</h2>
+            <div id="machinesGrid" class="machines-grid"></div>
+        </main>
+
+        <!-- Bottom Nav -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="machines">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="6" width="20" height="12" rx="2"/>
+                    <path d="M6 6V4a2 2 0 012-2h8a2 2 0 012 2v2"/>
+                </svg>
+                Maquinas
+            </button>
+            <button class="nav-item" data-tab="history">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                Historial
+            </button>
+            <button class="nav-item" data-tab="admin" id="adminNav">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                </svg>
+                Admin
+            </button>
+        </nav>
+    </div>
+
+    <!-- Machine Modal -->
+    <div id="machineModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" data-close>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div class="modal-handle"></div>
+
+            <div class="detail-image" id="detailImage">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="2" y="6" width="20" height="12" rx="2"/>
+                    <path d="M6 6V4a2 2 0 012-2h8a2 2 0 012 2v2"/>
+                </svg>
+            </div>
+
+            <div class="detail-body">
+                <span class="detail-category" id="detailCategory">-</span>
+                <h2 class="detail-title" id="detailTitle">-</h2>
+                <p class="detail-subtitle" id="detailSubtitle">-</p>
+                <div class="detail-tags" id="detailTags"></div>
+            </div>
+
+            <div class="detail-tabs">
+                <button class="detail-tab active" data-dtab="info">Informacion</button>
+                <button class="detail-tab" data-dtab="chat">Consultar IA</button>
+                <button class="detail-tab" data-dtab="manual">Manual</button>
+            </div>
+
+            <div class="detail-content">
+                <div id="infoPanel" class="detail-panel active"></div>
+                <div id="chatPanel" class="detail-panel">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-quick">
+                            <button class="quick-btn" data-q="Especificaciones tecnicas">Especificaciones</button>
+                            <button class="quick-btn" data-q="Procedimiento de arranque">Arranque</button>
+                            <button class="quick-btn" data-q="Mantenimiento">Mantenimiento</button>
+                            <button class="quick-btn" data-q="Seguridad">Seguridad</button>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chatInput" placeholder="Escribe tu pregunta...">
+                            <button class="chat-btn voice" id="voiceChatBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+                                    <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+                                </svg>
+                            </button>
+                            <button class="chat-btn send" id="sendChatBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="manualPanel" class="detail-panel"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Machine Modal -->
+    <div id="addMachineModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" data-close>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div class="modal-handle"></div>
+
+            <div class="form-section">
+                <h3 id="machineModalTitle">Agregar Maquina</h3>
+                <form id="machineForm">
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" id="machineName" required placeholder="Ej: Sierra de cinta">
+                    </div>
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" id="machineModel" placeholder="Ej: 280M eco">
+                    </div>
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input type="text" id="machineBrand" placeholder="Ej: FAT">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="machineCategory">
+                            <option value="soldadura">Soldadura</option>
+                            <option value="corte">Corte</option>
+                            <option value="conformado">Conformado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Foto de la maquina</label>
+                        <div class="image-upload" id="machineImageUpload">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="M21 15l-5-5L5 21"/>
+                            </svg>
+                            <p>Toca para subir foto</p>
+                            <input type="file" id="machineImageInput" accept="image/*" hidden>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" data-close>Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Manual Modal -->
+    <div id="uploadManualModal" class="modal">
+        <div class="modal-content" style="position: relative;">
+            <button class="modal-close" data-close>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div class="modal-handle"></div>
+
+            <!-- Processing Overlay -->
+            <div class="processing-overlay hidden" id="processingOverlay">
+                <div class="spinner"></div>
+                <p class="processing-text">Procesando PDF...</p>
+            </div>
+
+            <div class="form-section">
+                <h3>Subir Manual</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;" id="uploadMachineName">-</p>
+
+                <div class="form-group">
+                    <label>Archivo PDF</label>
+                    <div class="image-upload" id="pdfUploadArea">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <p>Toca para subir PDF</p>
+                        <input type="file" id="pdfInput" accept=".pdf" hidden>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>O pega el texto directamente:</label>
+                    <textarea id="manualText" placeholder="Pega aqui el contenido del manual..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close>Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveManualBtn">Guardar Manual</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="login-content">
+                <div class="login-logo" id="loginLogo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                </div>
+                <h2>Bienvenido</h2>
+                <p>Selecciona tu tipo de acceso</p>
+
+                <div class="login-options">
+                    <button class="login-option" data-role="student">
+                        <div class="login-option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                            </svg>
+                        </div>
+                        <div class="login-option-info">
+                            <h3>Alumno</h3>
+                            <p>Consultar maquinas y manuales</p>
+                        </div>
+                    </button>
+                    <button class="login-option" data-role="teacher">
+                        <div class="login-option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 010 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="login-option-info">
+                            <h3>Profesor</h3>
+                            <p>Acceso completo al sistema</p>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="code-section hidden" id="codeSection">
+                    <input type="password" id="teacherCode" placeholder="Codigo de acceso">
+                    <button class="btn btn-primary btn-block" id="verifyCodeBtn">Verificar</button>
+                    <p class="code-hint">Codigo: TALLER2024</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="hidden">
+        <div class="form-section" style="padding-top: 0;">
+            <h3 style="margin-bottom: 1rem;">Configuracion</h3>
+            
+            <div class="form-group">
+                <label>Nombre del taller</label>
+                <input type="text" id="tallerName" placeholder="Taller IES ACCI">
+            </div>
+            
+            <div class="form-group">
+                <label>Logo de la app</label>
+                <div class="image-upload" id="logoUpload">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                    <p>Toca para cambiar logo</p>
+                    <input type="file" id="logoInput" accept="image/*" hidden>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="addMachineBtn" style="margin-top: 0.5rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Agregar Maquina
+            </button>
+        </div>
+
+        <div class="form-section">
+            <h3>Maquinas Registradas</h3>
+            <div id="adminMachinesList" class="admin-list"></div>
+        </div>
+    </div>
+
+    <!-- Toasts -->
+    <div id="toasts" class="toasts"></div>
+
+    <script>
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // =============================================
+        // MAQUINAS PRECARGADAS CON FOTOS Y PDFs
+        // =============================================
+        
+        const INITIAL_MACHINES = [
+            {
+                id: 'rustler-em',
+                name: 'Rustler EM',
+                model: 'EM',
+                brand: 'ESAB',
+                category: 'soldadura',
+                image: 'rustler.jpg',
+                hasManual: false,
+                manualFile: 'rustler.pdf'
+            },
+            {
+                id: 'buddy-arc180',
+                name: 'Buddy ARC 180',
+                model: 'ARC 180',
+                brand: 'ESAB',
+                category: 'soldadura',
+                image: 'buddy.jpg',
+                hasManual: false,
+                manualFile: 'buddy.pdf'
+            },
+            {
+                id: 'buddy-tig160',
+                name: 'Buddy TIG 160',
+                model: 'TIG 160',
+                brand: 'ESAB',
+                category: 'soldadura',
+                image: 'buddytig.jpg',
+                hasManual: false,
+                manualFile: 'buddytig.pdf'
+            },
+            {
+                id: 'sierra-fat280',
+                name: 'Sierra de Cinta',
+                model: 'FAT 280',
+                brand: 'FAT',
+                category: 'corte',
+                image: 'FAT280.jpg',
+                hasManual: false,
+                manualFile: 'FAT280.pdf'
+            },
+            {
+                id: 'curvadora-rbm',
+                name: 'Curvadora de Rodillos',
+                model: 'RBM 1050-22',
+                brand: 'RBM',
+                category: 'conformado',
+                image: 'RBMCURVADORA.jpg',
+                hasManual: false,
+                manualFile: 'RBMCURVADORA.pdf'
+            },
+            {
+                id: 'biseladora-krbs',
+                name: 'Biseladora de Tubos',
+                model: 'KRBS 101',
+                brand: 'KRBS',
+                category: 'corte',
+                image: 'biseladoratubos.jpg',
+                hasManual: false,
+                manualFile: 'biseladoratubos.pdf'
+            }
+        ];
+
+        // =============================================
+        // DATABASE
+        // =============================================
+        
+        const DB = {
+            db: null,
+            
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const req = indexedDB.open('TallerIESACCI_v5', 1);
+                    req.onerror = () => reject(req.error);
+                    req.onsuccess = () => {
+                        this.db = req.result;
+                        resolve();
+                    };
+                    req.onupgradeneeded = (e) => {
+                        const db = e.target.result;
+                        if (!db.objectStoreNames.contains('config')) db.createObjectStore('config', { keyPath: 'id' });
+                        if (!db.objectStoreNames.contains('machines')) db.createObjectStore('machines', { keyPath: 'id' });
+                        if (!db.objectStoreNames.contains('manuals')) db.createObjectStore('manuals', { keyPath: 'machineId' });
+                        if (!db.objectStoreNames.contains('history')) db.createObjectStore('history', { keyPath: 'id' });
+                    };
+                });
+            },
+            
+            async get(store, key) {
+                return new Promise((resolve) => {
+                    const tx = this.db.transaction(store, 'readonly');
+                    const req = tx.objectStore(store).get(key);
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => resolve(null);
+                });
+            },
+            
+            async getAll(store) {
+                return new Promise((resolve) => {
+                    const tx = this.db.transaction(store, 'readonly');
+                    const req = tx.objectStore(store).getAll();
+                    req.onsuccess = () => resolve(req.result || []);
+                    req.onerror = () => resolve([]);
+                });
+            },
+            
+            async put(store, data) {
+                return new Promise((resolve) => {
+                    const tx = this.db.transaction(store, 'readwrite');
+                    tx.objectStore(store).put(data);
+                    tx.oncomplete = resolve;
+                });
+            },
+            
+            async delete(store, key) {
+                return new Promise((resolve) => {
+                    const tx = this.db.transaction(store, 'readwrite');
+                    tx.objectStore(store).delete(key);
+                    tx.oncomplete = resolve;
+                });
+            },
+            
+            async clear(store) {
+                return new Promise((resolve) => {
+                    const tx = this.db.transaction(store, 'readwrite');
+                    tx.objectStore(store).clear();
+                    tx.oncomplete = resolve;
+                });
+            }
+        };
+
+        // =============================================
+        // PDF PROCESSOR
+        // =============================================
+        
+        const PDFProcessor = {
+            async extractText(file) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    let fullText = '';
+                    
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        fullText += pageText + '\n\n';
+                    }
+                    
+                    return fullText.trim();
+                } catch (error) {
+                    console.error('Error extracting PDF text:', error);
+                    throw new Error('No se pudo leer el PDF. Asegurate de que es un archivo PDF valido.');
+                }
+            }
+        };
+
+        // =============================================
+        // APP
+        // =============================================
+        
+        const App = {
+            machines: [],
+            history: [],
+            currentMachine: null,
+            currentUser: null,
+            editingMachine: null,
+            recognition: null,
+            isRecording: false,
+            currentTab: 'machines',
+            
+            async init() {
+                await DB.init();
+                await this.loadConfig();
+                await this.loadMachines();
+                await this.loadHistory();
+                this.checkSession();
+                this.setupEvents();
+                this.initVoice();
+                
+                setTimeout(() => {
+                    document.getElementById('splash').classList.add('fade');
+                    document.getElementById('app').classList.remove('hidden');
+                }, 1500);
+            },
+            
+            async loadConfig() {
+                const config = await DB.get('config', 'main');
+                if (config) {
+                    if (config.logo) this.setLogo(config.logo);
+                    if (config.tallerName) {
+                        document.getElementById('headerTitle').textContent = config.tallerName;
+                        document.getElementById('tallerName').value = config.tallerName;
+                    }
+                }
+            },
+            
+            async saveConfig() {
+                const tallerName = document.getElementById('tallerName').value || 'Taller IES ACCI';
+                const logoData = document.getElementById('headerLogo').querySelector('img')?.src;
+                
+                await DB.put('config', { id: 'main', tallerName, logo: logoData });
+                document.getElementById('headerTitle').textContent = tallerName;
+                this.toast('Configuracion guardada', 'success');
+            },
+            
+            setLogo(src) {
+                const places = ['headerLogo', 'splashLogo', 'loginLogo'];
+                places.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = `<img src="${src}" alt="Logo">`;
+                });
+                
+                const upload = document.getElementById('logoUpload');
+                if (upload) {
+                    upload.classList.add('has-image');
+                    upload.innerHTML = `<img src="${src}" alt="Logo"><input type="file" id="logoInput" accept="image/*" hidden>`;
+                    document.getElementById('logoInput')?.addEventListener('change', e => this.handleLogoUpload(e));
+                }
+            },
+            
+            async loadMachines() {
+                let saved = await DB.getAll('machines');
+                
+                // If no machines, load initial data
+                if (saved.length === 0) {
+                    for (const machine of INITIAL_MACHINES) {
+                        await DB.put('machines', {
+                            ...machine,
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        });
+                    }
+                    saved = INITIAL_MACHINES;
+                }
+                
+                this.machines = saved;
+                this.renderMachines();
+            },
+            
+            async loadHistory() {
+                this.history = await DB.getAll('history');
+                this.history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            },
+            
+            checkSession() {
+                const saved = localStorage.getItem('tallerUser');
+                if (saved) {
+                    this.currentUser = JSON.parse(saved);
+                    this.updateUI();
+                } else {
+                    document.getElementById('loginModal').classList.add('active');
+                }
+            },
+            
+            login(role) {
+                this.currentUser = { role, time: new Date().toISOString() };
+                localStorage.setItem('tallerUser', JSON.stringify(this.currentUser));
+                this.updateUI();
+                document.getElementById('loginModal').classList.remove('active');
+                this.toast(`Bienvenido`, 'success');
+            },
+            
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem('tallerUser');
+                document.getElementById('loginModal').classList.add('active');
+            },
+            
+            updateUI() {
+                const isAdmin = this.currentUser?.role === 'teacher';
+                document.getElementById('adminNav').style.display = isAdmin ? 'flex' : 'none';
+            },
+            
+            setupEvents() {
+                // Nav tabs
+                document.querySelectorAll('.nav-item').forEach(t => {
+                    t.addEventListener('click', () => this.switchTab(t.dataset.tab));
+                });
+                
+                // Search
+                document.getElementById('searchInput').addEventListener('input', e => {
+                    this.filterMachines(e.target.value);
+                });
+                
+                // Voice search
+                document.getElementById('voiceSearchBtn').addEventListener('click', () => this.toggleVoice('voiceSearchBtn'));
+                
+                // Filters
+                document.querySelectorAll('.filter-chip').forEach(c => {
+                    c.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
+                        c.classList.add('active');
+                        this.filterByCategory(c.dataset.filter);
+                    });
+                });
+                
+                // Login
+                document.querySelectorAll('.login-option').forEach(o => {
+                    o.addEventListener('click', () => {
+                        if (o.dataset.role === 'teacher') {
+                            document.getElementById('codeSection').classList.remove('hidden');
+                        } else {
+                            this.login('student');
+                        }
+                    });
+                });
+                
+                document.getElementById('verifyCodeBtn').addEventListener('click', () => {
+                    if (document.getElementById('teacherCode').value === 'TALLER2024') {
+                        this.login('teacher');
+                    } else {
+                        this.toast('Codigo incorrecto', 'error');
+                    }
+                });
+                
+                // Profile
+                document.getElementById('profileBtn').addEventListener('click', () => {
+                    if (confirm('Cerrar sesion?')) this.logout();
+                });
+                
+                // Modals
+                document.querySelectorAll('[data-close]').forEach(b => {
+                    b.addEventListener('click', () => this.closeModals());
+                });
+                
+                document.querySelectorAll('.modal').forEach(m => {
+                    m.addEventListener('click', e => {
+                        if (e.target === m) this.closeModals();
+                    });
+                });
+                
+                // Detail tabs
+                document.querySelectorAll('.detail-tab').forEach(t => {
+                    t.addEventListener('click', () => this.switchDetailTab(t.dataset.dtab));
+                });
+                
+                // Chat
+                document.getElementById('sendChatBtn').addEventListener('click', () => this.sendChat());
+                document.getElementById('chatInput').addEventListener('keypress', e => {
+                    if (e.key === 'Enter') this.sendChat();
+                });
+                document.getElementById('voiceChatBtn').addEventListener('click', () => this.toggleVoice('voiceChatBtn'));
+                
+                // Quick questions
+                document.querySelectorAll('.quick-btn').forEach(b => {
+                    b.addEventListener('click', () => {
+                        document.getElementById('chatInput').value = b.dataset.q;
+                        this.sendChat();
+                    });
+                });
+                
+                // Admin
+                document.getElementById('addMachineBtn').addEventListener('click', () => {
+                    this.editingMachine = null;
+                    document.getElementById('machineModalTitle').textContent = 'Agregar Maquina';
+                    document.getElementById('machineForm').reset();
+                    this.resetImageUpload();
+                    document.getElementById('addMachineModal').classList.add('active');
+                });
+                
+                document.getElementById('machineForm').addEventListener('submit', e => {
+                    e.preventDefault();
+                    this.saveMachine();
+                });
+                
+                // Logo upload
+                document.getElementById('logoUpload')?.addEventListener('click', () => {
+                    document.getElementById('logoInput')?.click();
+                });
+                document.getElementById('logoInput')?.addEventListener('change', e => this.handleLogoUpload(e));
+                
+                // Taller name
+                document.getElementById('tallerName')?.addEventListener('change', () => this.saveConfig());
+                
+                // Machine image
+                document.getElementById('machineImageUpload').addEventListener('click', () => {
+                    document.getElementById('machineImageInput').click();
+                });
+                document.getElementById('machineImageInput').addEventListener('change', e => this.handleMachineImageUpload(e));
+                
+                // PDF Upload
+                document.getElementById('pdfUploadArea').addEventListener('click', () => {
+                    document.getElementById('pdfInput').click();
+                });
+                document.getElementById('pdfInput').addEventListener('change', e => this.handlePDFUpload(e));
+                
+                // Manual
+                document.getElementById('saveManualBtn').addEventListener('click', () => this.saveManual());
+                
+                // Sync
+                document.getElementById('syncBtn').addEventListener('click', () => {
+                    this.toast('Datos sincronizados', 'success');
+                });
+            },
+            
+            initVoice() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SR();
+                    this.recognition.lang = 'es-ES';
+                    this.recognition.continuous = false;
+                    
+                    this.recognition.onresult = e => {
+                        const text = e.results[0][0].transcript;
+                        if (this.currentMachine && document.getElementById('chatPanel').classList.contains('active')) {
+                            document.getElementById('chatInput').value = text;
+                            this.sendChat();
+                        } else {
+                            document.getElementById('searchInput').value = text;
+                            this.filterMachines(text);
+                        }
+                    };
+                    
+                    this.recognition.onerror = () => {
+                        this.toast('Error de microfono', 'error');
+                        this.stopVoice();
+                    };
+                    
+                    this.recognition.onend = () => this.stopVoice();
+                }
+            },
+            
+            toggleVoice(btnId) {
+                if (!this.recognition) {
+                    this.toast('Voz no soportada', 'error');
+                    return;
+                }
+                
+                if (this.isRecording) {
+                    this.recognition.stop();
+                } else {
+                    this.isRecording = true;
+                    document.getElementById(btnId).classList.add('recording');
+                    this.recognition.start();
+                }
+            },
+            
+            stopVoice() {
+                this.isRecording = false;
+                document.querySelectorAll('.voice-btn, .chat-btn.voice').forEach(b => b.classList.remove('recording'));
+            },
+            
+            switchTab(tab) {
+                this.currentTab = tab;
+                
+                document.querySelectorAll('.nav-item').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+                
+                const main = document.getElementById('mainContent');
+                const admin = document.getElementById('adminPanel');
+                
+                if (tab === 'machines') {
+                    main.classList.remove('hidden');
+                    admin.classList.add('hidden');
+                    document.getElementById('sectionTitle').textContent = 'Maquinas';
+                    this.renderMachines();
+                } else if (tab === 'history') {
+                    main.classList.remove('hidden');
+                    admin.classList.add('hidden');
+                    document.getElementById('sectionTitle').textContent = 'Historial';
+                    this.renderHistory();
+                } else if (tab === 'admin') {
+                    main.classList.add('hidden');
+                    admin.classList.remove('hidden');
+                    this.renderAdminList();
+                }
+            },
+            
+            filterMachines(q) {
+                const lower = q.toLowerCase();
+                const filtered = this.machines.filter(m => 
+                    m.name.toLowerCase().includes(lower) ||
+                    (m.model || '').toLowerCase().includes(lower) ||
+                    (m.brand || '').toLowerCase().includes(lower)
+                );
+                this.renderMachines(filtered);
+            },
+            
+            filterByCategory(cat) {
+                const filtered = cat === 'all' ? this.machines : this.machines.filter(m => m.category === cat);
+                this.renderMachines(filtered);
+            },
+            
+            renderMachines(list = this.machines) {
+                const grid = document.getElementById('machinesGrid');
+                
+                if (list.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; padding: 2rem; text-align: center;">
+                            <div style="width: 64px; height: 64px; background: var(--bg-main); border-radius: var(--radius-lg); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 32px; height: 32px; color: var(--text-muted);">
+                                    <rect x="2" y="6" width="20" height="12" rx="2"/>
+                                </svg>
+                            </div>
+                            <h3 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.25rem;">Sin maquinas</h3>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Agrega maquinas desde el panel de admin</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                grid.innerHTML = list.map(m => `
+                    <div class="machine-card" data-id="${m.id}">
+                        <div class="machine-image">
+                            ${m.image ? `<img src="${m.image}" alt="${m.name}" onerror="this.style.display='none'">` : ''}
+                            <span class="machine-badge ${m.category}">${m.category}</span>
+                            <div class="machine-status-badge ${m.hasManual ? 'ready' : 'empty'}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    ${m.hasManual ? 
+                                        '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' :
+                                        '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
+                                    }
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="machine-body">
+                            <h3 class="machine-name">${m.name}</h3>
+                            <p class="machine-model">${m.model || 'Sin modelo'}</p>
+                            <p class="machine-brand">${m.brand || 'Sin marca'}</p>
+                        </div>
+                    </div>
+                `).join('');
+                
+                grid.querySelectorAll('.machine-card').forEach(c => {
+                    c.addEventListener('click', () => this.openMachine(c.dataset.id));
+                });
+            },
+            
+            async openMachine(id) {
+                const machine = this.machines.find(m => m.id === id);
+                if (!machine) return;
+                
+                this.currentMachine = machine;
+                
+                // Image
+                const imgEl = document.getElementById('detailImage');
+                if (machine.image) {
+                    imgEl.innerHTML = `<img src="${machine.image}" alt="${machine.name}" onerror="this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'2\\' y=\\'6\\' width=\\'20\\' height=\\'12\\' rx=\\'2\\'/><path d=\\'M6 6V4a2 2 0 012-2h8a2 2 0 012 2v2\\'/></svg>'">`;
+                } else {
+                    imgEl.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="2" y="6" width="20" height="12" rx="2"/>
+                            <path d="M6 6V4a2 2 0 012-2h8a2 2 0 012 2v2"/>
+                        </svg>
+                    `;
+                }
+                
+                // Info
+                document.getElementById('detailCategory').textContent = machine.category;
+                document.getElementById('detailTitle').textContent = machine.name;
+                document.getElementById('detailSubtitle').textContent = `${machine.model || 'Sin modelo'} - ${machine.brand || 'Sin marca'}`;
+                
+                // Tags
+                document.getElementById('detailTags').innerHTML = `
+                    <span class="detail-tag">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                        ${machine.hasManual ? 'Manual cargado' : 'Sin manual'}
+                    </span>
+                `;
+                
+                // Load manual
+                const manual = await DB.get('manuals', machine.id);
+                this.renderMachineInfo(machine, manual);
+                this.renderManualContent(machine, manual);
+                this.resetChat();
+                
+                this.switchDetailTab('info');
+                document.getElementById('machineModal').classList.add('active');
+            },
+            
+            renderMachineInfo(machine, manual) {
+                const el = document.getElementById('infoPanel');
+                
+                if (!manual || !manual.content) {
+                    el.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                            </div>
+                            <h3>Sin informacion</h3>
+                            <p>Sube el manual para ver la informacion tecnica</p>
+                            ${this.currentUser?.role === 'teacher' ? `<button class="btn btn-primary" onclick="App.openUploadManual('${machine.id}')">Subir manual</button>` : ''}
+                        </div>
+                    `;
+                    return;
+                }
+                
+                el.innerHTML = `<div class="info-card"><div class="info-card-content" style="white-space: pre-wrap;">${manual.content.substring(0, 1500)}${manual.content.length > 1500 ? '...' : ''}</div></div>`;
+            },
+            
+            renderManualContent(machine, manual) {
+                const el = document.getElementById('manualPanel');
+                
+                if (!manual || !manual.content) {
+                    el.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                                </svg>
+                            </div>
+                            <h3>Sin manual</h3>
+                            <p>No hay manual cargado para esta maquina</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                el.innerHTML = `<div style="white-space: pre-wrap; font-size: 0.8rem; line-height: 1.7; color: var(--text-secondary);">${manual.content}</div>`;
+            },
+            
+            switchDetailTab(tab) {
+                document.querySelectorAll('.detail-tab').forEach(t => t.classList.toggle('active', t.dataset.dtab === tab));
+                document.querySelectorAll('.detail-panel').forEach(p => p.classList.toggle('active', p.id === tab + 'Panel'));
+            },
+            
+            resetChat() {
+                document.getElementById('chatMessages').innerHTML = `
+                    <div class="chat-msg ai">
+                        <div class="chat-avatar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/>
+                            </svg>
+                        </div>
+                        <div class="chat-bubble">
+                            <p>Asistente de <strong>${this.currentMachine?.name || 'esta maquina'}</strong>.</p>
+                            <p>${this.currentMachine?.hasManual ? 'Puedo responder consultas sobre esta maquina.' : 'Sube el manual para habilitar las consultas.'}</p>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            async sendChat() {
+                const input = document.getElementById('chatInput');
+                const q = input.value.trim();
+                if (!q || !this.currentMachine) return;
+                
+                input.value = '';
+                const msgs = document.getElementById('chatMessages');
+                
+                msgs.innerHTML += `
+                    <div class="chat-msg user">
+                        <div class="chat-avatar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div class="chat-bubble"><p>${q}</p></div>
+                    </div>
+                `;
+                
+                const manual = await DB.get('manuals', this.currentMachine.id);
+                
+                let answer = '';
+                if (!manual || !manual.content) {
+                    answer = 'No hay manual cargado. Sube el manual para poder responder.';
+                } else {
+                    answer = this.searchInManual(q, manual.content);
+                }
+                
+                setTimeout(() => {
+                    msgs.innerHTML += `
+                        <div class="chat-msg ai">
+                            <div class="chat-avatar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/>
+                                </svg>
+                            </div>
+                            <div class="chat-bubble"><p>${answer}</p></div>
+                        </div>
+                    `;
+                    msgs.scrollTop = msgs.scrollHeight;
+                    this.saveHistory(q, answer);
+                }, 400);
+            },
+            
+            searchInManual(q, content) {
+                const keywords = q.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+                const lines = content.split('\n').filter(l => l.trim());
+                const results = [];
+                
+                for (const line of lines) {
+                    const lower = line.toLowerCase();
+                    let score = 0;
+                    for (const kw of keywords) {
+                        if (lower.includes(kw)) score++;
+                    }
+                    if (score > 0) results.push({ line, score });
+                }
+                
+                if (results.length === 0) {
+                    return 'No encontre informacion especifica. Prueba con otras palabras.';
+                }
+                
+                results.sort((a, b) => b.score - a.score);
+                return `<strong>Informacion encontrada:</strong>\n\n${results.slice(0, 4).map(r => r.line).join('\n\n')}`;
+            },
+            
+            async saveHistory(q, a) {
+                const entry = {
+                    id: Date.now().toString(),
+                    machineId: this.currentMachine.id,
+                    machineName: this.currentMachine.name,
+                    question: q,
+                    answer: a.replace(/<[^>]*>/g, '').substring(0, 120) + '...',
+                    timestamp: new Date().toISOString()
+                };
+                
+                this.history.unshift(entry);
+                await DB.put('history', entry);
+            },
+            
+            renderHistory() {
+                const grid = document.getElementById('machinesGrid');
+                
+                if (this.history.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; padding: 2rem; text-align: center;">
+                            <div style="width: 64px; height: 64px; background: var(--bg-main); border-radius: var(--radius-lg); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 32px; height: 32px; color: var(--text-muted);">
+                                    <circle cx="12" cy="12" r="10"/>
+                                </svg>
+                            </div>
+                            <h3 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.25rem;">Sin historial</h3>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Las consultas apareceran aqui</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                grid.innerHTML = `<div class="history-list">${this.history.slice(0, 30).map(h => `
+                    <div class="history-item">
+                        <div class="history-item-head">
+                            <span class="history-machine">${h.machineName}</span>
+                            <span class="history-date">${new Date(h.timestamp).toLocaleDateString('es-ES')}</span>
+                        </div>
+                        <p class="history-q">${h.question}</p>
+                        <p class="history-a">${h.answer}</p>
+                    </div>
+                `).join('')}</div>`;
+            },
+            
+            renderAdminList() {
+                const el = document.getElementById('adminMachinesList');
+                
+                if (this.machines.length === 0) {
+                    el.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 1rem;">No hay maquinas registradas</p>';
+                    return;
+                }
+                
+                el.innerHTML = this.machines.map(m => `
+                    <div class="admin-item">
+                        <div class="admin-item-info">
+                            <h4>${m.name}</h4>
+                            <p>${m.model || 'Sin modelo'} | ${m.hasManual ? 'Con manual' : 'Sin manual'}</p>
+                        </div>
+                        <div class="admin-item-actions">
+                            <button class="btn-icon" onclick="App.openUploadManual('${m.id}')" title="Manual">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                </svg>
+                            </button>
+                            <button class="btn-icon" onclick="App.editMachine('${m.id}')" title="Editar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <button class="btn-icon danger" onclick="App.deleteMachine('${m.id}')" title="Eliminar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            },
+            
+            async saveMachine() {
+                const name = document.getElementById('machineName').value.trim();
+                const model = document.getElementById('machineModel').value.trim();
+                const brand = document.getElementById('machineBrand').value.trim();
+                const category = document.getElementById('machineCategory').value;
+                
+                if (!name) {
+                    this.toast('El nombre es obligatorio', 'error');
+                    return;
+                }
+                
+                const imageEl = document.getElementById('machineImageUpload').querySelector('img');
+                const image = imageEl ? imageEl.src : null;
+                
+                const machine = {
+                    id: this.editingMachine || Date.now().toString(),
+                    name,
+                    model,
+                    brand,
+                    category,
+                    image,
+                    hasManual: this.editingMachine ? (this.machines.find(m => m.id === this.editingMachine)?.hasManual || false) : false,
+                    createdAt: this.editingMachine ? (this.machines.find(m => m.id === this.editingMachine)?.createdAt) : new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                await DB.put('machines', machine);
+                
+                if (this.editingMachine) {
+                    const idx = this.machines.findIndex(m => m.id === this.editingMachine);
+                    if (idx >= 0) this.machines[idx] = machine;
+                } else {
+                    this.machines.push(machine);
+                }
+                
+                this.renderMachines();
+                this.renderAdminList();
+                this.closeModals();
+                document.getElementById('machineForm').reset();
+                this.resetImageUpload();
+                this.editingMachine = null;
+                this.toast('Maquina guardada', 'success');
+            },
+            
+            editMachine(id) {
+                const m = this.machines.find(x => x.id === id);
+                if (!m) return;
+                
+                this.editingMachine = id;
+                document.getElementById('machineModalTitle').textContent = 'Editar Maquina';
+                document.getElementById('machineName').value = m.name;
+                document.getElementById('machineModel').value = m.model || '';
+                document.getElementById('machineBrand').value = m.brand || '';
+                document.getElementById('machineCategory').value = m.category;
+                
+                const upload = document.getElementById('machineImageUpload');
+                if (m.image) {
+                    upload.classList.add('has-image');
+                    upload.innerHTML = `<img src="${m.image}" alt="Imagen"><input type="file" id="machineImageInput" accept="image/*" hidden>`;
+                    document.getElementById('machineImageInput').addEventListener('change', e => this.handleMachineImageUpload(e));
+                } else {
+                    this.resetImageUpload();
+                }
+                
+                document.getElementById('addMachineModal').classList.add('active');
+            },
+            
+            async deleteMachine(id) {
+                if (!confirm('Eliminar esta maquina?')) return;
+                
+                await DB.delete('machines', id);
+                await DB.delete('manuals', id);
+                this.machines = this.machines.filter(m => m.id !== id);
+                this.renderMachines();
+                this.renderAdminList();
+                this.toast('Maquina eliminada', 'success');
+            },
+            
+            openUploadManual(id) {
+                const m = this.machines.find(x => x.id === id);
+                if (!m) return;
+                
+                this.currentMachine = m;
+                document.getElementById('uploadMachineName').textContent = `${m.name} - ${m.model || 'Sin modelo'}`;
+                document.getElementById('manualText').value = '';
+                document.getElementById('pdfInput').value = '';
+                
+                // Reset PDF upload area
+                const pdfArea = document.getElementById('pdfUploadArea');
+                pdfArea.classList.remove('has-image');
+                pdfArea.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    <p>Toca para subir PDF</p>
+                    <input type="file" id="pdfInput" accept=".pdf" hidden>
+                `;
+                document.getElementById('pdfInput').addEventListener('change', e => this.handlePDFUpload(e));
+                
+                document.getElementById('uploadManualModal').classList.add('active');
+            },
+            
+            async handlePDFUpload(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                if (file.type !== 'application/pdf') {
+                    this.toast('Por favor selecciona un archivo PDF', 'error');
+                    return;
+                }
+                
+                const pdfArea = document.getElementById('pdfUploadArea');
+                const overlay = document.getElementById('processingOverlay');
+                
+                // Show processing
+                overlay.classList.remove('hidden');
+                pdfArea.classList.add('has-image');
+                pdfArea.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    <p style="color: var(--primary); font-weight: 500;">${file.name}</p>
+                    <p class="filename">Procesando...</p>
+                `;
+                
+                try {
+                    const text = await PDFProcessor.extractText(file);
+                    
+                    // Fill textarea with extracted text
+                    document.getElementById('manualText').value = text;
+                    
+                    pdfArea.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--success);">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <p style="color: var(--success); font-weight: 500;">${file.name}</p>
+                        <p class="filename">${text.length} caracteres extraidos</p>
+                    `;
+                    
+                    this.toast('PDF procesado correctamente', 'success');
+                    
+                } catch (error) {
+                    pdfArea.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--error);">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                        <p style="color: var(--error);">Error al procesar PDF</p>
+                        <p class="filename">Intenta pegar el texto manualmente</p>
+                    `;
+                    this.toast(error.message, 'error');
+                } finally {
+                    overlay.classList.add('hidden');
+                }
+            },
+            
+            async saveManual() {
+                if (!this.currentMachine) return;
+                
+                const text = document.getElementById('manualText').value.trim();
+                if (!text) {
+                    this.toast('Pega el contenido del manual o sube un PDF', 'error');
+                    return;
+                }
+                
+                await DB.put('manuals', { machineId: this.currentMachine.id, content: text, uploadedAt: new Date().toISOString() });
+                
+                this.currentMachine.hasManual = true;
+                await DB.put('machines', this.currentMachine);
+                
+                const idx = this.machines.findIndex(m => m.id === this.currentMachine.id);
+                if (idx >= 0) this.machines[idx].hasManual = true;
+                
+                this.renderMachines();
+                this.renderAdminList();
+                this.closeModals();
+                this.toast('Manual guardado correctamente', 'success');
+            },
+            
+            handleLogoUpload(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    this.setLogo(ev.target.result);
+                    this.saveConfig();
+                };
+                reader.readAsDataURL(file);
+            },
+            
+            handleMachineImageUpload(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    const upload = document.getElementById('machineImageUpload');
+                    upload.classList.add('has-image');
+                    upload.innerHTML = `<img src="${ev.target.result}" alt="Imagen"><input type="file" id="machineImageInput" accept="image/*" hidden>`;
+                    document.getElementById('machineImageInput').addEventListener('change', e => this.handleMachineImageUpload(e));
+                };
+                reader.readAsDataURL(file);
+            },
+            
+            resetImageUpload() {
+                const upload = document.getElementById('machineImageUpload');
+                upload.classList.remove('has-image');
+                upload.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                    <p>Toca para subir foto</p>
+                    <input type="file" id="machineImageInput" accept="image/*" hidden>
+                `;
+                document.getElementById('machineImageInput').addEventListener('change', e => this.handleMachineImageUpload(e));
+            },
+            
+            closeModals() {
+                document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+                this.editingMachine = null;
+            },
+            
+            toast(msg, type = 'info') {
+                const el = document.getElementById('toasts');
+                const t = document.createElement('div');
+                t.className = `toast ${type}`;
+                t.textContent = msg;
+                el.appendChild(t);
+                setTimeout(() => t.remove(), 3000);
+            }
+        };
+
+        // Init
+        App.init();
+    </script>
+</body>
+</html>
