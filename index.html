@@ -13,7 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
-    <!-- PDF.js para leer PDFs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
     <style>
@@ -610,26 +609,22 @@
         .info-card-content { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
         .info-card-content ul, .info-card-content ol { padding-left: 1.25rem; }
         .info-card-content li { margin-bottom: 0.3rem; }
-        .spec-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border-light); }
-        .spec-row:last-child { border-bottom: none; }
-        .spec-label { color: var(--text-muted); font-size: 0.75rem; }
-        .spec-value { font-weight: 500; color: var(--text-primary); font-size: 0.8rem; }
 
         /* Chat */
-        .chat-container { display: flex; flex-direction: column; height: 300px; }
+        .chat-container { display: flex; flex-direction: column; height: 350px; }
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 0.5rem;
+            padding: 0.75rem;
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
+            gap: 0.75rem;
         }
-        .chat-msg { display: flex; gap: 0.5rem; max-width: 88%; }
+        .chat-msg { display: flex; gap: 0.5rem; max-width: 90%; }
         .chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
         .chat-avatar {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: var(--radius-full);
             display: flex;
             align-items: center;
@@ -637,25 +632,25 @@
             flex-shrink: 0;
         }
         .chat-msg.ai .chat-avatar { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
-        .chat-msg.ai .chat-avatar svg { width: 16px; height: 16px; color: white; }
+        .chat-msg.ai .chat-avatar svg { width: 18px; height: 18px; color: white; }
         .chat-msg.user .chat-avatar { background: var(--accent); }
-        .chat-msg.user .chat-avatar svg { width: 16px; height: 16px; color: white; }
+        .chat-msg.user .chat-avatar svg { width: 18px; height: 18px; color: white; }
 
-        .chat-bubble { padding: 0.6rem 0.75rem; border-radius: var(--radius-lg); font-size: 0.8rem; line-height: 1.5; }
+        .chat-bubble { padding: 0.75rem 1rem; border-radius: var(--radius-lg); font-size: 0.85rem; line-height: 1.6; }
         .chat-msg.ai .chat-bubble { background: var(--bg-main); color: var(--text-primary); border-bottom-left-radius: var(--radius-sm); }
         .chat-msg.user .chat-bubble { background: var(--primary); color: white; border-bottom-right-radius: var(--radius-sm); }
         .chat-bubble strong { color: var(--primary); font-weight: 600; }
         .chat-msg.user .chat-bubble strong { color: rgba(255,255,255,0.9); }
 
-        .chat-quick { display: flex; gap: 0.4rem; padding: 0.5rem; overflow-x: auto; border-top: 1px solid var(--border-light); }
+        .chat-quick { display: flex; gap: 0.4rem; padding: 0.5rem 0.75rem; overflow-x: auto; border-top: 1px solid var(--border-light); }
         .chat-quick::-webkit-scrollbar { display: none; }
         .quick-btn {
-            padding: 0.35rem 0.7rem;
+            padding: 0.4rem 0.8rem;
             background: var(--bg-main);
             border: 1px solid var(--border);
             border-radius: var(--radius-full);
             color: var(--text-secondary);
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s;
@@ -665,19 +660,19 @@
         .chat-input-area { display: flex; gap: 0.5rem; padding: 0.75rem; border-top: 1px solid var(--border); background: white; }
         .chat-input-area input {
             flex: 1;
-            padding: 0.65rem 0.9rem;
+            padding: 0.75rem 1rem;
             background: var(--bg-main);
             border: 1px solid var(--border);
             border-radius: var(--radius-full);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-primary);
             font-family: var(--font-body);
             transition: all 0.2s;
         }
         .chat-input-area input:focus { outline: none; border-color: var(--primary); background: white; }
         .chat-btn {
-            width: 42px;
-            height: 42px;
+            width: 48px;
+            height: 48px;
             border: none;
             border-radius: var(--radius-full);
             cursor: pointer;
@@ -686,7 +681,7 @@
             justify-content: center;
             transition: all 0.2s;
         }
-        .chat-btn svg { width: 18px; height: 18px; }
+        .chat-btn svg { width: 20px; height: 20px; }
         .chat-btn.send { background: var(--primary); color: white; }
         .chat-btn.send:hover { background: var(--primary-dark); transform: scale(1.05); }
         .chat-btn.voice { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-muted); }
@@ -904,7 +899,7 @@
         .processing-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1004,7 +999,6 @@
             <div id="machinesGrid" class="machines-grid"></div>
         </main>
 
-        <!-- Bottom Nav -->
         <nav class="bottom-nav">
             <button class="nav-item active" data-tab="machines">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1041,12 +1035,7 @@
             </button>
             <div class="modal-handle"></div>
 
-            <div class="detail-image" id="detailImage">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="2" y="6" width="20" height="12" rx="2"/>
-                    <path d="M6 6V4a2 2 0 012-2h8a2 2 0 012 2v2"/>
-                </svg>
-            </div>
+            <div class="detail-image" id="detailImage"></div>
 
             <div class="detail-body">
                 <span class="detail-category" id="detailCategory">-</span>
@@ -1090,6 +1079,57 @@
                     </div>
                 </div>
                 <div id="manualPanel" class="detail-panel"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="login-content">
+                <div class="login-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                </div>
+                <h2>Bienvenido</h2>
+                <p>Selecciona tu tipo de acceso</p>
+
+                <div class="login-options">
+                    <button class="login-option" data-role="student">
+                        <div class="login-option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                            </svg>
+                        </div>
+                        <div class="login-option-info">
+                            <h3>Alumno</h3>
+                            <p>Consultar maquinas y manuales</p>
+                        </div>
+                    </button>
+                    <button class="login-option" data-role="teacher">
+                        <div class="login-option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 010 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="login-option-info">
+                            <h3>Profesor</h3>
+                            <p>Acceso completo al sistema</p>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="code-section hidden" id="codeSection">
+                    <input type="password" id="teacherCode" placeholder="Codigo de acceso">
+                    <button class="btn btn-primary btn-block" id="verifyCodeBtn">Verificar</button>
+                    <p class="code-hint">Codigo: TALLER2024</p>
+                </div>
             </div>
         </div>
     </div>
@@ -1160,7 +1200,6 @@
             </button>
             <div class="modal-handle"></div>
 
-            <!-- Processing Overlay -->
             <div class="processing-overlay hidden" id="processingOverlay">
                 <div class="spinner"></div>
                 <p class="processing-text">Procesando PDF...</p>
@@ -1192,57 +1231,6 @@
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" data-close>Cancelar</button>
                     <button type="button" class="btn btn-primary" id="saveManualBtn">Guardar Manual</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-handle"></div>
-            <div class="login-content">
-                <div class="login-logo" id="loginLogo">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
-                    </svg>
-                </div>
-                <h2>Bienvenido</h2>
-                <p>Selecciona tu tipo de acceso</p>
-
-                <div class="login-options">
-                    <button class="login-option" data-role="student">
-                        <div class="login-option-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                            </svg>
-                        </div>
-                        <div class="login-option-info">
-                            <h3>Alumno</h3>
-                            <p>Consultar maquinas y manuales</p>
-                        </div>
-                    </button>
-                    <button class="login-option" data-role="teacher">
-                        <div class="login-option-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 00-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 010 7.75"/>
-                            </svg>
-                        </div>
-                        <div class="login-option-info">
-                            <h3>Profesor</h3>
-                            <p>Acceso completo al sistema</p>
-                        </div>
-                    </button>
-                </div>
-
-                <div class="code-section hidden" id="codeSection">
-                    <input type="password" id="teacherCode" placeholder="Codigo de acceso">
-                    <button class="btn btn-primary btn-block" id="verifyCodeBtn">Verificar</button>
-                    <p class="code-hint">Codigo: TALLER2024</p>
                 </div>
             </div>
         </div>
@@ -1290,74 +1278,22 @@
     <div id="toasts" class="toasts"></div>
 
     <script>
-        // Initialize PDF.js worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        // PDF.js worker
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
 
         // =============================================
-        // MAQUINAS PRECARGADAS CON FOTOS Y PDFs
+        // MAQUINAS PRECARGADAS
         // =============================================
         
         const INITIAL_MACHINES = [
-            {
-                id: 'rustler-em',
-                name: 'Rustler EM',
-                model: 'EM',
-                brand: 'ESAB',
-                category: 'soldadura',
-                image: 'rustler.jpg',
-                hasManual: false,
-                manualFile: 'rustler.pdf'
-            },
-            {
-                id: 'buddy-arc180',
-                name: 'Buddy ARC 180',
-                model: 'ARC 180',
-                brand: 'ESAB',
-                category: 'soldadura',
-                image: 'buddy.jpg',
-                hasManual: false,
-                manualFile: 'buddy.pdf'
-            },
-            {
-                id: 'buddy-tig160',
-                name: 'Buddy TIG 160',
-                model: 'TIG 160',
-                brand: 'ESAB',
-                category: 'soldadura',
-                image: 'buddytig.jpg',
-                hasManual: false,
-                manualFile: 'buddytig.pdf'
-            },
-            {
-                id: 'sierra-fat280',
-                name: 'Sierra de Cinta',
-                model: 'FAT 280',
-                brand: 'FAT',
-                category: 'corte',
-                image: 'FAT280.jpg',
-                hasManual: false,
-                manualFile: 'FAT280.pdf'
-            },
-            {
-                id: 'curvadora-rbm',
-                name: 'Curvadora de Rodillos',
-                model: 'RBM 1050-22',
-                brand: 'RBM',
-                category: 'conformado',
-                image: 'RBMCURVADORA.jpg',
-                hasManual: false,
-                manualFile: 'RBMCURVADORA.pdf'
-            },
-            {
-                id: 'biseladora-krbs',
-                name: 'Biseladora de Tubos',
-                model: 'KRBS 101',
-                brand: 'KRBS',
-                category: 'corte',
-                image: 'biseladoratubos.jpg',
-                hasManual: false,
-                manualFile: 'biseladoratubos.pdf'
-            }
+            { id: 'rustler-em', name: 'Rustler EM', model: 'EM', brand: 'ESAB', category: 'soldadura', image: 'rustler.jpg', hasManual: false, manualFile: 'rustler.pdf' },
+            { id: 'buddy-arc180', name: 'Buddy ARC 180', model: 'ARC 180', brand: 'ESAB', category: 'soldadura', image: 'buddy.jpg', hasManual: false, manualFile: 'buddy.pdf' },
+            { id: 'buddy-tig160', name: 'Buddy TIG 160', model: 'TIG 160', brand: 'ESAB', category: 'soldadura', image: 'buddytig.jpg', hasManual: false, manualFile: 'buddytig.pdf' },
+            { id: 'sierra-fat280', name: 'Sierra de Cinta', model: 'FAT 280', brand: 'FAT', category: 'corte', image: 'FAT280.jpg', hasManual: false, manualFile: 'FAT280.pdf' },
+            { id: 'curvadora-rbm', name: 'Curvadora de Rodillos', model: 'RBM 1050-22', brand: 'RBM', category: 'conformado', image: 'RBMCURVADORA.jpg', hasManual: false, manualFile: 'RBMCURVADORA.pdf' },
+            { id: 'biseladora-krbs', name: 'Biseladora de Tubos', model: 'KRBS 101', brand: 'KRBS', category: 'corte', image: 'biseladoratubos.jpg', hasManual: false, manualFile: 'biseladoratubos.pdf' }
         ];
 
         // =============================================
@@ -1369,12 +1305,9 @@
             
             async init() {
                 return new Promise((resolve, reject) => {
-                    const req = indexedDB.open('TallerIESACCI_v5', 1);
+                    const req = indexedDB.open('TallerIESACCI_v6', 1);
                     req.onerror = () => reject(req.error);
-                    req.onsuccess = () => {
-                        this.db = req.result;
-                        resolve();
-                    };
+                    req.onsuccess = () => { this.db = req.result; resolve(); };
                     req.onupgradeneeded = (e) => {
                         const db = e.target.result;
                         if (!db.objectStoreNames.contains('config')) db.createObjectStore('config', { keyPath: 'id' });
@@ -1385,73 +1318,31 @@
                 });
             },
             
-            async get(store, key) {
-                return new Promise((resolve) => {
-                    const tx = this.db.transaction(store, 'readonly');
-                    const req = tx.objectStore(store).get(key);
-                    req.onsuccess = () => resolve(req.result);
-                    req.onerror = () => resolve(null);
-                });
-            },
+            get: (store, key) => new Promise((resolve) => {
+                const tx = DB.db.transaction(store, 'readonly');
+                const req = tx.objectStore(store).get(key);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => resolve(null);
+            }),
             
-            async getAll(store) {
-                return new Promise((resolve) => {
-                    const tx = this.db.transaction(store, 'readonly');
-                    const req = tx.objectStore(store).getAll();
-                    req.onsuccess = () => resolve(req.result || []);
-                    req.onerror = () => resolve([]);
-                });
-            },
+            getAll: (store) => new Promise((resolve) => {
+                const tx = DB.db.transaction(store, 'readonly');
+                const req = tx.objectStore(store).getAll();
+                req.onsuccess = () => resolve(req.result || []);
+                req.onerror = () => resolve([]);
+            }),
             
-            async put(store, data) {
-                return new Promise((resolve) => {
-                    const tx = this.db.transaction(store, 'readwrite');
-                    tx.objectStore(store).put(data);
-                    tx.oncomplete = resolve;
-                });
-            },
+            put: (store, data) => new Promise((resolve) => {
+                const tx = DB.db.transaction(store, 'readwrite');
+                tx.objectStore(store).put(data);
+                tx.oncomplete = resolve;
+            }),
             
-            async delete(store, key) {
-                return new Promise((resolve) => {
-                    const tx = this.db.transaction(store, 'readwrite');
-                    tx.objectStore(store).delete(key);
-                    tx.oncomplete = resolve;
-                });
-            },
-            
-            async clear(store) {
-                return new Promise((resolve) => {
-                    const tx = this.db.transaction(store, 'readwrite');
-                    tx.objectStore(store).clear();
-                    tx.oncomplete = resolve;
-                });
-            }
-        };
-
-        // =============================================
-        // PDF PROCESSOR
-        // =============================================
-        
-        const PDFProcessor = {
-            async extractText(file) {
-                try {
-                    const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                    let fullText = '';
-                    
-                    for (let i = 1; i <= pdf.numPages; i++) {
-                        const page = await pdf.getPage(i);
-                        const textContent = await page.getTextContent();
-                        const pageText = textContent.items.map(item => item.str).join(' ');
-                        fullText += pageText + '\n\n';
-                    }
-                    
-                    return fullText.trim();
-                } catch (error) {
-                    console.error('Error extracting PDF text:', error);
-                    throw new Error('No se pudo leer el PDF. Asegurate de que es un archivo PDF valido.');
-                }
-            }
+            delete: (store, key) => new Promise((resolve) => {
+                const tx = DB.db.transaction(store, 'readwrite');
+                tx.objectStore(store).delete(key);
+                tx.oncomplete = resolve;
+            })
         };
 
         // =============================================
@@ -1469,47 +1360,51 @@
             currentTab: 'machines',
             
             async init() {
-                await DB.init();
-                await this.loadConfig();
-                await this.loadMachines();
-                await this.loadHistory();
-                this.checkSession();
-                this.setupEvents();
-                this.initVoice();
-                
-                setTimeout(() => {
-                    document.getElementById('splash').classList.add('fade');
-                    document.getElementById('app').classList.remove('hidden');
-                }, 1500);
+                try {
+                    await DB.init();
+                    await this.loadConfig();
+                    await this.loadMachines();
+                    await this.loadHistory();
+                    this.checkSession();
+                    this.setupEvents();
+                    this.initVoice();
+                    
+                    setTimeout(() => {
+                        document.getElementById('splash').classList.add('fade');
+                        document.getElementById('app').classList.remove('hidden');
+                    }, 1200);
+                } catch (err) {
+                    console.error('Error iniciando app:', err);
+                    alert('Error al iniciar la aplicación: ' + err.message);
+                }
             },
             
             async loadConfig() {
-                const config = await DB.get('config', 'main');
-                if (config) {
-                    if (config.logo) this.setLogo(config.logo);
-                    if (config.tallerName) {
-                        document.getElementById('headerTitle').textContent = config.tallerName;
-                        document.getElementById('tallerName').value = config.tallerName;
+                try {
+                    const config = await DB.get('config', 'main');
+                    if (config) {
+                        if (config.logo) this.setLogo(config.logo);
+                        if (config.tallerName) {
+                            document.getElementById('headerTitle').textContent = config.tallerName;
+                            document.getElementById('tallerName').value = config.tallerName;
+                        }
                     }
-                }
+                } catch (e) { console.log('No config found'); }
             },
             
             async saveConfig() {
                 const tallerName = document.getElementById('tallerName').value || 'Taller IES ACCI';
                 const logoData = document.getElementById('headerLogo').querySelector('img')?.src;
-                
                 await DB.put('config', { id: 'main', tallerName, logo: logoData });
                 document.getElementById('headerTitle').textContent = tallerName;
                 this.toast('Configuracion guardada', 'success');
             },
             
             setLogo(src) {
-                const places = ['headerLogo', 'splashLogo', 'loginLogo'];
-                places.forEach(id => {
+                ['headerLogo', 'splashLogo'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.innerHTML = `<img src="${src}" alt="Logo">`;
                 });
-                
                 const upload = document.getElementById('logoUpload');
                 if (upload) {
                     upload.classList.add('has-image');
@@ -1520,19 +1415,12 @@
             
             async loadMachines() {
                 let saved = await DB.getAll('machines');
-                
-                // If no machines, load initial data
                 if (saved.length === 0) {
-                    for (const machine of INITIAL_MACHINES) {
-                        await DB.put('machines', {
-                            ...machine,
-                            createdAt: new Date().toISOString(),
-                            updatedAt: new Date().toISOString()
-                        });
+                    for (const m of INITIAL_MACHINES) {
+                        await DB.put('machines', { ...m, createdAt: new Date().toISOString() });
                     }
                     saved = INITIAL_MACHINES;
                 }
-                
                 this.machines = saved;
                 this.renderMachines();
             },
@@ -1557,7 +1445,7 @@
                 localStorage.setItem('tallerUser', JSON.stringify(this.currentUser));
                 this.updateUI();
                 document.getElementById('loginModal').classList.remove('active');
-                this.toast(`Bienvenido`, 'success');
+                this.toast('Bienvenido', 'success');
             },
             
             logout() {
@@ -1572,17 +1460,13 @@
             },
             
             setupEvents() {
-                // Nav tabs
+                // Nav
                 document.querySelectorAll('.nav-item').forEach(t => {
                     t.addEventListener('click', () => this.switchTab(t.dataset.tab));
                 });
                 
                 // Search
-                document.getElementById('searchInput').addEventListener('input', e => {
-                    this.filterMachines(e.target.value);
-                });
-                
-                // Voice search
+                document.getElementById('searchInput').addEventListener('input', e => this.filterMachines(e.target.value));
                 document.getElementById('voiceSearchBtn').addEventListener('click', () => this.toggleVoice('voiceSearchBtn'));
                 
                 // Filters
@@ -1613,7 +1497,6 @@
                     }
                 });
                 
-                // Profile
                 document.getElementById('profileBtn').addEventListener('click', () => {
                     if (confirm('Cerrar sesion?')) this.logout();
                 });
@@ -1624,9 +1507,7 @@
                 });
                 
                 document.querySelectorAll('.modal').forEach(m => {
-                    m.addEventListener('click', e => {
-                        if (e.target === m) this.closeModals();
-                    });
+                    m.addEventListener('click', e => { if (e.target === m) this.closeModals(); });
                 });
                 
                 // Detail tabs
@@ -1634,7 +1515,7 @@
                     t.addEventListener('click', () => this.switchDetailTab(t.dataset.dtab));
                 });
                 
-                // Chat
+                // Chat - IMPORTANTE: Eventos correctos
                 document.getElementById('sendChatBtn').addEventListener('click', () => this.sendChat());
                 document.getElementById('chatInput').addEventListener('keypress', e => {
                     if (e.key === 'Enter') this.sendChat();
@@ -1654,49 +1535,33 @@
                     this.editingMachine = null;
                     document.getElementById('machineModalTitle').textContent = 'Agregar Maquina';
                     document.getElementById('machineForm').reset();
-                    this.resetImageUpload();
+                    this.resetImageUpload('machineImageUpload');
                     document.getElementById('addMachineModal').classList.add('active');
                 });
                 
-                document.getElementById('machineForm').addEventListener('submit', e => {
-                    e.preventDefault();
-                    this.saveMachine();
-                });
+                document.getElementById('machineForm').addEventListener('submit', e => { e.preventDefault(); this.saveMachine(); });
                 
-                // Logo upload
-                document.getElementById('logoUpload')?.addEventListener('click', () => {
-                    document.getElementById('logoInput')?.click();
-                });
+                // Logo
+                document.getElementById('logoUpload')?.addEventListener('click', () => document.getElementById('logoInput')?.click());
                 document.getElementById('logoInput')?.addEventListener('change', e => this.handleLogoUpload(e));
-                
-                // Taller name
                 document.getElementById('tallerName')?.addEventListener('change', () => this.saveConfig());
                 
                 // Machine image
-                document.getElementById('machineImageUpload').addEventListener('click', () => {
-                    document.getElementById('machineImageInput').click();
-                });
+                document.getElementById('machineImageUpload').addEventListener('click', () => document.getElementById('machineImageInput').click());
                 document.getElementById('machineImageInput').addEventListener('change', e => this.handleMachineImageUpload(e));
                 
-                // PDF Upload
-                document.getElementById('pdfUploadArea').addEventListener('click', () => {
-                    document.getElementById('pdfInput').click();
-                });
+                // PDF
+                document.getElementById('pdfUploadArea').addEventListener('click', () => document.getElementById('pdfInput').click());
                 document.getElementById('pdfInput').addEventListener('change', e => this.handlePDFUpload(e));
-                
-                // Manual
                 document.getElementById('saveManualBtn').addEventListener('click', () => this.saveManual());
                 
-                // Sync
-                document.getElementById('syncBtn').addEventListener('click', () => {
-                    this.toast('Datos sincronizados', 'success');
-                });
+                document.getElementById('syncBtn').addEventListener('click', () => this.toast('Sincronizado', 'success'));
             },
             
             initVoice() {
-                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    this.recognition = new SR();
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (SpeechRecognition) {
+                    this.recognition = new SpeechRecognition();
                     this.recognition.lang = 'es-ES';
                     this.recognition.continuous = false;
                     
@@ -1711,8 +1576,8 @@
                         }
                     };
                     
-                    this.recognition.onerror = () => {
-                        this.toast('Error de microfono', 'error');
+                    this.recognition.onerror = e => {
+                        console.log('Error voz:', e.error);
                         this.stopVoice();
                     };
                     
@@ -1722,7 +1587,7 @@
             
             toggleVoice(btnId) {
                 if (!this.recognition) {
-                    this.toast('Voz no soportada', 'error');
+                    this.toast('Voz no soportada en este navegador', 'error');
                     return;
                 }
                 
@@ -1731,7 +1596,13 @@
                 } else {
                     this.isRecording = true;
                     document.getElementById(btnId).classList.add('recording');
-                    this.recognition.start();
+                    try {
+                        this.recognition.start();
+                        this.toast('Escuchando...', 'info');
+                    } catch (e) {
+                        console.log('Error al iniciar voz:', e);
+                        this.stopVoice();
+                    }
                 }
             },
             
@@ -1742,7 +1613,6 @@
             
             switchTab(tab) {
                 this.currentTab = tab;
-                
                 document.querySelectorAll('.nav-item').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
                 
                 const main = document.getElementById('mainContent');
@@ -1784,17 +1654,7 @@
                 const grid = document.getElementById('machinesGrid');
                 
                 if (list.length === 0) {
-                    grid.innerHTML = `
-                        <div style="grid-column: 1/-1; padding: 2rem; text-align: center;">
-                            <div style="width: 64px; height: 64px; background: var(--bg-main); border-radius: var(--radius-lg); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 32px; height: 32px; color: var(--text-muted);">
-                                    <rect x="2" y="6" width="20" height="12" rx="2"/>
-                                </svg>
-                            </div>
-                            <h3 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.25rem;">Sin maquinas</h3>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">Agrega maquinas desde el panel de admin</p>
-                        </div>
-                    `;
+                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;"><h3>Sin maquinas</h3></div>';
                     return;
                 }
                 
@@ -1805,10 +1665,7 @@
                             <span class="machine-badge ${m.category}">${m.category}</span>
                             <div class="machine-status-badge ${m.hasManual ? 'ready' : 'empty'}">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    ${m.hasManual ? 
-                                        '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' :
-                                        '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
-                                    }
+                                    ${m.hasManual ? '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'}
                                 </svg>
                             </div>
                         </div>
@@ -1831,35 +1688,14 @@
                 
                 this.currentMachine = machine;
                 
-                // Image
                 const imgEl = document.getElementById('detailImage');
-                if (machine.image) {
-                    imgEl.innerHTML = `<img src="${machine.image}" alt="${machine.name}" onerror="this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'2\\' y=\\'6\\' width=\\'20\\' height=\\'12\\' rx=\\'2\\'/><path d=\\'M6 6V4a2 2 0 012-2h8a2 2 0 012 2v2\\'/></svg>'">`;
-                } else {
-                    imgEl.innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <rect x="2" y="6" width="20" height="12" rx="2"/>
-                            <path d="M6 6V4a2 2 0 012-2h8a2 2 0 012 2v2"/>
-                        </svg>
-                    `;
-                }
+                imgEl.innerHTML = machine.image ? `<img src="${machine.image}" alt="${machine.name}" onerror="this.parentElement.innerHTML=''">` : '';
                 
-                // Info
                 document.getElementById('detailCategory').textContent = machine.category;
                 document.getElementById('detailTitle').textContent = machine.name;
                 document.getElementById('detailSubtitle').textContent = `${machine.model || 'Sin modelo'} - ${machine.brand || 'Sin marca'}`;
+                document.getElementById('detailTags').innerHTML = `<span class="detail-tag">${machine.hasManual ? 'Manual cargado' : 'Sin manual'}</span>`;
                 
-                // Tags
-                document.getElementById('detailTags').innerHTML = `
-                    <span class="detail-tag">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
-                        </svg>
-                        ${machine.hasManual ? 'Manual cargado' : 'Sin manual'}
-                    </span>
-                `;
-                
-                // Load manual
                 const manual = await DB.get('manuals', machine.id);
                 this.renderMachineInfo(machine, manual);
                 this.renderManualContent(machine, manual);
@@ -1871,46 +1707,26 @@
             
             renderMachineInfo(machine, manual) {
                 const el = document.getElementById('infoPanel');
-                
                 if (!manual || !manual.content) {
                     el.innerHTML = `
                         <div class="empty-state">
-                            <div class="empty-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                </svg>
-                            </div>
+                            <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
                             <h3>Sin informacion</h3>
                             <p>Sube el manual para ver la informacion tecnica</p>
                             ${this.currentUser?.role === 'teacher' ? `<button class="btn btn-primary" onclick="App.openUploadManual('${machine.id}')">Subir manual</button>` : ''}
-                        </div>
-                    `;
+                        </div>`;
                     return;
                 }
-                
-                el.innerHTML = `<div class="info-card"><div class="info-card-content" style="white-space: pre-wrap;">${manual.content.substring(0, 1500)}${manual.content.length > 1500 ? '...' : ''}</div></div>`;
+                el.innerHTML = `<div class="info-card"><div class="info-card-content" style="white-space:pre-wrap;">${manual.content.substring(0, 1500)}${manual.content.length > 1500 ? '...' : ''}</div></div>`;
             },
             
             renderManualContent(machine, manual) {
                 const el = document.getElementById('manualPanel');
-                
                 if (!manual || !manual.content) {
-                    el.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                                </svg>
-                            </div>
-                            <h3>Sin manual</h3>
-                            <p>No hay manual cargado para esta maquina</p>
-                        </div>
-                    `;
+                    el.innerHTML = '<div class="empty-state"><h3>Sin manual</h3><p>No hay manual cargado</p></div>';
                     return;
                 }
-                
-                el.innerHTML = `<div style="white-space: pre-wrap; font-size: 0.8rem; line-height: 1.7; color: var(--text-secondary);">${manual.content}</div>`;
+                el.innerHTML = `<div style="white-space:pre-wrap;font-size:0.8rem;line-height:1.7;color:var(--text-secondary);">${manual.content}</div>`;
             },
             
             switchDetailTab(tab) {
@@ -1919,7 +1735,11 @@
             },
             
             resetChat() {
-                document.getElementById('chatMessages').innerHTML = `
+                const msgs = document.getElementById('chatMessages');
+                const machineName = this.currentMachine?.name || 'esta maquina';
+                const hasManual = this.currentMachine?.hasManual;
+                
+                msgs.innerHTML = `
                     <div class="chat-msg ai">
                         <div class="chat-avatar">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1927,21 +1747,41 @@
                             </svg>
                         </div>
                         <div class="chat-bubble">
-                            <p>Asistente de <strong>${this.currentMachine?.name || 'esta maquina'}</strong>.</p>
-                            <p>${this.currentMachine?.hasManual ? 'Puedo responder consultas sobre esta maquina.' : 'Sube el manual para habilitar las consultas.'}</p>
+                            <p>Soy el asistente tecnico de <strong>${machineName}</strong>.</p>
+                            ${hasManual ? 
+                                '<p>Tengo acceso al manual de esta maquina. Preguntame lo que necesites saber.</p>' :
+                                '<p style="color:var(--warning);">Aun no hay manual cargado. Mientras tanto, puedo darte informacion general basada en el modelo y marca.</p>'
+                            }
                         </div>
-                    </div>
-                `;
+                    </div>`;
             },
             
-            async sendChat() {
+            // =============================================
+            // FUNCIÓN DE CHAT CORREGIDA
+            // =============================================
+            
+            sendChat() {
+                console.log('sendChat llamado');
+                
                 const input = document.getElementById('chatInput');
                 const q = input.value.trim();
-                if (!q || !this.currentMachine) return;
                 
-                input.value = '';
+                console.log('Pregunta:', q);
+                console.log('Maquina actual:', this.currentMachine?.name);
+                
+                if (!q) {
+                    this.toast('Escribe una pregunta', 'warning');
+                    return;
+                }
+                
+                if (!this.currentMachine) {
+                    this.toast('Selecciona una maquina primero', 'error');
+                    return;
+                }
+                
                 const msgs = document.getElementById('chatMessages');
                 
+                // Mensaje del usuario
                 msgs.innerHTML += `
                     <div class="chat-msg user">
                         <div class="chat-avatar">
@@ -1951,37 +1791,162 @@
                             </svg>
                         </div>
                         <div class="chat-bubble"><p>${q}</p></div>
-                    </div>
-                `;
+                    </div>`;
                 
-                const manual = await DB.get('manuals', this.currentMachine.id);
+                input.value = '';
+                msgs.scrollTop = msgs.scrollHeight;
                 
-                let answer = '';
-                if (!manual || !manual.content) {
-                    answer = 'No hay manual cargado. Sube el manual para poder responder.';
-                } else {
-                    answer = this.searchInManual(q, manual.content);
+                // Generar respuesta
+                setTimeout(async () => {
+                    try {
+                        const manual = await DB.get('manuals', this.currentMachine.id);
+                        const answer = this.generateAnswer(q, manual);
+                        
+                        msgs.innerHTML += `
+                            <div class="chat-msg ai">
+                                <div class="chat-avatar">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/>
+                                    </svg>
+                                </div>
+                                <div class="chat-bubble">${answer}</div>
+                            </div>`;
+                        
+                        msgs.scrollTop = msgs.scrollHeight;
+                        this.saveHistory(q, answer.replace(/<[^>]*>/g, ''));
+                        
+                    } catch (err) {
+                        console.error('Error en chat:', err);
+                        msgs.innerHTML += `
+                            <div class="chat-msg ai">
+                                <div class="chat-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg></div>
+                                <div class="chat-bubble"><p>Error al procesar la respuesta. Intenta de nuevo.</p></div>
+                            </div>`;
+                    }
+                }, 500);
+            },
+            
+            // =============================================
+            // GENERADOR DE RESPUESTAS
+            // =============================================
+            
+            generateAnswer(q, manual) {
+                const question = q.toLowerCase();
+                const machine = this.currentMachine;
+                
+                // Si hay manual con contenido, usarlo
+                if (manual && manual.content) {
+                    return this.searchInManual(q, manual.content);
                 }
                 
-                setTimeout(() => {
-                    msgs.innerHTML += `
-                        <div class="chat-msg ai">
-                            <div class="chat-avatar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/>
-                                </svg>
-                            </div>
-                            <div class="chat-bubble"><p>${answer}</p></div>
-                        </div>
-                    `;
-                    msgs.scrollTop = msgs.scrollHeight;
-                    this.saveHistory(q, answer);
-                }, 400);
+                // Respuestas genéricas basadas en el tipo de pregunta y categoría
+                if (machine.category === 'soldadura') {
+                    if (question.includes('especificacion') || question.includes('parametro')) {
+                        return `<p><strong>Especificaciones típicas para ${machine.name}:</strong></p>
+                        <ul>
+                            <li>Rango de corriente: 20-200A (ver manual específico)</li>
+                            <li>Tensión en vacío: ~65V</li>
+                            <li>Alimentación: 230V monofásica</li>
+                            <li>Factor de marcha: 60%</li>
+                        </ul>
+                        <p><em>Para datos exactos, carga el manual del fabricante.</em></p>`;
+                    }
+                    if (question.includes('arranque') || question.includes('inicio')) {
+                        return `<p><strong>Procedimiento general de arranque:</strong></p>
+                        <ol>
+                            <li>Verificar conexiones eléctricas correctas</li>
+                            <li>Comprobar el estado del portaelectrodo/pistola</li>
+                            <li>Ajustar los parámetros según material y espesor</li>
+                            <li>Verificar suministro de gas (si aplica)</li>
+                            <li>Realizar prueba en material de desecho</li>
+                        </ol>
+                        <p><em>Carga el manual para el procedimiento específico.</em></p>`;
+                    }
+                    if (question.includes('mantenimiento')) {
+                        return `<p><strong>Mantenimiento general:</strong></p>
+                        <ul>
+                            <li>Diario: Limpiar boquilla y difusor</li>
+                            <li>Semanal: Revisar cables y conexiones</li>
+                            <li>Mensual: Comprobrar aislamiento</li>
+                            <li>Anual: Revisión técnica completa</li>
+                        </ul>
+                        <p><em>Consulta el manual para el plan de mantenimiento específico.</em></p>`;
+                    }
+                    if (question.includes('seguridad')) {
+                        return `<p><strong>Medidas de seguridad:</strong></p>
+                        <ul>
+                            <li>USO OBLIGATORIO de máscara de soldar</li>
+                            <li>Guantes y ropa de protección ignífuga</li>
+                            <li>Ventilación adecuada</li>
+                            <li>Nunca mirar el arco sin protección</li>
+                            <li>No soldar en ambientes húmedos</li>
+                        </ul>`;
+                    }
+                }
+                
+                if (machine.category === 'corte') {
+                    if (question.includes('especificacion') || question.includes('capacidad')) {
+                        return `<p><strong>Capacidades típicas:</strong></p>
+                        <ul>
+                            <li>Capacidad de corte según modelo (ver manual)</li>
+                            <li>Velocidades de corte variables</li>
+                            <li>Sistema de refrigeración</li>
+                        </ul>
+                        <p><em>Carga el manual para especificaciones exactas.</em></p>`;
+                    }
+                    if (question.includes('mantenimiento')) {
+                        return `<p><strong>Mantenimiento general:</strong></p>
+                        <ul>
+                            <li>Diario: Limpiar virutas y residuos</li>
+                            <li>Semanal: Verificar cuchillas/hoja</li>
+                            <li>Mensual: Lubricar guías</li>
+                            <li>Trimestral: Revisar motor y transmisiones</li>
+                        </ul>`;
+                    }
+                    if (question.includes('seguridad')) {
+                        return `<p><strong>Seguridad:</strong></p>
+                        <ul>
+                            <li>Gafas de seguridad obligatorias</li>
+                            <li>Guantes de protección</li>
+                            <li>No operar sin protecciones</li>
+                            <li>Asegurar la pieza antes de cortar</li>
+                        </ul>`;
+                    }
+                }
+                
+                if (machine.category === 'conformado') {
+                    if (question.includes('especificacion') || question.includes('capacidad')) {
+                        return `<p><strong>Capacidades típicas:</strong></p>
+                        <ul>
+                            <li>Capacidad según modelo</li>
+                            <li>Radios mínimos de curvado</li>
+                            <li>Espesores admitidos</li>
+                        </ul>
+                        <p><em>Carga el manual para especificaciones exactas.</em></p>`;
+                    }
+                    if (question.includes('mantenimiento')) {
+                        return `<p><strong>Mantenimiento:</strong></p>
+                        <ul>
+                            <li>Diario: Limpiar rodillos/herramientas</li>
+                            <li>Semanal: Lubricar partes móviles</li>
+                            <li>Mensual: Verificar desgastes</li>
+                        </ul>`;
+                    }
+                }
+                
+                // Respuesta por defecto
+                return `<p>No tengo información específica sobre "${q}" para ${machine.name}.</p>
+                <p>Puedo darte mejores respuestas si:</p>
+                <ul>
+                    <li>Subes el manual técnico de esta máquina</li>
+                    <li>Formulas la pregunta de otra manera</li>
+                </ul>
+                <p>Como ${machine.brand} ${machine.model}, consulta el manual del fabricante para datos precisos.</p>`;
             },
             
             searchInManual(q, content) {
-                const keywords = q.toLowerCase().split(/\s+/).filter(w => w.length > 3);
-                const lines = content.split('\n').filter(l => l.trim());
+                const keywords = q.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+                const lines = content.split('\n').filter(l => l.trim().length > 10);
                 const results = [];
                 
                 for (const line of lines) {
@@ -1994,11 +1959,16 @@
                 }
                 
                 if (results.length === 0) {
-                    return 'No encontre informacion especifica. Prueba con otras palabras.';
+                    return `<p>No encontré información específica sobre "${q}" en el manual.</p>
+                    <p>Intenta con otros términos o revisa el manual completo en la pestaña "Manual".</p>`;
                 }
                 
                 results.sort((a, b) => b.score - a.score);
-                return `<strong>Informacion encontrada:</strong>\n\n${results.slice(0, 4).map(r => r.line).join('\n\n')}`;
+                const top = results.slice(0, 5);
+                
+                return `<p><strong>Información encontrada:</strong></p>
+                <ul>${top.map(r => `<li>${r.line}</li>`).join('')}</ul>
+                <p><em>Fuente: Manual de ${this.currentMachine.name}</em></p>`;
             },
             
             async saveHistory(q, a) {
@@ -2007,32 +1977,19 @@
                     machineId: this.currentMachine.id,
                     machineName: this.currentMachine.name,
                     question: q,
-                    answer: a.replace(/<[^>]*>/g, '').substring(0, 120) + '...',
+                    answer: a.substring(0, 150) + '...',
                     timestamp: new Date().toISOString()
                 };
-                
                 this.history.unshift(entry);
                 await DB.put('history', entry);
             },
             
             renderHistory() {
                 const grid = document.getElementById('machinesGrid');
-                
                 if (this.history.length === 0) {
-                    grid.innerHTML = `
-                        <div style="grid-column: 1/-1; padding: 2rem; text-align: center;">
-                            <div style="width: 64px; height: 64px; background: var(--bg-main); border-radius: var(--radius-lg); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 32px; height: 32px; color: var(--text-muted);">
-                                    <circle cx="12" cy="12" r="10"/>
-                                </svg>
-                            </div>
-                            <h3 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.25rem;">Sin historial</h3>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">Las consultas apareceran aqui</p>
-                        </div>
-                    `;
+                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;"><h3>Sin historial</h3></div>';
                     return;
                 }
-                
                 grid.innerHTML = `<div class="history-list">${this.history.slice(0, 30).map(h => `
                     <div class="history-item">
                         <div class="history-item-head">
@@ -2041,18 +1998,15 @@
                         </div>
                         <p class="history-q">${h.question}</p>
                         <p class="history-a">${h.answer}</p>
-                    </div>
-                `).join('')}</div>`;
+                    </div>`).join('')}</div>`;
             },
             
             renderAdminList() {
                 const el = document.getElementById('adminMachinesList');
-                
                 if (this.machines.length === 0) {
-                    el.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 1rem;">No hay maquinas registradas</p>';
+                    el.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:1rem;">No hay máquinas</p>';
                     return;
                 }
-                
                 el.innerHTML = this.machines.map(m => `
                     <div class="admin-item">
                         <div class="admin-item-info">
@@ -2061,49 +2015,29 @@
                         </div>
                         <div class="admin-item-actions">
                             <button class="btn-icon" onclick="App.openUploadManual('${m.id}')" title="Manual">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                                    <polyline points="17 8 12 3 7 8"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/></svg>
                             </button>
                             <button class="btn-icon" onclick="App.editMachine('${m.id}')" title="Editar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             </button>
                             <button class="btn-icon danger" onclick="App.deleteMachine('${m.id}')" title="Eliminar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="3 6 5 6 21 6"/>
-                                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
                             </button>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`).join('');
             },
             
             async saveMachine() {
                 const name = document.getElementById('machineName').value.trim();
-                const model = document.getElementById('machineModel').value.trim();
-                const brand = document.getElementById('machineBrand').value.trim();
-                const category = document.getElementById('machineCategory').value;
-                
-                if (!name) {
-                    this.toast('El nombre es obligatorio', 'error');
-                    return;
-                }
-                
-                const imageEl = document.getElementById('machineImageUpload').querySelector('img');
-                const image = imageEl ? imageEl.src : null;
+                if (!name) { this.toast('Nombre obligatorio', 'error'); return; }
                 
                 const machine = {
                     id: this.editingMachine || Date.now().toString(),
                     name,
-                    model,
-                    brand,
-                    category,
-                    image,
+                    model: document.getElementById('machineModel').value.trim(),
+                    brand: document.getElementById('machineBrand').value.trim(),
+                    category: document.getElementById('machineCategory').value,
+                    image: document.getElementById('machineImageUpload').querySelector('img')?.src || null,
                     hasManual: this.editingMachine ? (this.machines.find(m => m.id === this.editingMachine)?.hasManual || false) : false,
                     createdAt: this.editingMachine ? (this.machines.find(m => m.id === this.editingMachine)?.createdAt) : new Date().toISOString(),
                     updatedAt: new Date().toISOString()
@@ -2122,7 +2056,7 @@
                 this.renderAdminList();
                 this.closeModals();
                 document.getElementById('machineForm').reset();
-                this.resetImageUpload();
+                this.resetImageUpload('machineImageUpload');
                 this.editingMachine = null;
                 this.toast('Maquina guardada', 'success');
             },
@@ -2144,7 +2078,7 @@
                     upload.innerHTML = `<img src="${m.image}" alt="Imagen"><input type="file" id="machineImageInput" accept="image/*" hidden>`;
                     document.getElementById('machineImageInput').addEventListener('change', e => this.handleMachineImageUpload(e));
                 } else {
-                    this.resetImageUpload();
+                    this.resetImageUpload('machineImageUpload');
                 }
                 
                 document.getElementById('addMachineModal').classList.add('active');
@@ -2152,7 +2086,6 @@
             
             async deleteMachine(id) {
                 if (!confirm('Eliminar esta maquina?')) return;
-                
                 await DB.delete('machines', id);
                 await DB.delete('manuals', id);
                 this.machines = this.machines.filter(m => m.id !== id);
@@ -2170,7 +2103,6 @@
                 document.getElementById('manualText').value = '';
                 document.getElementById('pdfInput').value = '';
                 
-                // Reset PDF upload area
                 const pdfArea = document.getElementById('pdfUploadArea');
                 pdfArea.classList.remove('has-image');
                 pdfArea.innerHTML = `
@@ -2181,8 +2113,7 @@
                         <line x1="16" y1="17" x2="8" y2="17"/>
                     </svg>
                     <p>Toca para subir PDF</p>
-                    <input type="file" id="pdfInput" accept=".pdf" hidden>
-                `;
+                    <input type="file" id="pdfInput" accept=".pdf" hidden>`;
                 document.getElementById('pdfInput').addEventListener('change', e => this.handlePDFUpload(e));
                 
                 document.getElementById('uploadManualModal').classList.add('active');
@@ -2190,56 +2121,47 @@
             
             async handlePDFUpload(e) {
                 const file = e.target.files[0];
-                if (!file) return;
-                
-                if (file.type !== 'application/pdf') {
-                    this.toast('Por favor selecciona un archivo PDF', 'error');
+                if (!file || file.type !== 'application/pdf') {
+                    this.toast('Selecciona un archivo PDF valido', 'error');
                     return;
                 }
                 
                 const pdfArea = document.getElementById('pdfUploadArea');
                 const overlay = document.getElementById('processingOverlay');
                 
-                // Show processing
                 overlay.classList.remove('hidden');
                 pdfArea.classList.add('has-image');
-                pdfArea.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                    </svg>
-                    <p style="color: var(--primary); font-weight: 500;">${file.name}</p>
-                    <p class="filename">Procesando...</p>
-                `;
+                pdfArea.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg><p style="color:var(--primary);font-weight:500;">${file.name}</p><p class="filename">Procesando...</p>`;
                 
                 try {
-                    const text = await PDFProcessor.extractText(file);
+                    if (typeof pdfjsLib === 'undefined') throw new Error('PDF.js no cargado');
                     
-                    // Fill textarea with extracted text
-                    document.getElementById('manualText').value = text;
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    let fullText = '';
+                    
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        fullText += textContent.items.map(item => item.str).join(' ') + '\n\n';
+                    }
+                    
+                    document.getElementById('manualText').value = fullText.trim();
                     
                     pdfArea.innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--success);">
-                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-                            <polyline points="22 4 12 14.01 9 11.01"/>
-                        </svg>
-                        <p style="color: var(--success); font-weight: 500;">${file.name}</p>
-                        <p class="filename">${text.length} caracteres extraidos</p>
-                    `;
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--success);"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <p style="color:var(--success);font-weight:500;">${file.name}</p>
+                        <p class="filename">${fullText.length} caracteres extraidos</p>`;
                     
                     this.toast('PDF procesado correctamente', 'success');
                     
-                } catch (error) {
+                } catch (err) {
+                    console.error('Error PDF:', err);
                     pdfArea.innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--error);">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="15" y1="9" x2="9" y2="15"/>
-                            <line x1="9" y1="9" x2="15" y2="15"/>
-                        </svg>
-                        <p style="color: var(--error);">Error al procesar PDF</p>
-                        <p class="filename">Intenta pegar el texto manualmente</p>
-                    `;
-                    this.toast(error.message, 'error');
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--error);"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        <p style="color:var(--error);">Error al procesar PDF</p>
+                        <p class="filename">Pega el texto manualmente</p>`;
+                    this.toast('Error al procesar PDF', 'error');
                 } finally {
                     overlay.classList.add('hidden');
                 }
@@ -2250,7 +2172,7 @@
                 
                 const text = document.getElementById('manualText').value.trim();
                 if (!text) {
-                    this.toast('Pega el contenido del manual o sube un PDF', 'error');
+                    this.toast('Pega el contenido o sube un PDF', 'error');
                     return;
                 }
                 
@@ -2271,7 +2193,6 @@
             handleLogoUpload(e) {
                 const file = e.target.files[0];
                 if (!file) return;
-                
                 const reader = new FileReader();
                 reader.onload = ev => {
                     this.setLogo(ev.target.result);
@@ -2283,7 +2204,6 @@
             handleMachineImageUpload(e) {
                 const file = e.target.files[0];
                 if (!file) return;
-                
                 const reader = new FileReader();
                 reader.onload = ev => {
                     const upload = document.getElementById('machineImageUpload');
@@ -2294,8 +2214,8 @@
                 reader.readAsDataURL(file);
             },
             
-            resetImageUpload() {
-                const upload = document.getElementById('machineImageUpload');
+            resetImageUpload(id) {
+                const upload = document.getElementById(id);
                 upload.classList.remove('has-image');
                 upload.innerHTML = `
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2304,9 +2224,13 @@
                         <path d="M21 15l-5-5L5 21"/>
                     </svg>
                     <p>Toca para subir foto</p>
-                    <input type="file" id="machineImageInput" accept="image/*" hidden>
-                `;
-                document.getElementById('machineImageInput').addEventListener('change', e => this.handleMachineImageUpload(e));
+                    <input type="file" id="${id === 'machineImageUpload' ? 'machineImageInput' : 'logoInput'}" accept="image/*" hidden>`;
+                
+                if (id === 'machineImageUpload') {
+                    document.getElementById('machineImageInput').addEventListener('change', e => this.handleMachineImageUpload(e));
+                } else {
+                    document.getElementById('logoInput').addEventListener('change', e => this.handleLogoUpload(e));
+                }
             },
             
             closeModals() {
@@ -2324,7 +2248,7 @@
             }
         };
 
-        // Init
+        // Iniciar
         App.init();
     </script>
 </body>
