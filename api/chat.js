@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     
     try {
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -27,13 +27,13 @@ export default async function handler(req, res) {
                                 }
                             },
                             {
-                                text: `Eres un experto técnico en maquinaria industrial. Responde SIEMPRE en español de forma clara y natural.
+                                text: `Eres un experto técnico en maquinaria industrial. Responde SIEMPRE en español de forma clara, precisa y natural.
 
 Máquina: ${machineName || 'industrial'}
 
 PREGUNTA: ${question}
 
-Analiza el manual PDF y responde usando esa información.`
+Analiza el manual PDF adjunto y responde usando esa información de forma práctica y directa.`
                             }
                         ]
                     }],
