@@ -70,8 +70,6 @@
         
         .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-accent { background: var(--accent); color: white; }
-        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
         
         .machines-section { padding: 1rem; }
         
@@ -166,6 +164,12 @@
         
         .status-dot.yes { background: var(--success); }
         .status-dot.no { background: #cbd5e1; }
+        .status-dot.loading { background: var(--warning); animation: blink 1s infinite; }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
         
         /* MODAL */
         .modal {
@@ -418,7 +422,7 @@
             font-size: 0.85rem;
             line-height: 1.7;
             white-space: pre-wrap;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
         }
         
@@ -445,6 +449,23 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loading-text {
+            color: var(--text2);
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading-text::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
         }
     </style>
 </head>
@@ -481,7 +502,7 @@
             <div class="modal-body">
                 <div id="chatTab" class="tab-content active">
                     <div class="instructions">
-                        <strong>Como usar:</strong> Escribe tu pregunta y pulsa ENVIAR (boton azul).
+                        <strong>Como usar:</strong> Escribe tu pregunta y pulsa ENVIAR.
                     </div>
                     
                     <div class="chat-box">
@@ -550,281 +571,16 @@
 
     <script>
         // =============================================
-        // MAQUINAS CON MANUALES PRECARGADOS
+        // MAQUINAS - CON NOMBRES DE ARCHIVOS TXT
         // =============================================
         
         const MACHINES = [
-            {
-                id: 'rustler',
-                name: 'Rustler EM',
-                model: 'EM',
-                brand: 'ESAB',
-                cat: 'soldadura',
-                img: 'rustler.jpg',
-                manual: `MAQUINA DE SOLDAR RUSTLER EM - ESAB
-
-ESPECIFICACIONES TECNICAS
-- Tipo: Soldadora MIG/MAG semiautomatica
-- Rango de corriente: 30-350 A
-- Factor de marcha: 60% a 350A
-- Tension en vacio: 48V
-- Diametro de hilo: 0.6 - 1.2 mm
-- Alimentacion: 400V trifasica
-- Velocidad de hilo: 1.5 - 18 m/min
-- Peso: 85 kg
-
-PROCEDIMIENTO DE ARRANQUE
-1. Verificar conexion de gas protector (Ar o mezcla)
-2. Comprobar que el carrete de hilo esta cargado
-3. Ajustar tension del rodillo de arrastre
-4. Seleccionar tipo de material y espesor
-5. Ajustar voltaje y velocidad de hilo
-6. Purgar gas antes de soldar (2-3 segundos)
-7. Probar en chapa de desecho
-
-PARAMETROS RECOMENDADOS
-- Acero suave 1mm: 80-100A, 17-18V
-- Acero suave 3mm: 140-160A, 20-21V
-- Acero suave 6mm: 200-240A, 24-26V
-
-MANTENIMIENTO
-- Diario: Limpiar boquilla y difusor
-- Diario: Verificar estado de la punta de contacto
-- Semanal: Limpiar conducto de hilo con aire
-- Mensual: Comprobar rodillos de arrastre
-- Trimestral: Limpiar interior de la maquina
-
-SEGURIDAD
-- USO OBLIGATORIO de mascara de soldar
-- Guantes de cuero para soldador
-- Mandil y polainas
-- Proteccion respiratoria en espacios cerrados
-- NUNCA mirar el arco sin proteccion
-- Ventilacion adecuada del area`
-            },
-            {
-                id: 'buddy',
-                name: 'Buddy ARC 180',
-                model: 'ARC 180',
-                brand: 'ESAB',
-                cat: 'soldadura',
-                img: 'buddy.jpg',
-                manual: `SOLDADORA POR ELECTRODO BUDDY ARC 180 - ESAB
-
-ESPECIFICACIONES TECNICAS
-- Tipo: Soldadora MMA (electrodo revestido)
-- Rango de corriente: 10-180 A
-- Factor de marcha: 60% a 180A
-- Tension en vacio: 65V
-- Diametro de electrodo: 1.6 - 4.0 mm
-- Alimentacion: 230V monofasica
-- Peso: 6.5 kg
-- Clase de aislamiento: H
-
-TABLA DE PARAMETROS
-- Electrodo 2.0 mm: 40-70 A
-- Electrodo 2.5 mm: 50-90 A
-- Electrodo 3.2 mm: 80-130 A
-- Electrodo 4.0 mm: 110-160 A
-
-PROCEDIMIENTO DE ARRANQUE
-1. Verificar cables en buen estado
-2. Conectar pinza de masa cerca de la zona de soldadura
-3. Seleccionar electrodo adecuado
-4. Ajustar corriente segun diametro
-5. Probar en material similar
-
-MANTENIMIENTO
-- Diario: Revisar cables y conexiones
-- Semanal: Limpiar bornes
-- Mensual: Comprobar aislamiento
-- Anual: Revision tecnica
-
-SEGURIDAD
-- NUNCA soldar en ambientes humedos
-- Gafas/mascara con filtro minimo DIN 10
-- Guantes de cuero secos
-- Ropa de algodon
-- Electrodos guardar en lugar seco`
-            },
-            {
-                id: 'buddytig',
-                name: 'Buddy TIG 160',
-                model: 'TIG 160',
-                brand: 'ESAB',
-                cat: 'soldadura',
-                img: 'buddytig.jpg',
-                manual: `SOLDADORA TIG DC BUDDY TIG 160 - ESAB
-
-ESPECIFICACIONES TECNICAS
-- Tipo: Soldadora TIG DC
-- Rango de corriente: 5-160 A
-- Factor de marcha: 60% a 160A
-- Tension en vacio: 65V
-- Corriente de alta frecuencia: Si, HF start
-- Alimentacion: 230V monofasica
-- Peso: 8 kg
-- Gas: Argon 100%
-
-PROCEDIMIENTO DE ARRANQUE
-1. Verificar conexion del gas argon (6-12 l/min)
-2. Instalar antorcha TIG correcta
-3. Afilar electrodo de tungsteno (punta conica 30-45 grados)
-4. Seleccionar diametro de electrodo segun corriente
-5. Ajustar corriente segun espesor
-6. Activar alta frecuencia para inicio sin contacto
-
-ELECTRODOS DE TUNGSTENO
-- Punto rojo (Torio): Acero al carbono
-- Punto verde (Puro): Aluminio (no recomendado para DC)
-- Punto dorado (Lantano): Uso general
-
-MANTENIMIENTO
-- Diario: Limpiar boquilla de ceramica
-- Verificar estado del electrodo
-- Semanal: Revisar mangueras de gas
-
-SEGURIDAD
-- Filtro minimo DIN 10-12
-- El tungsteno es toxico: no inhalar polvo al afilar
-- Ventilacion por humos metalicos
-- Cuidado con quemaduras`
-            },
-            {
-                id: 'sierra',
-                name: 'Sierra de Cinta',
-                model: 'FAT 280',
-                brand: 'FAT',
-                cat: 'corte',
-                img: 'FAT280.jpg',
-                manual: `SIERRA DE CINTA FAT 280M ECO
-
-ESPECIFICACIONES TECNICAS
-- Capacidad de corte redondo: 280 mm
-- Capacidad de corte cuadrado: 280x280 mm
-- Velocidad de cinta: 40/60/80 m/min
-- Potencia del motor: 1.1 kW
-- Tension: 400V trifasica
-- Dimensiones: 1400 x 700 x 1200 mm
-- Peso: 280 kg
-- Sistema de refrigeracion: Incluido
-
-PROCEDIMIENTO DE ARRANQUE
-1. Verificar cinta correctamente tensada
-2. Comprobar estado de rodillos guia
-3. Revisar nivel de refrigerante
-4. Encender motor con interruptor principal
-5. Seleccionar velocidad segun material
-6. Esperar a velocidad nominal
-7. Aplicar presion constante
-
-VELOCIDADES SEGUN MATERIAL
-- Acero suave: 60-80 m/min
-- Acero inoxidable: 40-50 m/min
-- Aluminio: 80 m/min
-- Fundicion: 40-50 m/min
-
-MANTENIMIENTO
-- Diario: Limpiar virutas
-- Diario: Verificar nivel de refrigerante
-- Semanal: Comprobar tension de cinta
-- Mensual: Revisar estado de dientes
-- Trimestral: Cambiar aceite reductor
-
-SEGURIDAD
-- Gafas de seguridad obligatorias
-- Guantes contra cortes
-- No operar con manos cerca de cinta
-- Mantener protecciones instaladas
-- Asegurar pieza con mordazas`
-            },
-            {
-                id: 'curvadora',
-                name: 'Curvadora de Rodillos',
-                model: 'RBM 1050-22',
-                brand: 'RBM',
-                cat: 'conformado',
-                img: 'RBMCURVADORA.jpg',
-                manual: `CURVADORA DE RODILLOS RBM 1050-22
-
-ESPECIFICACIONES TECNICAS
-- Ancho de trabajo: 1050 mm
-- Espesor maximo acero: 22 mm
-- Diametro minimo de cilindro: 450 mm
-- Diametro de rodillos: 180 mm
-- Velocidad de avance: 4.5 m/min
-- Potencia: 5.5 kW
-- Alimentacion: 400V trifasica
-- Peso: 1800 kg
-
-PROCEDIMIENTO DE ARRANQUE
-1. Verificar rodillos limpios
-2. Ajustar posicion del rodillo superior
-3. Introducir chapa entre rodillos
-4. Encender motor de avance
-5. Pasar chapa aumentando presion gradualmente
-6. Verificar curvatura con plantilla
-
-CALCULO DE PASADAS
-- Radio grande: 3-4 pasadas con incrementos pequenos
-- Radio medio: 4-6 pasadas
-- Radio pequeno: 6-8 pasadas con incrementos minimos
-
-MANTENIMIENTO
-- Diario: Limpiar rodillos
-- Semanal: Lubricar cojinetes
-- Mensual: Comprobar alineacion
-- Trimestral: Revisar sistema hidraulico
-
-SEGURIDAD
-- No tocar rodillos en movimiento
-- Manos alejadas de puntos de pellizco
-- No llevar ropa suelta
-- Parada emergencia accesible`
-            },
-            {
-                id: 'biseladora',
-                name: 'Biseladora de Tubos',
-                model: 'KRBS 101',
-                brand: 'KRBS',
-                cat: 'corte',
-                img: 'biseladoratubos.jpg',
-                manual: `BISELADORA DE TUBOS KRBS 101
-
-ESPECIFICACIONES TECNICAS
-- Diametro de tubo: 20-101 mm
-- Espesor maximo: 8 mm
-- Angulo de bisel: 0-45 grados
-- Velocidad de giro: 2800 RPM
-- Potencia: 1.5 kW
-- Alimentacion: 230V monofasica
-- Peso: 35 kg
-
-PROCEDIMIENTO DE ARRANQUE
-1. Fijar tubo en soporte
-2. Ajustar angulo de bisel
-3. Seleccionar velocidad de avance
-4. Encender maquina
-5. Acercar herramienta gradualmente
-6. Realizar biselado en pasadas sucesivas
-
-TIPOS DE BISEL
-- Bisel en V: Para uniones a tope
-- Bisel en J: Para espesores gruesos
-- Bisel simple: 30-45 grados tipico
-
-MANTENIMIENTO
-- Diario: Limpiar residuos
-- Semanal: Lubricar partes moviles
-- Mensual: Verificar estado de fresas
-- Trimestral: Ajustar correas
-
-SEGURIDAD
-- Gafas de seguridad
-- No tocar zona de corte
-- Asegurar pieza correctamente
-- Desconectar antes de ajustes`
-            }
+            { id: 'rustler', name: 'Rustler EM', model: 'EM', brand: 'ESAB', cat: 'soldadura', img: 'rustler.jpg', txt: 'rustler.txt', manual: null },
+            { id: 'buddy', name: 'Buddy ARC 180', model: 'ARC 180', brand: 'ESAB', cat: 'soldadura', img: 'buddy.jpg', txt: 'buddy.txt', manual: null },
+            { id: 'buddytig', name: 'Buddy TIG 160', model: 'TIG 160', brand: 'ESAB', cat: 'soldadura', img: 'buddytig.jpg', txt: 'buddytig.txt', manual: null },
+            { id: 'sierra', name: 'Sierra de Cinta', model: 'FAT 280', brand: 'FAT', cat: 'corte', img: 'FAT280.jpg', txt: 'FAT280.txt', manual: null },
+            { id: 'curvadora', name: 'Curvadora', model: 'RBM 1050-22', brand: 'RBM', cat: 'conformado', img: 'RBMCURVADORA.jpg', txt: 'RBMCURVADORA.txt', manual: null },
+            { id: 'biseladora', name: 'Biseladora', model: 'KRBS 101', brand: 'KRBS', cat: 'corte', img: 'biseladoratubos.jpg', txt: 'biseladoratubos.txt', manual: null }
         ];
         
         let currentMachine = null;
@@ -850,7 +606,7 @@ SEGURIDAD
         });
         
         // =============================================
-        // FUNCIONES
+        // RENDERIZAR MAQUINAS
         // =============================================
         
         function renderMachines() {
@@ -866,26 +622,85 @@ SEGURIDAD
                         <div class="machine-name">${m.name}</div>
                         <div class="machine-model">${m.model} - ${m.brand}</div>
                         <div class="machine-status">
-                            <span class="status-dot yes"></span>
-                            Con manual
+                            <span class="status-dot ${m.manual ? 'yes' : 'no'}" id="status-${m.id}"></span>
+                            <span id="status-text-${m.id}">${m.manual ? 'Con manual' : 'Sin manual'}</span>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
         
-        function openMachine(id) {
+        // =============================================
+        // ABRIR MAQUINA - CARGAR TXT
+        // =============================================
+        
+        async function openMachine(id) {
             currentMachine = MACHINES.find(m => m.id === id);
             if (!currentMachine) return;
             
             document.getElementById('modalTitle').textContent = currentMachine.name;
             document.getElementById('chatInput').value = '';
             
+            // Mostrar cargando
+            document.getElementById('manualContent').innerHTML = '<div class="loading-text">Cargando manual</div>';
+            
+            // Cargar manual si no está cargado
+            if (!currentMachine.manual) {
+                await loadManual(currentMachine);
+            }
+            
             resetChat();
             renderManual();
             showTab('chat');
             
             document.getElementById('machineModal').classList.add('active');
+        }
+        
+        // =============================================
+        // CARGAR TXT DESDE GITHUB
+        // =============================================
+        
+        async function loadManual(machine) {
+            try {
+                // Obtener la URL base (donde está el index.html)
+                const baseUrl = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
+                const txtUrl = baseUrl + '/' + machine.txt;
+                
+                console.log('Cargando:', txtUrl);
+                
+                const response = await fetch(txtUrl);
+                
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar el archivo');
+                }
+                
+                const text = await response.text();
+                machine.manual = text;
+                
+                // Actualizar estado
+                const statusDot = document.getElementById('status-' + machine.id);
+                const statusText = document.getElementById('status-text-' + machine.id);
+                if (statusDot) statusDot.className = 'status-dot yes';
+                if (statusText) statusText.textContent = 'Con manual';
+                
+                showToast('Manual cargado', 'success');
+                
+            } catch (error) {
+                console.error('Error cargando manual:', error);
+                
+                // Manual de respaldo básico
+                machine.manual = `MANUAL NO DISPONIBLE
+
+No se pudo cargar el archivo ${machine.txt}.
+
+Asegurate de que el archivo esta subido a GitHub en la misma carpeta que index.html.
+
+Nombre esperado: ${machine.txt}
+
+URL intentada: ${window.location.href.replace(/index\.html$/, '') + machine.txt}`;
+                
+                showToast('Error al cargar manual', 'error');
+            }
         }
         
         function closeModal() {
@@ -916,7 +731,7 @@ SEGURIDAD
                     </div>
                     <div class="msg-bubble">
                         Soy el asistente de <strong>${name}</strong>.<br>
-                        Tengo el manual cargado. Preguntame lo que necesites.
+                        ${currentMachine.manual ? 'Tengo el manual cargado. Preguntame lo que necesites.' : 'Cargando manual...'}
                     </div>
                 </div>`;
         }
@@ -926,7 +741,7 @@ SEGURIDAD
             if (currentMachine && currentMachine.manual) {
                 el.innerHTML = `<div class="manual-text">${currentMachine.manual}</div>`;
             } else {
-                el.innerHTML = '<div class="empty">Sin manual</div>';
+                el.innerHTML = '<div class="empty">Sin manual cargado</div>';
             }
         }
         
@@ -980,7 +795,7 @@ SEGURIDAD
             const manual = currentMachine.manual;
             
             if (!manual) {
-                return 'No tengo manual cargado para esta maquina.';
+                return 'El manual aun no se ha cargado. Intenta de nuevo.';
             }
             
             // Buscar en el manual
