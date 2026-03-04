@@ -12,7 +12,6 @@ export default async function handler(req, res) {
     if (!pdfBase64) return res.status(400).json({ error: 'PDF requerido' });
     
     try {
-        // Usar gemini-2.5-flash (tu modelo más moderno)
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
             {
@@ -28,19 +27,19 @@ export default async function handler(req, res) {
                                 }
                             },
                             {
-                                text: `Eres un experto técnico en maquinaria industrial. Responde SIEMPRE en español de forma clara, precisa y natural.
+                                text: `Eres un experto técnico en maquinaria industrial. Responde SIEMPRE en español de forma clara, precisa y NATURAL. No cortes las respuestas, da respuestas completas y detalladas.
 
 Máquina: ${machineName || 'industrial'}
 
-PREGUNTA: ${question}
+PREGUNTA DEL USUARIO: ${question}
 
-Analiza el manual PDF adjunto y responde usando esa información de forma práctica y directa.`
+Analiza el manual PDF adjunto y responde de forma práctica, directa y COMPLETA. Si hay especificaciones técnicas, inclúyelas. Si hay pasos, numéralos.`
                             }
                         ]
                     }],
                     generationConfig: {
                         temperature: 0.7,
-                        maxOutputTokens: 1000
+                        maxOutputTokens: 4096
                     }
                 })
             }
@@ -49,6 +48,7 @@ Analiza el manual PDF adjunto y responde usando esa información de forma práct
         const data = await response.json();
         
         if (!response.ok) {
+            console.error('Gemini error:', JSON.stringify(data, null, 2));
             return res.status(response.status).json({ error: data.error?.message || 'Error de Gemini' });
         }
         
@@ -56,6 +56,7 @@ Analiza el manual PDF adjunto y responde usando esa información de forma práct
         return res.status(200).json({ answer });
         
     } catch (error) {
-        return res.status(500).json({ error: 'Error: ' + error.message });
+        console.error('Error:', error);
+        return res.status(500).json({ error: 'Error de conexión: ' + error.message });
     }
 }
