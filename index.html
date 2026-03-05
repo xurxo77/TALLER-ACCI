@@ -372,7 +372,7 @@
                 <div class="login-options">
                     <button class="login-option" id="studentBtn"><div class="login-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div class="login-option-info"><h3>Alumno</h3><p>Consultar</p></div></button>
                     <button class="login-option" id="teacherBtn"><div class="login-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="login-option-info"><h3>Profesor</h3><p>Control total</p></div></button>
-                    <button class="login-option" id="adminBtn" style="display:none;"><div class="login-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="login-option-info"><h3>Admin</h3><p>Gestionar maquinas</p></div></button>
+                    <button class="login-option" id="adminBtn" style="display:none; border-color: var(--success);"><div class="login-option-icon" style="background: #f0fdf4;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--success);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="login-option-info"><h3>Admin</h3><p>Gestionar maquinas</p></div></button>
                 </div>
                 <div class="code-section hidden" id="codeSection">
                     <input type="password" id="code" placeholder="Codigo">
@@ -475,50 +475,55 @@
             document.getElementById('splash').classList.add('hidden');
         }, 2500);
 
-        // MAQUINAS - Se cargan dinámicamente desde la API
+        // MAQUINAS - Se cargan desde archivo local
         let MACHINES = [];
-
-        const $ = id => document.getElementById(id);
-        
+        let currentUser = null;
+        let isAdmin = false;
         let machine = null;
         let pdfBase64 = null;
-        let currentUser = null;
         let recognition = null;
         let recActive = false;
-        let isAdmin = false;
         let selectedImage = null;
         let selectedPdf = null;
 
-        // Cargar sesión y máquinas
+        const $ = id => document.getElementById(id);
+
+        // Cargar sesión guardada
         const s = localStorage.getItem('tallerUser');
         if (s) { 
             currentUser = JSON.parse(s); 
             updateUIForUser();
         }
-        
+
         loadMachines();
         setupVoice();
         setupEvents();
         setupFileUploads();
 
         function loadMachines() {
-            fetch('/api/machines')
+            fetch('machines.json')
                 .then(r => r.json())
                 .then(data => {
-                    if (data.machines) {
-                        MACHINES = data.machines;
-                        renderGrid(MACHINES);
-                    }
+                    MACHINES = data;
+                    renderGrid(MACHINES);
                 })
                 .catch(e => {
                     console.error('Error loading machines:', e);
-                    // Fallback: cargar desde JSON local
-                    fetch('machines.json')
-                        .then(r => r.json())
-                        .then(data => {
-                            MACHINES = data;
-                            renderGrid(MACHINES);
-                        });
+                    MACHINES = [
+                        {id:'rustler',name:'Rustler EM',model:'EM',brand:'ESAB',cat:'soldadura',img:'rustler.jpg',pdf:'rustler.pdf'},
+                        {id:'buddy',name:'Buddy ARC 180',model:'ARC 180',brand:'ESAB',cat:'soldadura',img:'buddy.jpg',pdf:'buddy.pdf'},
+                        {id:'buddytig',name:'Buddy TIG 160',model:'TIG 160',brand:'ESAB',cat:'soldadura',img:'buddytig.jpg',pdf:'buddytig.pdf'},
+                        {id:'sierra',name:'Sierra de Cinta',model:'FAT 280',brand:'FAT',cat:'corte',img:'FAT280.jpg',pdf:'FAT280.pdf'},
+                        {id:'curvadora',name:'Curvadora',model:'RBM 1050-22',brand:'RBM',cat:'conformado',img:'RBMCURVADORA.jpg',pdf:'RBMCURVADORA.pdf'},
+                        {id:'biseladora',name:'Biseladora',model:'KRBS 101',brand:'KRBS',cat:'corte',img:'biseladoratubos.jpg',pdf:'biseladoratubos.pdf'},
+                        {id:'ionplasma',name:'Ion Plasma Cutter',model:'Plasma',brand:'NomadTechnologies',cat:'corte',img:'ionplasma.jpg',pdf:'ionplasma.pdf'},
+                        {id:'powermax',name:'Cortadora Plasma',model:'Powermax 900',brand:'Hypertherm',cat:'corte',img:'cortadoraplasmamanual.jpg',pdf:'cortadoraplasmamanual.pdf'},
+                        {id:'selco',name:'Neomig 2400',model:'Semiautomatica',brand:'Selco',cat:'soldadura',img:'selco.jpg',pdf:'selco.pdf'},
+                        {id:'rebel',name:'Rebel 235ic',model:'Semiautomatica',brand:'ESAB',cat:'soldadura',img:'rebel.jpg',pdf:'rebel.pdf'},
+                        {id:'taladro',name:'Taladro Columna',model:'S32',brand:'Ibarmia',cat:'corte',img:'taladro.jpg',pdf:'taladro.pdf'},
+                        {id:'plegadora',name:'Plegadora',model:'hS2 AS',brand:'Generica',cat:'conformado',img:'plegadora.jpg',pdf:'plegadora.pdf'}
+                    ];
+                    renderGrid(MACHINES);
                 });
         }
 
@@ -588,7 +593,7 @@
             });
             
             $('studentBtn').addEventListener('click', function() { login('student'); });
-            $('teacherBtn').addEventListener('click', function() { $('codeSection').classList.remove('hidden'); $('codeHint').textContent = 'Codigo: TALLER2024'; });
+            $('teacherBtn').addEventListener('click', function() { $('codeSection').classList.remove('hidden'); $('codeHint').textContent = 'Codigo: TALLER2024'; $('code').dataset.admin = ''; });
             $('adminBtn').addEventListener('click', function() { $('codeSection').classList.remove('hidden'); $('codeHint').textContent = 'Introduce tu clave de Admin'; $('code').dataset.admin = 'true'; });
             $('codeBtn').addEventListener('click', verifyCode);
             $('loginClose').addEventListener('click', function() { $('loginModal').classList.remove('active'); $('codeSection').classList.add('hidden'); $('code').dataset.admin = ''; });
@@ -677,12 +682,14 @@
             formData.append('category', cat);
             formData.append('image', selectedImage);
             formData.append('pdf', selectedPdf);
+            formData.append('adminKey', currentUser.role === 'admin' ? 'valid' : '');
             
             try {
                 toast('Subiendo maquina...', 'info');
                 
                 const response = await fetch('/api/admin/add-machine', {
                     method: 'POST',
+                    headers: { 'x-admin-key': 'valid' },
                     body: formData
                 });
                 
