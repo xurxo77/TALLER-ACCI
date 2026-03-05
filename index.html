@@ -24,6 +24,7 @@
             --accent: #f97316;
             --success: #10b981;
             --error: #ef4444;
+            --warning: #f59e0b;
             --bg: #f8fafc;
             --bg-card: #fff;
             --text: #0f172a;
@@ -84,6 +85,9 @@
         .btn:hover { transform: translateY(-2px); }
         .btn-primary { background: var(--primary); color: white; }
         .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--error); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.78rem; }
         .content { padding: 0.5rem 1rem 1.5rem; }
         .search-box { background: white; border-radius: 14px; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.7rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 1.1rem; }
         .search-box input { flex: 1; border: none; background: transparent; font-size: 0.95rem; }
@@ -123,6 +127,30 @@
         .badge-soldadura { background: #fecaca; color: #991b1b; }
         .badge-corte { background: #bfdbfe; color: #1e40af; }
         .badge-conformado { background: #bbf7d0; color: #166534; }
+        
+        /* BOTONES ADMIN EN TARJETAS */
+        .card-admin-btns {
+            position: absolute;
+            top: 0.6rem;
+            left: 0.6rem;
+            display: none;
+            gap: 0.4rem;
+            z-index: 3;
+        }
+        .card.show-admin .card-admin-btns { display: flex; }
+        .card-admin-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .card-admin-btn:hover { transform: scale(1.1); }
         
         .card-overlay {
             position: absolute; bottom: 0; left: 0; right: 0;
@@ -272,6 +300,25 @@
         .file-upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
         .file-upload-text { font-size: 0.85rem; color: var(--text2); }
         .file-upload-name { font-size: 0.85rem; color: var(--success); font-weight: 600; }
+        
+        /* CONFIRMACION BORRAR */
+        .confirm-box {
+            text-align: center;
+            padding: 1rem;
+        }
+        .confirm-box p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            color: var(--text2);
+        }
+        .confirm-box strong {
+            color: var(--text);
+        }
+        .confirm-btns {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -322,6 +369,7 @@
     <!-- BOTON FLOTANTE ADMIN -->
     <button class="fab" id="adminFab">+</button>
 
+    <!-- MODAL MAQUINA -->
     <div class="modal" id="machineModal">
         <div class="modal-box">
             <div class="modal-header">
@@ -356,6 +404,7 @@
         </div>
     </div>
 
+    <!-- MODAL LOGIN -->
     <div class="modal" id="loginModal">
         <div class="modal-box">
             <div class="modal-header">
@@ -382,18 +431,19 @@
         </div>
     </div>
 
-    <!-- MODAL ADMIN - AÑADIR MÁQUINA -->
+    <!-- MODAL AÑADIR MAQUINA -->
     <div class="modal" id="adminModal">
         <div class="modal-box">
             <div class="modal-header">
-                <h3 class="modal-title">Añadir Maquina</h3>
+                <h3 class="modal-title" id="adminModalTitle">Anadir Maquina</h3>
                 <button class="modal-close" id="adminClose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
             <div class="modal-body">
                 <form class="admin-form" id="addMachineForm">
+                    <input type="hidden" id="editMachineId" value="">
                     <div class="form-group">
                         <label>Nombre de la maquina *</label>
-                        <input type="text" id="machineName" required placeholder="Ej: Plegadora hidráulica">
+                        <input type="text" id="machineName" required placeholder="Ej: Plegadora hidraulica">
                     </div>
                     <div class="form-group">
                         <label>Modelo</label>
@@ -401,7 +451,7 @@
                     </div>
                     <div class="form-group">
                         <label>Marca</label>
-                        <input type="text" id="machineBrand" placeholder="Ej: Generic">
+                        <input type="text" id="machineBrand" placeholder="Ej: Generica">
                     </div>
                     <div class="form-group">
                         <label>Categoria *</label>
@@ -413,23 +463,42 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Imagen (JPG) *</label>
+                        <label>Imagen (JPG)</label>
                         <div class="file-upload" id="imageUpload">
                             <div class="file-upload-icon">📷</div>
-                            <div class="file-upload-text">Toca para subir imagen</div>
+                            <div class="file-upload-text" id="imageText">Toca para subir imagen</div>
                             <input type="file" accept="image/*" id="machineImage" style="display:none;">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Manual (PDF) *</label>
+                        <label>Manual (PDF)</label>
                         <div class="file-upload" id="pdfUpload">
                             <div class="file-upload-icon">📄</div>
-                            <div class="file-upload-text">Toca para subir PDF</div>
+                            <div class="file-upload-text" id="pdfText">Toca para subir PDF</div>
                             <input type="file" accept=".pdf" id="machinePdf" style="display:none;">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success" style="width:100%;">Guardar Maquina</button>
+                    <button type="submit" class="btn btn-success" style="width:100%;" id="submitBtn">Guardar Maquina</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMAR BORRAR -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-box" style="max-width: 350px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar</h3>
+                <button class="modal-close" id="deleteClose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-box">
+                    <p>¿Seguro que quieres borrar <strong id="deleteMachineName"></strong>?</p>
+                    <div class="confirm-btns">
+                        <button class="btn" id="cancelDelete">Cancelar</button>
+                        <button class="btn btn-danger" id="confirmDelete">Borrar</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -484,10 +553,11 @@
         let recActive = false;
         let selectedImage = null;
         let selectedPdf = null;
+        let editingMachine = null;
 
         const $ = id => document.getElementById(id);
 
-        // Cargar sesión guardada
+        // Cargar sesion guardada
         const s = localStorage.getItem('tallerUser');
         if (s) { 
             currentUser = JSON.parse(s); 
@@ -533,6 +603,8 @@
             if (currentUser.role === 'admin') {
                 isAdmin = true;
                 $('adminFab').style.display = 'flex';
+                // Mostrar botones admin en tarjetas
+                document.querySelectorAll('.card').forEach(function(c) { c.classList.add('show-admin'); });
             }
         }
 
@@ -582,6 +654,7 @@
                         $('loginBtn').textContent = 'Entrar';
                         $('headerRole').textContent = 'Asistente IA';
                         $('adminFab').style.display = 'none';
+                        document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('show-admin'); });
                         toast('Sesion cerrada', 'success'); 
                     } 
                 } else { 
@@ -589,7 +662,6 @@
                 } 
             });
             
-            // SIMPLIFICADO: Ambos botones solo muestran el input de codigo
             $('teacherBtn').addEventListener('click', function() { 
                 $('codeSection').classList.remove('hidden'); 
                 $('codeHint').textContent = 'Codigo: TALLER2024'; 
@@ -607,10 +679,15 @@
             });
             
             // Admin
-            $('adminFab').addEventListener('click', function() { $('adminModal').classList.add('active'); });
+            $('adminFab').addEventListener('click', function() { openAddModal(); });
             $('adminClose').addEventListener('click', function() { $('adminModal').classList.remove('active'); resetAdminForm(); });
             $('adminModal').addEventListener('click', function(e) { if (e.target.id === 'adminModal') { $('adminModal').classList.remove('active'); resetAdminForm(); } });
-            $('addMachineForm').addEventListener('submit', addMachine);
+            $('addMachineForm').addEventListener('submit', saveMachine);
+            
+            // Delete
+            $('deleteClose').addEventListener('click', function() { $('deleteModal').classList.remove('active'); });
+            $('cancelDelete').addEventListener('click', function() { $('deleteModal').classList.remove('active'); });
+            $('confirmDelete').addEventListener('click', confirmDeleteMachine);
         }
 
         function setupFileUploads() {
@@ -626,8 +703,8 @@
                 if (this.files[0]) {
                     selectedImage = this.files[0];
                     imageUpload.classList.add('has-file');
-                    imageUpload.querySelector('.file-upload-text').textContent = selectedImage.name;
-                    imageUpload.querySelector('.file-upload-text').className = 'file-upload-name';
+                    $('imageText').textContent = selectedImage.name;
+                    $('imageText').className = 'file-upload-name';
                 }
             });
             
@@ -635,13 +712,12 @@
                 if (this.files[0]) {
                     selectedPdf = this.files[0];
                     pdfUpload.classList.add('has-file');
-                    pdfUpload.querySelector('.file-upload-text').textContent = selectedPdf.name;
-                    pdfUpload.querySelector('.file-upload-text').className = 'file-upload-name';
+                    $('pdfText').textContent = selectedPdf.name;
+                    $('pdfText').className = 'file-upload-name';
                 }
             });
         }
 
-        // SIMPLIFICADO: Una sola API para profesor y admin
         async function verifyCode() {
             const code = $('code').value;
             
@@ -667,16 +743,107 @@
             }
         }
 
-        async function addMachine(e) {
+        function openAddModal() {
+            editingMachine = null;
+            $('adminModalTitle').textContent = 'Anadir Maquina';
+            $('submitBtn').textContent = 'Guardar Maquina';
+            $('editMachineId').value = '';
+            $('machineName').value = '';
+            $('machineModel').value = '';
+            $('machineBrand').value = '';
+            $('machineCat').value = '';
+            resetAdminForm();
+            $('adminModal').classList.add('active');
+        }
+
+        window.openEditModal = function(id) {
+            const m = MACHINES.find(function(x) { return x.id === id; });
+            if (!m) return;
+            
+            editingMachine = m;
+            $('adminModalTitle').textContent = 'Editar Maquina';
+            $('submitBtn').textContent = 'Guardar Cambios';
+            $('editMachineId').value = m.id;
+            $('machineName').value = m.name;
+            $('machineModel').value = m.model;
+            $('machineBrand').value = m.brand;
+            $('machineCat').value = m.cat;
+            
+            // Mostrar archivos actuales
+            $('imageText').textContent = m.img + ' (actual)';
+            $('imageText').className = 'file-upload-name';
+            $('imageUpload').classList.add('has-file');
+            $('pdfText').textContent = m.pdf + ' (actual)';
+            $('pdfText').className = 'file-upload-name';
+            $('pdfUpload').classList.add('has-file');
+            
+            selectedImage = null;
+            selectedPdf = null;
+            
+            $('adminModal').classList.add('active');
+        };
+
+        window.openDeleteModal = function(id) {
+            const m = MACHINES.find(function(x) { return x.id === id; });
+            if (!m) return;
+            
+            editingMachine = m;
+            $('deleteMachineName').textContent = m.name;
+            $('deleteModal').classList.add('active');
+        };
+
+        async function saveMachine(e) {
             e.preventDefault();
             
+            const id = $('editMachineId').value;
             const name = $('machineName').value.trim();
             const model = $('machineModel').value.trim() || 'N/A';
-            const brand = $('machineBrand').value.trim() || 'Generic';
+            const brand = $('machineBrand').value.trim() || 'Generica';
             const cat = $('machineCat').value;
             
-            if (!name || !cat || !selectedImage || !selectedPdf) {
-                toast('Completa todos los campos obligatorios', 'error');
+            if (!name || !cat) {
+                toast('Completa los campos obligatorios', 'error');
+                return;
+            }
+            
+            // Edicion
+            if (id) {
+                const formData = new FormData();
+                formData.append('id', id);
+                formData.append('name', name);
+                formData.append('model', model);
+                formData.append('brand', brand);
+                formData.append('category', cat);
+                if (selectedImage) formData.append('image', selectedImage);
+                if (selectedPdf) formData.append('pdf', selectedPdf);
+                
+                try {
+                    toast('Guardando cambios...', 'info');
+                    
+                    const response = await fetch('/api/admin/edit-machine', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        toast('Maquina actualizada', 'success');
+                        $('adminModal').classList.remove('active');
+                        resetAdminForm();
+                        loadMachines();
+                    } else {
+                        toast(data.error || 'Error al actualizar', 'error');
+                    }
+                } catch (e) {
+                    toast('Error de conexion', 'error');
+                }
+                return;
+            }
+            
+            // Nueva maquina
+            if (!selectedImage || !selectedPdf) {
+                toast('Sube imagen y PDF', 'error');
                 return;
             }
             
@@ -699,12 +866,39 @@
                 const data = await response.json();
                 
                 if (response.ok && data.success) {
-                    toast('Maquina añadida correctamente', 'success');
+                    toast('Maquina anadida', 'success');
                     $('adminModal').classList.remove('active');
                     resetAdminForm();
                     loadMachines();
                 } else {
-                    toast(data.error || 'Error al añadir maquina', 'error');
+                    toast(data.error || 'Error al anadir', 'error');
+                }
+            } catch (e) {
+                toast('Error de conexion', 'error');
+            }
+        }
+
+        async function confirmDeleteMachine() {
+            if (!editingMachine) return;
+            
+            try {
+                toast('Borrando...', 'info');
+                
+                const response = await fetch('/api/admin/delete-machine', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: editingMachine.id })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    toast('Maquina borrada', 'success');
+                    $('deleteModal').classList.remove('active');
+                    editingMachine = null;
+                    loadMachines();
+                } else {
+                    toast(data.error || 'Error al borrar', 'error');
                 }
             } catch (e) {
                 toast('Error de conexion', 'error');
@@ -715,16 +909,14 @@
             $('addMachineForm').reset();
             selectedImage = null;
             selectedPdf = null;
+            editingMachine = null;
             
-            const imageUpload = $('imageUpload');
-            const pdfUpload = $('pdfUpload');
-            
-            imageUpload.classList.remove('has-file');
-            pdfUpload.classList.remove('has-file');
-            imageUpload.querySelector('.file-upload-name').textContent = 'Toca para subir imagen';
-            imageUpload.querySelector('.file-upload-name').className = 'file-upload-text';
-            pdfUpload.querySelector('.file-upload-name').textContent = 'Toca para subir PDF';
-            pdfUpload.querySelector('.file-upload-name').className = 'file-upload-text';
+            $('imageUpload').classList.remove('has-file');
+            $('pdfUpload').classList.remove('has-file');
+            $('imageText').textContent = 'Toca para subir imagen';
+            $('imageText').className = 'file-upload-text';
+            $('pdfText').textContent = 'Toca para subir PDF';
+            $('pdfText').className = 'file-upload-text';
         }
 
         function filterMachines(cat) {
@@ -735,9 +927,13 @@
         function renderGrid(list) {
             $('machineCount').textContent = list.length;
             $('grid').innerHTML = list.map(function(m) {
-                return '<div class="card" onclick="openMachine(\'' + m.id + '\')">' +
+                return '<div class="card' + (isAdmin ? ' show-admin' : '') + '" onclick="openMachine(\'' + m.id + '\')">' +
                     '<div class="card-img">' +
                         '<img src="' + m.img + '" alt="' + m.name + '" onerror="this.style.display=\'none\'">' +
+                        '<div class="card-admin-btns">' +
+                            '<button class="card-admin-btn btn-warning" style="background:var(--warning)" onclick="event.stopPropagation();openEditModal(\'' + m.id + '\')">&#9998;</button>' +
+                            '<button class="card-admin-btn btn-danger" style="background:var(--error)" onclick="event.stopPropagation();openDeleteModal(\'' + m.id + '\')">&#10006;</button>' +
+                        '</div>' +
                         '<span class="card-badge badge-' + m.cat + '">' + m.cat + '</span>' +
                         '<div class="card-overlay">' +
                             '<div class="card-name">' + m.name + '</div>' +
@@ -825,7 +1021,7 @@
             
             const d = document.createElement('div');
             d.className = 'msg ' + type;
-            d.innerHTML = '<div class="msg-avatar">' + (type === 'ai' ? '🤖' : '👤') + '</div><div class="msg-bubble">' + html + '</div>';
+            d.innerHTML = '<div class="msg-avatar">' + (type === 'ai' ? '&#129302;' : '&#128100;') + '</div><div class="msg-bubble">' + html + '</div>';
             $('msgs').appendChild(d);
             $('msgs').scrollTop = $('msgs').scrollHeight;
         }
