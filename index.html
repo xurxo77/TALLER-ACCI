@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1e3a5f">
+    <meta name="mobile-web-app-capable" content="yes">
     
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -319,7 +320,7 @@
     </button>
 
     <!-- BOTON FLOTANTE ADMIN -->
-    <button class="fab" id="adminFab" <button class="fab" id="adminFab">+</button>;">+</button>
+    <button class="fab" id="adminFab">+</button>
 
     <div class="modal" id="machineModal">
         <div class="modal-box">
@@ -531,7 +532,7 @@
             
             if (currentUser.role === 'admin') {
                 isAdmin = true;
-                $('adminFab').classList.add('show');
+                $('adminFab').style.display = 'flex';
             }
         }
 
@@ -580,7 +581,7 @@
                         localStorage.removeItem('tallerUser'); 
                         $('loginBtn').textContent = 'Entrar';
                         $('headerRole').textContent = 'Asistente IA';
-                        $('adminFab').classList.remove('show');
+                        $('adminFab').style.display = 'none';
                         toast('Sesion cerrada', 'success'); 
                     } 
                 } else { 
@@ -858,7 +859,4 @@
         }
     </script>
 </body>
-</html>  
-
-
-
+</html>
