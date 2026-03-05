@@ -633,34 +633,30 @@
             });
         }
 
-        async function verifyCode() {
-            const code = $('code').value;
-            const isAdminLogin = $('code').dataset.admin === 'true';
-            
-            const endpoint = isAdminLogin ? '/api/admin/verify' : '/api/verify-code';
-            
-            try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ code: code })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.valid) {
-                    login(isAdminLogin ? 'admin' : 'teacher');
-                    $('loginModal').classList.remove('active');
-                    $('codeSection').classList.add('hidden');
-                    $('code').value = '';
-                    $('code').dataset.admin = '';
-                } else {
-                    toast('Codigo incorrecto', 'error');
-                }
-            } catch (e) {
-                toast('Error de conexion', 'error');
-            }
+       async function verifyCode() {
+    const code = $('code').value;
+    
+    try {
+        const response = await fetch('/api/verify-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: code })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.valid) {
+            login(data.role);
+            $('loginModal').classList.remove('active');
+            $('codeSection').classList.add('hidden');
+            $('code').value = '';
+        } else {
+            toast('Codigo incorrecto', 'error');
         }
+    } catch (e) {
+        toast('Error de conexion', 'error');
+    }
+}
 
         async function addMachine(e) {
             e.preventDefault();
@@ -864,4 +860,5 @@
     </script>
 </body>
 </html>
+
 
