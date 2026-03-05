@@ -1,0 +1,19 @@
+{
+    "name": "Taller IES ACCI",
+    "short_name": "Taller IES",
+    "description": "Asistente IA para maquinas industriales",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1e3a5f",
+    "theme_color": "#1e3a5f",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "LOGOTALLER.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["education", "productivity"]
+}
