@@ -527,14 +527,18 @@
         }
 
         function updateUIForUser() {
-            $('loginBtn').textContent = currentUser.role === 'admin' ? 'Admin' : 'Profesor';
-            $('headerRole').textContent = currentUser.role === 'admin' ? 'Administrador' : 'Asistente IA';
-            
-            if (currentUser.role === 'admin') {
-                isAdmin = true;
-                $('adminFab').style.display = 'flex';
-            }
-        }
+    $('loginBtn').textContent = currentUser.role === 'admin' ? 'Admin' : 'Profesor';
+    $('headerRole').textContent = currentUser.role === 'admin' ? 'Administrador' : 'Asistente IA';
+    
+    if (currentUser.role === 'admin') {
+        isAdmin = true;
+        var fab = $('adminFab');
+        fab.style.display = 'flex';
+        fab.style.visibility = 'visible';
+        fab.style.opacity = '1';
+        fab.classList.add('show');
+    }
+}
 
         function setupEvents() {
             $('searchInput').addEventListener('input', function() {
@@ -860,3 +864,4 @@
     </script>
 </body>
 </html>
+
