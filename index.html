@@ -82,7 +82,6 @@
         .btn { padding: 0.6rem 1.1rem; background: white; border: none; border-radius: 10px; font-family: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .btn:hover { transform: translateY(-2px); }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-danger { background: var(--error); color: white; }
         .btn-success { background: var(--success); color: white; }
         .content { padding: 0.5rem 1rem 1.5rem; }
         .search-box { background: white; border-radius: 14px; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.7rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 1.1rem; }
@@ -370,14 +369,13 @@
                 <h2>Bienvenido</h2>
                 <p>Selecciona tu rol</p>
                 <div class="login-options">
-                    <button class="login-option" id="studentBtn"><div class="login-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div class="login-option-info"><h3>Alumno</h3><p>Consultar</p></div></button>
-                    <button class="login-option" id="teacherBtn"><div class="login-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="login-option-info"><h3>Profesor</h3><p>Control total</p></div></button>
-                    <button class="login-option" id="adminBtn" style="display:none; border-color: var(--success);"><div class="login-option-icon" style="background: #f0fdf4;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--success);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="login-option-info"><h3>Admin</h3><p>Gestionar maquinas</p></div></button>
+                    <button class="login-option" id="teacherBtn"><div class="login-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="login-option-info"><h3>Profesor</h3><p>Consultar maquinas</p></div></button>
+                    <button class="login-option" id="adminBtn" style="border-color: var(--success);"><div class="login-option-icon" style="background: #f0fdf4;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--success);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="login-option-info"><h3>Admin</h3><p>Gestionar maquinas</p></div></button>
                 </div>
                 <div class="code-section hidden" id="codeSection">
                     <input type="password" id="code" placeholder="Codigo">
                     <button class="btn btn-primary" style="width:100%" id="codeBtn">Verificar</button>
-                    <p class="code-hint" id="codeHint">Codigo: TALLER2024</p>
+                    <p class="code-hint" id="codeHint">Introduce el codigo</p>
                 </div>
             </div>
         </div>
@@ -475,7 +473,7 @@
             document.getElementById('splash').classList.add('hidden');
         }, 2500);
 
-        // MAQUINAS - Se cargan desde archivo local
+        // MAQUINAS
         let MACHINES = [];
         let currentUser = null;
         let isAdmin = false;
@@ -528,13 +526,12 @@
         }
 
         function updateUIForUser() {
-            $('loginBtn').textContent = currentUser.role === 'admin' ? 'Admin' : (currentUser.role === 'teacher' ? 'Profesor' : 'Alumno');
+            $('loginBtn').textContent = currentUser.role === 'admin' ? 'Admin' : 'Profesor';
             $('headerRole').textContent = currentUser.role === 'admin' ? 'Administrador' : 'Asistente IA';
             
             if (currentUser.role === 'admin') {
                 isAdmin = true;
                 $('adminFab').classList.add('show');
-                $('adminBtn').style.display = 'flex';
             }
         }
 
@@ -584,7 +581,6 @@
                         $('loginBtn').textContent = 'Entrar';
                         $('headerRole').textContent = 'Asistente IA';
                         $('adminFab').classList.remove('show');
-                        $('adminBtn').style.display = 'none';
                         toast('Sesion cerrada', 'success'); 
                     } 
                 } else { 
@@ -592,7 +588,6 @@
                 } 
             });
             
-            $('studentBtn').addEventListener('click', function() { login('student'); });
             $('teacherBtn').addEventListener('click', function() { $('codeSection').classList.remove('hidden'); $('codeHint').textContent = 'Codigo: TALLER2024'; $('code').dataset.admin = ''; });
             $('adminBtn').addEventListener('click', function() { $('codeSection').classList.remove('hidden'); $('codeHint').textContent = 'Introduce tu clave de Admin'; $('code').dataset.admin = 'true'; });
             $('codeBtn').addEventListener('click', verifyCode);
@@ -682,14 +677,12 @@
             formData.append('category', cat);
             formData.append('image', selectedImage);
             formData.append('pdf', selectedPdf);
-            formData.append('adminKey', currentUser.role === 'admin' ? 'valid' : '');
             
             try {
                 toast('Subiendo maquina...', 'info');
                 
                 const response = await fetch('/api/admin/add-machine', {
                     method: 'POST',
-                    headers: { 'x-admin-key': 'valid' },
                     body: formData
                 });
                 
