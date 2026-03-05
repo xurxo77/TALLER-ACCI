@@ -527,18 +527,14 @@
         }
 
         function updateUIForUser() {
-    $('loginBtn').textContent = currentUser.role === 'admin' ? 'Admin' : 'Profesor';
-    $('headerRole').textContent = currentUser.role === 'admin' ? 'Administrador' : 'Asistente IA';
-    
-    if (currentUser.role === 'admin') {
-        isAdmin = true;
-        var fab = $('adminFab');
-        fab.style.display = 'flex';
-        fab.style.visibility = 'visible';
-        fab.style.opacity = '1';
-        fab.classList.add('show');
-    }
-}
+            $('loginBtn').textContent = currentUser.role === 'admin' ? 'Admin' : 'Profesor';
+            $('headerRole').textContent = currentUser.role === 'admin' ? 'Administrador' : 'Asistente IA';
+            
+            if (currentUser.role === 'admin') {
+                isAdmin = true;
+                $('adminFab').style.display = 'flex';
+            }
+        }
 
         function setupEvents() {
             $('searchInput').addEventListener('input', function() {
@@ -593,10 +589,22 @@
                 } 
             });
             
-            $('teacherBtn').addEventListener('click', function() { $('codeSection').classList.remove('hidden'); $('codeHint').textContent = 'Codigo: TALLER2024'; $('code').dataset.admin = ''; });
-            $('adminBtn').addEventListener('click', function() { $('codeSection').classList.remove('hidden'); $('codeHint').textContent = 'Introduce tu clave de Admin'; $('code').dataset.admin = 'true'; });
+            // SIMPLIFICADO: Ambos botones solo muestran el input de codigo
+            $('teacherBtn').addEventListener('click', function() { 
+                $('codeSection').classList.remove('hidden'); 
+                $('codeHint').textContent = 'Codigo: TALLER2024'; 
+            });
+            
+            $('adminBtn').addEventListener('click', function() { 
+                $('codeSection').classList.remove('hidden'); 
+                $('codeHint').textContent = 'Introduce tu clave de Admin'; 
+            });
+            
             $('codeBtn').addEventListener('click', verifyCode);
-            $('loginClose').addEventListener('click', function() { $('loginModal').classList.remove('active'); $('codeSection').classList.add('hidden'); $('code').dataset.admin = ''; });
+            $('loginClose').addEventListener('click', function() { 
+                $('loginModal').classList.remove('active'); 
+                $('codeSection').classList.add('hidden'); 
+            });
             
             // Admin
             $('adminFab').addEventListener('click', function() { $('adminModal').classList.add('active'); });
@@ -633,30 +641,31 @@
             });
         }
 
-       async function verifyCode() {
-    const code = $('code').value;
-    
-    try {
-        const response = await fetch('/api/verify-code', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code: code })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.valid) {
-            login(data.role);
-            $('loginModal').classList.remove('active');
-            $('codeSection').classList.add('hidden');
-            $('code').value = '';
-        } else {
-            toast('Codigo incorrecto', 'error');
+        // SIMPLIFICADO: Una sola API para profesor y admin
+        async function verifyCode() {
+            const code = $('code').value;
+            
+            try {
+                const response = await fetch('/api/verify-code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.valid) {
+                    login(data.role);
+                    $('loginModal').classList.remove('active');
+                    $('codeSection').classList.add('hidden');
+                    $('code').value = '';
+                } else {
+                    toast('Codigo incorrecto', 'error');
+                }
+            } catch (e) {
+                toast('Error de conexion', 'error');
+            }
         }
-    } catch (e) {
-        toast('Error de conexion', 'error');
-    }
-}
 
         async function addMachine(e) {
             e.preventDefault();
@@ -860,5 +869,3 @@
     </script>
 </body>
 </html>
-
-
