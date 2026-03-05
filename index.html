@@ -28,6 +28,38 @@
             border-radius: 0 0 50% 50% / 0 0 40px 40px; z-index: 0;
         }
         .app { position: relative; z-index: 1; }
+        
+        /* SPLASH SCREEN */
+        .splash {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .splash.hidden { opacity: 0; visibility: hidden; }
+        .splash-logo {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .splash-logo img { width: 85%; height: 85%; object-fit: contain; }
+        .splash-title { margin-top: 2rem; font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: white; text-align: center; }
+        .splash-subtitle { margin-top: 0.5rem; font-size: 1rem; color: rgba(255,255,255,0.8); }
+        .splash-loader { margin-top: 2.5rem; width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        
         .header { padding: 1rem; display: flex; align-items: center; justify-content: space-between; }
         .header-brand { display: flex; align-items: center; gap: 0.85rem; }
         .header-logo { 
@@ -159,6 +191,16 @@
     </style>
 </head>
 <body>
+    <!-- SPLASH SCREEN -->
+    <div class="splash" id="splash">
+        <div class="splash-logo">
+            <img src="LOGOTALLER.png" alt="Logo">
+        </div>
+        <div class="splash-title">Taller IES ACCI</div>
+        <div class="splash-subtitle">Asistente Inteligente</div>
+        <div class="splash-loader"></div>
+    </div>
+
     <div class="app">
         <header class="header">
             <div class="header-brand">
@@ -250,10 +292,12 @@
     <div class="toast-container" id="toasts"></div>
 
     <script>
-        // =============================================
-        // MAQUINAS
-        // =============================================
-        
+        // SPLASH SCREEN
+        setTimeout(function() {
+            document.getElementById('splash').classList.add('hidden');
+        }, 2500);
+
+        // MAQUINAS - CON LA NUEVA MAQUINA AÑADIDA
         const MACHINES = [
             {id:'rustler', name:'Rustler EM', model:'EM', brand:'ESAB', cat:'soldadura', img:'rustler.jpg', pdf:'rustler.pdf'},
             {id:'buddy', name:'Buddy ARC 180', model:'ARC 180', brand:'ESAB', cat:'soldadura', img:'buddy.jpg', pdf:'buddy.pdf'},
@@ -261,7 +305,8 @@
             {id:'sierra', name:'Sierra de Cinta', model:'FAT 280', brand:'FAT', cat:'corte', img:'FAT280.jpg', pdf:'FAT280.pdf'},
             {id:'curvadora', name:'Curvadora', model:'RBM 1050-22', brand:'RBM', cat:'conformado', img:'RBMCURVADORA.jpg', pdf:'RBMCURVADORA.pdf'},
             {id:'biseladora', name:'Biseladora', model:'KRBS 101', brand:'KRBS', cat:'corte', img:'biseladoratubos.jpg', pdf:'biseladoratubos.pdf'},
-            {id:'ionplasma', name:'Ion Plasma Cutter', model:'Plasma', brand:'Generico', cat:'corte', img:'ionplasma.jpg', pdf:'ionplasma.pdf'}
+            {id:'ionplasma', name:'Ion Plasma Cutter', model:'Plasma', brand:'Generico', cat:'corte', img:'ionplasma.jpg', pdf:'ionplasma.pdf'},
+            {id:'powermax', name:'Cortadora Plasma', model:'Powermax 900', brand:'Kypertherm', cat:'corte', img:'cortadoraplasmamanual.jpg', pdf:'cortadoraplasmamanual.pdf'}
         ];
 
         const $ = id => document.getElementById(id);
@@ -272,24 +317,17 @@
         let recognition = null;
         let recActive = false;
 
-        // Sesion
         const s = localStorage.getItem('tallerUser');
         if (s) { 
             currentUser = JSON.parse(s); 
             $('loginBtn').textContent = currentUser.role === 'teacher' ? 'Profesor' : 'Alumno'; 
         }
 
-        // Iniciar
         renderGrid(MACHINES);
         setupVoice();
         setupEvents();
 
-        // =============================================
-        // EVENTOS
-        // =============================================
-        
         function setupEvents() {
-            // Busqueda
             $('searchInput').addEventListener('input', function() {
                 const q = this.value.toLowerCase().trim();
                 if (q.length > 0) {
@@ -304,39 +342,20 @@
                 }
             });
             
-            // Voz busqueda
-            $('voiceSearchBtn').addEventListener('click', function() {
-                startVoice('search');
-            });
+            $('voiceSearchBtn').addEventListener('click', function() { startVoice('search'); });
             
-            // FILTROS - ARREGLADO
             const filterBtns = document.querySelectorAll('.filter');
             filterBtns.forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    // Quitar activo a todos
-                    filterBtns.forEach(function(b) {
-                        b.classList.remove('active');
-                    });
-                    // Activar el clicado
+                    filterBtns.forEach(function(b) { b.classList.remove('active'); });
                     this.classList.add('active');
-                    // Filtrar
-                    const cat = this.getAttribute('data-filter');
-                    filterMachines(cat);
+                    filterMachines(this.getAttribute('data-filter'));
                 });
             });
             
-            // Modal cerrar
-            $('closeBtn').addEventListener('click', function() {
-                $('machineModal').classList.remove('active');
-            });
+            $('closeBtn').addEventListener('click', function() { $('machineModal').classList.remove('active'); });
+            $('machineModal').addEventListener('click', function(e) { if (e.target.id === 'machineModal') $('machineModal').classList.remove('active'); });
             
-            $('machineModal').addEventListener('click', function(e) {
-                if (e.target.id === 'machineModal') {
-                    $('machineModal').classList.remove('active');
-                }
-            });
-            
-            // Tabs
             document.querySelectorAll('.tab').forEach(function(t) {
                 t.addEventListener('click', function() {
                     document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('active'); });
@@ -346,16 +365,10 @@
                 });
             });
             
-            // Chat
             $('sendBtn').addEventListener('click', sendChat);
-            $('input').addEventListener('keypress', function(e) { 
-                if (e.key === 'Enter') sendChat(); 
-            });
-            $('voiceBtn').addEventListener('click', function() {
-                startVoice('chat');
-            });
+            $('input').addEventListener('keypress', function(e) { if (e.key === 'Enter') sendChat(); });
+            $('voiceBtn').addEventListener('click', function() { startVoice('chat'); });
             
-            // Login
             $('loginBtn').addEventListener('click', function() { 
                 if (currentUser) { 
                     if (confirm('Cerrar sesion?')) { 
@@ -375,33 +388,19 @@
                 if ($('code').value === 'TALLER2024') login('teacher'); 
                 else toast('Codigo incorrecto', 'error'); 
             });
-            $('loginClose').addEventListener('click', function() { 
-                $('loginModal').classList.remove('active'); 
-            });
+            $('loginClose').addEventListener('click', function() { $('loginModal').classList.remove('active'); });
         }
 
-        // =============================================
-        // FILTROS
-        // =============================================
-        
         function filterMachines(cat) {
             if (cat === 'all') {
                 renderGrid(MACHINES);
             } else {
-                const filtered = MACHINES.filter(function(m) {
-                    return m.cat === cat;
-                });
-                renderGrid(filtered);
+                renderGrid(MACHINES.filter(function(m) { return m.cat === cat; }));
             }
         }
-
-        // =============================================
-        // RENDER
-        // =============================================
         
         function renderGrid(list) {
-            const grid = $('grid');
-            grid.innerHTML = list.map(function(m) {
+            $('grid').innerHTML = list.map(function(m) {
                 return '<div class="card" onclick="openMachine(\'' + m.id + '\')">' +
                     '<div class="card-img">' +
                         '<img src="' + m.img + '" alt="' + m.name + '" onerror="this.style.display=\'none\'">' +
@@ -415,10 +414,6 @@
                 '</div>';
             }).join('');
         }
-
-        // =============================================
-        // ABRIR MAQUINA
-        // =============================================
         
         window.openMachine = async function(id) {
             machine = MACHINES.find(function(m) { return m.id === id; });
@@ -443,7 +438,6 @@
                 if (!response.ok) throw new Error('PDF no encontrado');
                 const arrayBuffer = await response.arrayBuffer();
                 pdfBase64 = arrayBufferToBase64(arrayBuffer);
-                // Quitar mensaje cargando
                 const msgs = $('msgs');
                 if (msgs.lastChild && msgs.lastChild.querySelector && msgs.lastChild.querySelector('em')) {
                     msgs.removeChild(msgs.lastChild);
@@ -458,15 +452,9 @@
         function arrayBufferToBase64(buffer) {
             let binary = '';
             const bytes = new Uint8Array(buffer);
-            for (let i = 0; i < bytes.byteLength; i++) {
-                binary += String.fromCharCode(bytes[i]);
-            }
+            for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
             return btoa(binary);
         }
-
-        // =============================================
-        // CHAT
-        // =============================================
         
         async function sendChat() {
             const q = $('input').value.trim();
@@ -499,25 +487,16 @@
             }
             $('sendBtn').disabled = false;
         }
-
-        // =============================================
-        // AÑADIR MENSAJE - MARKDOWN ARREGLADO
-        // =============================================
         
         function addMsg(type, html) {
             if (type === 'ai') {
-                // Headers
                 html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
                 html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
                 html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-                // Bold (doble asterisco)
                 html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-                // Italic (un asterisco)
                 html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-                // Lists
                 html = html.replace(/^- (.*$)/gm, '<li>$1</li>');
                 html = html.replace(/^(\d+)\. (.*$)/gm, '<li>$2</li>');
-                // Line breaks
                 html = html.replace(/\n/g, '<br>');
             }
             
@@ -528,15 +507,8 @@
             $('msgs').scrollTop = $('msgs').scrollHeight;
         }
 
-        window.ask = function(q) { 
-            $('input').value = q; 
-            sendChat(); 
-        };
+        window.ask = function(q) { $('input').value = q; sendChat(); };
 
-        // =============================================
-        // VOZ
-        // =============================================
-        
         function setupVoice() {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SR) return;
@@ -565,18 +537,11 @@
                 recognition.stop();
             } else {
                 recActive = true;
-                if (ctx === 'search') {
-                    $('voiceSearchBtn').classList.add('recording');
-                } else {
-                    $('voiceBtn').classList.add('recording');
-                }
+                if (ctx === 'search') $('voiceSearchBtn').classList.add('recording');
+                else $('voiceBtn').classList.add('recording');
                 recognition.start();
             }
         }
-
-        // =============================================
-        // LOGIN
-        // =============================================
         
         function login(role) {
             currentUser = {role: role};
@@ -585,10 +550,6 @@
             $('loginModal').classList.remove('active');
             toast('Bienvenido', 'success');
         }
-
-        // =============================================
-        // TOAST
-        // =============================================
         
         function toast(msg, type) {
             const d = document.createElement('div');
