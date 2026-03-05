@@ -431,7 +431,7 @@
         </div>
     </div>
 
-    <!-- MODAL AÑADIR MAQUINA -->
+    <!-- MODAL ANADIR/EDITAR MAQUINA -->
     <div class="modal" id="adminModal">
         <div class="modal-box">
             <div class="modal-header">
@@ -534,7 +534,7 @@
         });
         
         window.addEventListener('appinstalled', function() {
-            toast('App instalada', 'success');
+            toast('App instalada correctamente', 'success');
             installBtn.classList.remove('show');
         });
 
@@ -577,7 +577,7 @@
                     renderGrid(MACHINES);
                 })
                 .catch(e => {
-                    console.error('Error loading machines:', e);
+                    console.error('Error cargando maquinas:', e);
                     MACHINES = [
                         {id:'rustler',name:'Rustler EM',model:'EM',brand:'ESAB',cat:'soldadura',img:'rustler.jpg',pdf:'rustler.pdf'},
                         {id:'buddy',name:'Buddy ARC 180',model:'ARC 180',brand:'ESAB',cat:'soldadura',img:'buddy.jpg',pdf:'buddy.pdf'},
@@ -603,7 +603,6 @@
             if (currentUser.role === 'admin') {
                 isAdmin = true;
                 $('adminFab').style.display = 'flex';
-                // Mostrar botones admin en tarjetas
                 document.querySelectorAll('.card').forEach(function(c) { c.classList.add('show-admin'); });
             }
         }
@@ -647,7 +646,7 @@
             
             $('loginBtn').addEventListener('click', function() { 
                 if (currentUser) { 
-                    if (confirm('Cerrar sesion?')) { 
+                    if (confirm('¿Cerrar sesion?')) { 
                         currentUser = null; 
                         isAdmin = false;
                         localStorage.removeItem('tallerUser'); 
@@ -769,7 +768,6 @@
             $('machineBrand').value = m.brand;
             $('machineCat').value = m.cat;
             
-            // Mostrar archivos actuales
             $('imageText').textContent = m.img + ' (actual)';
             $('imageText').className = 'file-upload-name';
             $('imageUpload').classList.add('has-file');
