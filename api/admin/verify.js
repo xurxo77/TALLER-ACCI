@@ -7,10 +7,15 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
     
+    // LOG: ver qué llega
+    console.log('Method:', req.method);
+    console.log('Headers:', req.headers['content-type']);
+    console.log('Body raw:', req.body);
+    
     if (req.method === 'GET') {
-        // Para pruebas
         const code = req.query ? req.query.code : null;
         const adminKey = process.env.ADMIN_KEY;
+        console.log('GET code:', code, 'adminKey:', adminKey);
         return res.status(200).json({ valid: code === adminKey });
     }
     
@@ -20,6 +25,9 @@ export default async function handler(req, res) {
     
     const { code } = req.body || {};
     const adminKey = process.env.ADMIN_KEY;
+    
+    console.log('POST code:', code, 'adminKey:', adminKey);
+    console.log('Match:', code === adminKey);
     
     if (code && adminKey && code === adminKey) {
         return res.status(200).json({ valid: true, role: 'admin' });
