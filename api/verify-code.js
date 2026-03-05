@@ -12,7 +12,14 @@ export default async function handler(req, res) {
     }
     
     const { code } = req.body || {};
+    const adminKey = process.env.ADMIN_KEY;
     
+    // Verificar si es Admin
+    if (code && adminKey && code === adminKey) {
+        return res.status(200).json({ valid: true, role: 'admin' });
+    }
+    
+    // Verificar si es Profesor
     if (code === 'TALLER2024') {
         return res.status(200).json({ valid: true, role: 'teacher' });
     }
