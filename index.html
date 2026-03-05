@@ -31,15 +31,9 @@
         .header { padding: 1rem; display: flex; align-items: center; justify-content: space-between; }
         .header-brand { display: flex; align-items: center; gap: 0.85rem; }
         .header-logo { 
-            width: 56px; 
-            height: 56px; 
-            background: white; 
-            border-radius: 14px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2); 
-            overflow: hidden;
+            width: 56px; height: 56px; background: white; border-radius: 14px; 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2); overflow: hidden;
         }
         .header-logo img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         .header-logo svg { width: 28px; height: 28px; color: var(--primary); }
@@ -53,81 +47,44 @@
         .voice-btn { width: 40px; height: 40px; background: #f1f5f9; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .voice-btn.recording { background: var(--error); color: white; animation: pulse 1s infinite; }
         @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-        .filters { display: flex; gap: 0.45rem; margin-bottom: 1.1rem; overflow-x: auto; }
-        .filter { padding: 0.5rem 1rem; background: rgba(255,255,255,0.9); border: none; border-radius: 18px; font-size: 0.82rem; font-weight: 500; cursor: pointer; white-space: nowrap; }
+        
+        .filters { display: flex; gap: 0.45rem; margin-bottom: 1.1rem; overflow-x: auto; padding-bottom: 0.3rem; }
+        .filters::-webkit-scrollbar { display: none; }
+        .filter { 
+            padding: 0.5rem 1rem; background: rgba(255,255,255,0.9); border: none; 
+            border-radius: 18px; font-size: 0.82rem; font-weight: 500; cursor: pointer; 
+            white-space: nowrap; transition: all 0.2s; flex-shrink: 0;
+        }
+        .filter:hover { background: white; }
         .filter.active { background: var(--primary); color: white; }
         .section-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; }
         
-        /* TARJETAS GRANDES - IMAGEN QUE LLENA */
-        .machines-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 1rem; 
-        }
-        @media (min-width: 420px) { 
-            .machines-grid { gap: 1.1rem; } 
-        }
-        @media (min-width: 600px) { 
-            .machines-grid { grid-template-columns: repeat(3, 1fr); } 
-        }
+        .machines-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        @media (min-width: 420px) { .machines-grid { gap: 1.1rem; } }
+        @media (min-width: 600px) { .machines-grid { grid-template-columns: repeat(3, 1fr); } }
         
         .card { 
-            background: white; 
-            border-radius: 18px; 
-            overflow: hidden; 
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08); 
-            cursor: pointer; 
-            transition: transform 0.25s, box-shadow 0.25s; 
-            position: relative;
+            background: white; border-radius: 18px; overflow: hidden; 
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08); cursor: pointer; 
+            transition: transform 0.25s, box-shadow 0.25s; position: relative;
         }
         .card:hover { transform: translateY(-5px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
         
-        /* IMAGEN QUE LLENA TODA LA TARJETA */
-        .card-img { 
-            width: 100%;
-            height: 180px;
-            position: relative;
-        }
-        .card-img img { 
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
+        .card-img { width: 100%; height: 180px; position: relative; }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
         .card-badge { position: absolute; top: 0.6rem; right: 0.6rem; padding: 0.25rem 0.6rem; border-radius: 8px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; z-index: 2; }
         .badge-soldadura { background: #fecaca; color: #991b1b; }
         .badge-corte { background: #bfdbfe; color: #1e40af; }
         .badge-conformado { background: #bbf7d0; color: #166534; }
         
-        /* TEXTO ENCIMA DE LA IMAGEN */
         .card-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: absolute; bottom: 0; left: 0; right: 0;
             background: linear-gradient(transparent, rgba(0,0,0,0.8));
             padding: 2rem 0.9rem 0.85rem;
         }
-        .card-name { 
-            font-family: 'Space Grotesk', sans-serif; 
-            font-weight: 700; 
-            font-size: 1.05rem; 
-            color: white;
-            margin-bottom: 0.15rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-        }
-        .card-model { 
-            font-size: 0.8rem; 
-            color: rgba(255,255,255,0.85);
-            margin-bottom: 0.3rem;
-        }
-        .card-status { 
-            display: flex; 
-            align-items: center; 
-            gap: 0.3rem; 
-            font-size: 0.72rem; 
-            color: rgba(255,255,255,0.7);
-        }
+        .card-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; color: white; margin-bottom: 0.15rem; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .card-model { font-size: 0.8rem; color: rgba(255,255,255,0.85); margin-bottom: 0.3rem; }
+        .card-status { display: flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; color: rgba(255,255,255,0.7); }
         .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
         
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: flex-end; justify-content: center; z-index: 1000; }
@@ -156,13 +113,15 @@
         .msg-bubble { padding: 0.85rem 1rem; border-radius: 14px; font-size: 0.92rem; line-height: 1.6; }
         .msg.ai .msg-bubble { background: #f1f5f9; border-bottom-left-radius: 4px; }
         .msg.user .msg-bubble { background: var(--primary); color: white; border-bottom-right-radius: 4px; }
-        .msg-bubble strong { color: var(--accent); }
+        .msg-bubble strong { color: var(--accent); font-weight: 700; }
         .msg.user .msg-bubble strong { color: #fef3c7; }
-        .msg-bubble p { margin-bottom: 0.4rem; }
-        .msg-bubble p:last-child { margin-bottom: 0; }
+        .msg-bubble em { color: var(--text2); font-style: normal; font-size: 0.85rem; }
+        .msg-bubble h1, .msg-bubble h2, .msg-bubble h3 { margin: 0.8rem 0 0.4rem; font-family: 'Space Grotesk', sans-serif; color: var(--text); }
+        .msg-bubble h1 { font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        .msg-bubble h2 { font-size: 1rem; }
+        .msg-bubble h3 { font-size: 0.95rem; }
         .msg-bubble ul, .msg-bubble ol { padding-left: 1.2rem; margin: 0.4rem 0; }
         .msg-bubble li { margin-bottom: 0.25rem; }
-        .msg-bubble em { display: block; margin-top: 0.5rem; font-size: 0.78rem; opacity: 0.7; font-style: normal; }
         .chat-input-box { padding: 0.65rem 0; border-top: 1px solid var(--border); }
         .quick-btns { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.55rem; }
         .quick-btn { padding: 0.45rem 0.8rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 16px; font-size: 0.78rem; cursor: pointer; }
@@ -207,7 +166,7 @@
                     <img src="LOGOTALLER.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
                 </div>
-                <div><h1>Taller IES ACCI</h1><span>Asistente IA con PDF</span></div>
+                <div><h1>Taller IES ACCI</h1><span>Asistente IA</span></div>
             </div>
             <button class="btn" id="loginBtn">Entrar</button>
         </header>
@@ -217,7 +176,7 @@
                 <input type="text" id="searchInput" placeholder="Buscar maquina...">
                 <button class="voice-btn" id="voiceSearchBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></button>
             </div>
-            <div class="filters">
+            <div class="filters" id="filtersContainer">
                 <button class="filter active" data-filter="all">Todas</button>
                 <button class="filter" data-filter="soldadura">Soldadura</button>
                 <button class="filter" data-filter="corte">Corte</button>
@@ -232,7 +191,7 @@
         <div class="modal-box">
             <div class="modal-header">
                 <h3 class="modal-title" id="title">-</h3>
-                <button class="modal-close" id="close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                <button class="modal-close" id="closeBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
             <div class="tabs">
                 <button class="tab active" data-tab="chat">Consultar IA</button>
@@ -252,7 +211,7 @@
                             <div class="input-row">
                                 <input type="text" id="input" class="chat-input" placeholder="Escribe tu pregunta...">
                                 <button class="chat-btn voice" id="voiceBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></button>
-                                <button class="chat-btn send" id="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+                                <button class="chat-btn send" id="sendBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -291,81 +250,188 @@
     <div class="toast-container" id="toasts"></div>
 
     <script>
+        // =============================================
+        // MAQUINAS
+        // =============================================
+        
         const MACHINES = [
-            {id:'rustler',name:'Rustler EM',model:'EM',brand:'ESAB',cat:'soldadura',img:'rustler.jpg',pdf:'rustler.pdf'},
-            {id:'buddy',name:'Buddy ARC 180',model:'ARC 180',brand:'ESAB',cat:'soldadura',img:'buddy.jpg',pdf:'buddy.pdf'},
-            {id:'buddytig',name:'Buddy TIG 160',model:'TIG 160',brand:'ESAB',cat:'soldadura',img:'buddytig.jpg',pdf:'buddytig.pdf'},
-            {id:'sierra',name:'Sierra de Cinta',model:'FAT 280',brand:'FAT',cat:'corte',img:'FAT280.jpg',pdf:'FAT280.pdf'},
-            {id:'curvadora',name:'Curvadora',model:'RBM 1050-22',brand:'RBM',cat:'conformado',img:'RBMCURVADORA.jpg',pdf:'RBMCURVADORA.pdf'},
-            {id:'biseladora',name:'Biseladora',model:'KRBS 101',brand:'KRBS',cat:'corte',img:'biseladoratubos.jpg',pdf:'biseladoratubos.pdf'}
+            {id:'rustler', name:'Rustler EM', model:'EM', brand:'ESAB', cat:'soldadura', img:'rustler.jpg', pdf:'rustler.pdf'},
+            {id:'buddy', name:'Buddy ARC 180', model:'ARC 180', brand:'ESAB', cat:'soldadura', img:'buddy.jpg', pdf:'buddy.pdf'},
+            {id:'buddytig', name:'Buddy TIG 160', model:'TIG 160', brand:'ESAB', cat:'soldadura', img:'buddytig.jpg', pdf:'buddytig.pdf'},
+            {id:'sierra', name:'Sierra de Cinta', model:'FAT 280', brand:'FAT', cat:'corte', img:'FAT280.jpg', pdf:'FAT280.pdf'},
+            {id:'curvadora', name:'Curvadora', model:'RBM 1050-22', brand:'RBM', cat:'conformado', img:'RBMCURVADORA.jpg', pdf:'RBMCURVADORA.pdf'},
+            {id:'biseladora', name:'Biseladora', model:'KRBS 101', brand:'KRBS', cat:'corte', img:'biseladoratubos.jpg', pdf:'biseladoratubos.pdf'},
+            {id:'ionplasma', name:'Ion Plasma Cutter', model:'Plasma', brand:'Generico', cat:'corte', img:'ionplasma.jpg', pdf:'ionplasma.pdf'}
         ];
 
         const $ = id => document.getElementById(id);
         
-        let machine = null, pdfBase64 = null, currentUser = null, recognition = null, recActive = false;
+        let machine = null;
+        let pdfBase64 = null;
+        let currentUser = null;
+        let recognition = null;
+        let recActive = false;
 
+        // Sesion
         const s = localStorage.getItem('tallerUser');
-        if (s) { currentUser = JSON.parse(s); $('loginBtn').textContent = currentUser.role === 'teacher' ? 'Profesor' : 'Alumno'; }
+        if (s) { 
+            currentUser = JSON.parse(s); 
+            $('loginBtn').textContent = currentUser.role === 'teacher' ? 'Profesor' : 'Alumno'; 
+        }
 
-        render();
+        // Iniciar
+        renderGrid(MACHINES);
         setupVoice();
-        events();
+        setupEvents();
 
-        function events() {
-            $('searchInput').oninput = e => filter(e.target.value);
-            $('voiceSearchBtn').onclick = () => vToggle('search');
-            document.querySelectorAll('.filter').forEach(f => f.onclick = () => {
-                document.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
-                f.classList.add('active');
-                filter(f.dataset.filter);
+        // =============================================
+        // EVENTOS
+        // =============================================
+        
+        function setupEvents() {
+            // Busqueda
+            $('searchInput').addEventListener('input', function() {
+                const q = this.value.toLowerCase().trim();
+                if (q.length > 0) {
+                    const filtered = MACHINES.filter(m => 
+                        m.name.toLowerCase().includes(q) || 
+                        m.model.toLowerCase().includes(q) || 
+                        m.brand.toLowerCase().includes(q)
+                    );
+                    renderGrid(filtered);
+                } else {
+                    renderGrid(MACHINES);
+                }
             });
-            $('close').onclick = () => $('machineModal').classList.remove('active');
-            $('machineModal').onclick = e => { if (e.target.id === 'machineModal') $('machineModal').classList.remove('active'); };
-            document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
-                document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
-                t.classList.add('active');
-                $(t.dataset.tab + 'Tab').classList.add('active');
+            
+            // Voz busqueda
+            $('voiceSearchBtn').addEventListener('click', function() {
+                startVoice('search');
             });
-            $('send').onclick = chat;
-            $('input').onkeypress = e => { if (e.key === 'Enter') chat(); };
-            $('voiceBtn').onclick = () => vToggle('chat');
-            $('loginBtn').onclick = () => { if (currentUser) { if (confirm('Cerrar sesion?')) { currentUser = null; localStorage.removeItem('tallerUser'); $('loginBtn').textContent = 'Entrar'; toast('Sesion cerrada', 'success'); } } else $('loginModal').classList.add('active'); };
-            $('studentBtn').onclick = () => login('student');
-            $('teacherBtn').onclick = () => $('codeSection').classList.remove('hidden');
-            $('codeBtn').onclick = () => { if ($('code').value === 'TALLER2024') login('teacher'); else toast('Codigo incorrecto', 'error'); };
-            $('loginClose').onclick = () => $('loginModal').classList.remove('active');
+            
+            // FILTROS - ARREGLADO
+            const filterBtns = document.querySelectorAll('.filter');
+            filterBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    // Quitar activo a todos
+                    filterBtns.forEach(function(b) {
+                        b.classList.remove('active');
+                    });
+                    // Activar el clicado
+                    this.classList.add('active');
+                    // Filtrar
+                    const cat = this.getAttribute('data-filter');
+                    filterMachines(cat);
+                });
+            });
+            
+            // Modal cerrar
+            $('closeBtn').addEventListener('click', function() {
+                $('machineModal').classList.remove('active');
+            });
+            
+            $('machineModal').addEventListener('click', function(e) {
+                if (e.target.id === 'machineModal') {
+                    $('machineModal').classList.remove('active');
+                }
+            });
+            
+            // Tabs
+            document.querySelectorAll('.tab').forEach(function(t) {
+                t.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('active'); });
+                    document.querySelectorAll('.tab-content').forEach(function(x) { x.classList.remove('active'); });
+                    t.classList.add('active');
+                    $(t.getAttribute('data-tab') + 'Tab').classList.add('active');
+                });
+            });
+            
+            // Chat
+            $('sendBtn').addEventListener('click', sendChat);
+            $('input').addEventListener('keypress', function(e) { 
+                if (e.key === 'Enter') sendChat(); 
+            });
+            $('voiceBtn').addEventListener('click', function() {
+                startVoice('chat');
+            });
+            
+            // Login
+            $('loginBtn').addEventListener('click', function() { 
+                if (currentUser) { 
+                    if (confirm('Cerrar sesion?')) { 
+                        currentUser = null; 
+                        localStorage.removeItem('tallerUser'); 
+                        $('loginBtn').textContent = 'Entrar'; 
+                        toast('Sesion cerrada', 'success'); 
+                    } 
+                } else { 
+                    $('loginModal').classList.add('active'); 
+                } 
+            });
+            
+            $('studentBtn').addEventListener('click', function() { login('student'); });
+            $('teacherBtn').addEventListener('click', function() { $('codeSection').classList.remove('hidden'); });
+            $('codeBtn').addEventListener('click', function() { 
+                if ($('code').value === 'TALLER2024') login('teacher'); 
+                else toast('Codigo incorrecto', 'error'); 
+            });
+            $('loginClose').addEventListener('click', function() { 
+                $('loginModal').classList.remove('active'); 
+            });
         }
 
-        function render(list = MACHINES) {
-            $('grid').innerHTML = list.map(m => `
-                <div class="card" onclick="openM('${m.id}')">
-                    <div class="card-img">
-                        <img src="${m.img}" alt="${m.name}" onerror="this.style.display='none'">
-                        <span class="card-badge badge-${m.cat}">${m.cat}</span>
-                        <div class="card-overlay">
-                            <div class="card-name">${m.name}</div>
-                            <div class="card-model">${m.model} - ${m.brand}</div>
-                            <div class="card-status"><span class="status-dot"></span>PDF listo</div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        // =============================================
+        // FILTROS
+        // =============================================
+        
+        function filterMachines(cat) {
+            if (cat === 'all') {
+                renderGrid(MACHINES);
+            } else {
+                const filtered = MACHINES.filter(function(m) {
+                    return m.cat === cat;
+                });
+                renderGrid(filtered);
+            }
         }
 
-        function filter(q) { const l = q.toLowerCase(); render(MACHINES.filter(m => m.name.toLowerCase().includes(l) || m.model.toLowerCase().includes(l) || m.brand.toLowerCase().includes(l))); }
+        // =============================================
+        // RENDER
+        // =============================================
+        
+        function renderGrid(list) {
+            const grid = $('grid');
+            grid.innerHTML = list.map(function(m) {
+                return '<div class="card" onclick="openMachine(\'' + m.id + '\')">' +
+                    '<div class="card-img">' +
+                        '<img src="' + m.img + '" alt="' + m.name + '" onerror="this.style.display=\'none\'">' +
+                        '<span class="card-badge badge-' + m.cat + '">' + m.cat + '</span>' +
+                        '<div class="card-overlay">' +
+                            '<div class="card-name">' + m.name + '</div>' +
+                            '<div class="card-model">' + m.model + ' - ' + m.brand + '</div>' +
+                            '<div class="card-status"><span class="status-dot"></span>PDF listo</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
 
-        window.openM = async id => {
-            machine = MACHINES.find(m => m.id === id);
+        // =============================================
+        // ABRIR MAQUINA
+        // =============================================
+        
+        window.openMachine = async function(id) {
+            machine = MACHINES.find(function(m) { return m.id === id; });
             if (!machine) return;
+            
             $('title').textContent = machine.name;
             $('input').value = '';
             $('msgs').innerHTML = '';
-            addMsg('ai', `Hola. Soy el asistente tecnico de <strong>${machine.name}</strong>.<p>Estoy analizando el manual PDF. ¿Que necesitas saber?</p>`);
+            addMsg('ai', 'Hola. Soy el asistente tecnico de <strong>' + machine.name + '</strong>.<p>Estoy analizando el manual PDF. ¿Que necesitas saber?</p>');
             
             await loadPDF(machine.pdf);
             
-            $('pdf').innerHTML = `<embed src="${machine.pdf}" type="application/pdf" width="100%" height="100%">`;
+            $('pdf').innerHTML = '<embed src="' + machine.pdf + '" type="application/pdf" width="100%" height="100%">';
             $('machineModal').classList.add('active');
         };
 
@@ -373,36 +439,46 @@
             try {
                 addMsg('ai', '<em>Cargando manual PDF...</em>');
                 const base = window.location.href.replace(/\/$/, '').replace(/index\.html$/, '');
-                const response = await fetch(`${base}/${pdfFile}`);
+                const response = await fetch(base + '/' + pdfFile);
                 if (!response.ok) throw new Error('PDF no encontrado');
                 const arrayBuffer = await response.arrayBuffer();
                 pdfBase64 = arrayBufferToBase64(arrayBuffer);
+                // Quitar mensaje cargando
                 const msgs = $('msgs');
-                if (msgs.lastChild && msgs.lastChild.querySelector && msgs.lastChild.querySelector('em')) msgs.removeChild(msgs.lastChild);
+                if (msgs.lastChild && msgs.lastChild.querySelector && msgs.lastChild.querySelector('em')) {
+                    msgs.removeChild(msgs.lastChild);
+                }
             } catch (error) {
-                console.error('Error cargando PDF:', error);
+                console.error('Error:', error);
                 pdfBase64 = null;
-                addMsg('ai', '<em>No se pudo cargar el PDF. Verifica que el archivo existe.</em>');
+                addMsg('ai', '<em>No se pudo cargar el PDF.</em>');
             }
         }
 
         function arrayBufferToBase64(buffer) {
             let binary = '';
             const bytes = new Uint8Array(buffer);
-            for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
             return btoa(binary);
         }
 
-        async function chat() {
+        // =============================================
+        // CHAT
+        // =============================================
+        
+        async function sendChat() {
             const q = $('input').value.trim();
             if (!q || !machine) return;
+            
             addMsg('user', q);
             $('input').value = '';
-            $('send').disabled = true;
+            $('sendBtn').disabled = true;
             
             if (!pdfBase64) {
-                addMsg('ai', 'El PDF no se ha cargado. Cierra y vuelve a abrir.');
-                $('send').disabled = false;
+                addMsg('ai', 'El PDF no se ha cargado.');
+                $('sendBtn').disabled = false;
                 return;
             }
             
@@ -413,57 +489,113 @@
                     body: JSON.stringify({ question: q, pdfBase64: pdfBase64, machineName: machine.name })
                 });
                 const data = await response.json();
-                if (response.ok && data.answer) addMsg('ai', data.answer.replace(/\n/g, '<br>'));
-                else addMsg('ai', 'Error: ' + (data.error || 'No se pudo procesar'));
+                if (response.ok && data.answer) {
+                    addMsg('ai', data.answer);
+                } else {
+                    addMsg('ai', 'Error: ' + (data.error || 'No se pudo procesar'));
+                }
             } catch (e) {
-                addMsg('ai', 'Error de conexion. Intenta de nuevo.');
+                addMsg('ai', 'Error de conexion.');
             }
-            $('send').disabled = false;
+            $('sendBtn').disabled = false;
         }
 
+        // =============================================
+        // AÑADIR MENSAJE - MARKDOWN ARREGLADO
+        // =============================================
+        
         function addMsg(type, html) {
+            if (type === 'ai') {
+                // Headers
+                html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+                html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+                html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+                // Bold (doble asterisco)
+                html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+                // Italic (un asterisco)
+                html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+                // Lists
+                html = html.replace(/^- (.*$)/gm, '<li>$1</li>');
+                html = html.replace(/^(\d+)\. (.*$)/gm, '<li>$2</li>');
+                // Line breaks
+                html = html.replace(/\n/g, '<br>');
+            }
+            
             const d = document.createElement('div');
-            d.className = `msg ${type}`;
-            d.innerHTML = `<div class="msg-avatar">${type === 'ai' ? '🤖' : '👤'}</div><div class="msg-bubble">${html}</div>`;
+            d.className = 'msg ' + type;
+            d.innerHTML = '<div class="msg-avatar">' + (type === 'ai' ? '🤖' : '👤') + '</div><div class="msg-bubble">' + html + '</div>';
             $('msgs').appendChild(d);
             $('msgs').scrollTop = $('msgs').scrollHeight;
         }
 
-        window.ask = q => { $('input').value = q; chat(); };
+        window.ask = function(q) { 
+            $('input').value = q; 
+            sendChat(); 
+        };
 
+        // =============================================
+        // VOZ
+        // =============================================
+        
         function setupVoice() {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SR) return;
             recognition = new SR();
             recognition.lang = 'es-ES';
-            recognition.onresult = e => {
+            recognition.onresult = function(e) {
                 const t = e.results[0][0].transcript;
-                if ($('machineModal').classList.contains('active')) { $('input').value = t; chat(); }
-                else { $('searchInput').value = t; filter(t); }
+                if ($('machineModal').classList.contains('active')) { 
+                    $('input').value = t; 
+                    sendChat(); 
+                } else { 
+                    $('searchInput').value = t;
+                    $('searchInput').dispatchEvent(new Event('input'));
+                }
             };
-            recognition.onerror = recognition.onend = () => { recActive = false; $('voiceSearchBtn').classList.remove('recording'); $('voiceBtn').classList.remove('recording'); };
+            recognition.onerror = recognition.onend = function() { 
+                recActive = false; 
+                $('voiceSearchBtn').classList.remove('recording'); 
+                $('voiceBtn').classList.remove('recording'); 
+            };
         }
 
-        function vToggle(ctx) {
+        function startVoice(ctx) {
             if (!recognition) { toast('Voz no soportada', 'error'); return; }
-            if (recActive) recognition.stop();
-            else { recActive = true; (ctx === 'search' ? $('voiceSearchBtn') : $('voiceBtn')).classList.add('recording'); recognition.start(); }
+            if (recActive) {
+                recognition.stop();
+            } else {
+                recActive = true;
+                if (ctx === 'search') {
+                    $('voiceSearchBtn').classList.add('recording');
+                } else {
+                    $('voiceBtn').classList.add('recording');
+                }
+                recognition.start();
+            }
         }
 
+        // =============================================
+        // LOGIN
+        // =============================================
+        
         function login(role) {
-            currentUser = {role};
+            currentUser = {role: role};
             localStorage.setItem('tallerUser', JSON.stringify(currentUser));
             $('loginBtn').textContent = role === 'teacher' ? 'Profesor' : 'Alumno';
             $('loginModal').classList.remove('active');
             toast('Bienvenido', 'success');
         }
 
-        function toast(msg, type = 'info') {
+        // =============================================
+        // TOAST
+        // =============================================
+        
+        function toast(msg, type) {
             const d = document.createElement('div');
-            d.className = `toast ${type}`;
+            d.className = 'toast ' + type;
             d.textContent = msg;
             $('toasts').appendChild(d);
-            setTimeout(() => d.remove(), 2500);
+            setTimeout(function() { d.remove(); }, 2500);
         }
     </script>
 </body>
