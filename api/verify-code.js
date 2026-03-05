@@ -11,22 +11,7 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
     
-    // Parsear body manualmente
-    let body = {};
-    try {
-        const chunks = [];
-        for await (const chunk of req) {
-            chunks.push(chunk);
-        }
-        const rawBody = Buffer.concat(chunks).toString();
-        if (rawBody) {
-            body = JSON.parse(rawBody);
-        }
-    } catch (e) {
-        return res.status(400).json({ error: 'Invalid JSON' });
-    }
-    
-    const { code } = body;
+    const { code } = req.body || {};
     
     if (code === 'TALLER2024') {
         return res.status(200).json({ valid: true, role: 'teacher' });
