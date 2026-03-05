@@ -128,29 +128,33 @@
         .badge-corte { background: #bfdbfe; color: #1e40af; }
         .badge-conformado { background: #bbf7d0; color: #166534; }
         
-        /* BOTONES ADMIN EN TARJETAS */
+        /* BOTONES ADMIN EN TARJETAS - MAS GRANDES */
         .card-admin-btns {
             position: absolute;
-            top: 0.6rem;
-            left: 0.6rem;
+            top: 0.5rem;
+            left: 0.5rem;
             display: none;
-            gap: 0.4rem;
-            z-index: 3;
+            gap: 0.5rem;
+            z-index: 10;
         }
         .card.show-admin .card-admin-btns { display: flex; }
         .card-admin-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 3px solid white;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-size: 1.3rem;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.35);
+            background: rgba(255,255,255,0.95);
+            -webkit-tap-highlight-color: transparent;
         }
-        .card-admin-btn:hover { transform: scale(1.1); }
+        .card-admin-btn:active { transform: scale(0.9); }
+        .card-admin-btn.edit { color: #d97706; }
+        .card-admin-btn.delete { color: #dc2626; }
         
         .card-overlay {
             position: absolute; bottom: 0; left: 0; right: 0;
@@ -929,8 +933,8 @@
                     '<div class="card-img">' +
                         '<img src="' + m.img + '" alt="' + m.name + '" onerror="this.style.display=\'none\'">' +
                         '<div class="card-admin-btns">' +
-                            '<button class="card-admin-btn btn-warning" style="background:var(--warning)" onclick="event.stopPropagation();openEditModal(\'' + m.id + '\')">&#9998;</button>' +
-                            '<button class="card-admin-btn btn-danger" style="background:var(--error)" onclick="event.stopPropagation();openDeleteModal(\'' + m.id + '\')">&#10006;</button>' +
+                            '<button class="card-admin-btn edit" onclick="event.stopPropagation();openEditModal(\'' + m.id + '\')">&#9998;</button>' +
+                            '<button class="card-admin-btn delete" onclick="event.stopPropagation();openDeleteModal(\'' + m.id + '\')">&#128465;</button>' +
                         '</div>' +
                         '<span class="card-badge badge-' + m.cat + '">' + m.cat + '</span>' +
                         '<div class="card-overlay">' +
