@@ -106,6 +106,7 @@
         @media (min-width: 600px) { .machines-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (min-width: 900px) { .machines-grid { grid-template-columns: repeat(4, 1fr); } }
         @media (min-width: 1100px) { .machines-grid { grid-template-columns: repeat(5, 1fr); } }
+        @media (min-width: 1300px) { .machines-grid { grid-template-columns: repeat(6, 1fr); } }
         
         .card { 
             background: white; border-radius: 18px; overflow: hidden; 
@@ -376,7 +377,7 @@
             document.getElementById('splash').classList.add('hidden');
         }, 2500);
 
-        // MAQUINAS - 11 MAQUINAS (MARCAS CORREGIDAS)
+        // MAQUINAS - 12 MAQUINAS
         const MACHINES = [
             {id:'rustler', name:'Rustler EM', model:'EM', brand:'ESAB', cat:'soldadura', img:'rustler.jpg', pdf:'rustler.pdf'},
             {id:'buddy', name:'Buddy ARC 180', model:'ARC 180', brand:'ESAB', cat:'soldadura', img:'buddy.jpg', pdf:'buddy.pdf'},
@@ -388,7 +389,8 @@
             {id:'powermax', name:'Cortadora Plasma', model:'Powermax 900', brand:'Hypertherm', cat:'corte', img:'cortadoraplasmamanual.jpg', pdf:'cortadoraplasmamanual.pdf'},
             {id:'selco', name:'Neomig 2400', model:'Semiautomatica', brand:'Selco', cat:'soldadura', img:'selco.jpg', pdf:'selco.pdf'},
             {id:'rebel', name:'Rebel 235ic', model:'Semiautomatica', brand:'ESAB', cat:'soldadura', img:'rebel.jpg', pdf:'rebel.pdf'},
-            {id:'taladro', name:'Taladro Columna', model:'S32', brand:'Ibarmia', cat:'corte', img:'taladro.jpg', pdf:'taladro.pdf'}
+            {id:'taladro', name:'Taladro Columna', model:'S32', brand:'Ibarmia', cat:'corte', img:'taladro.jpg', pdf:'taladro.pdf'},
+            {id:'plegadora', name:'Plegadora', model:'hS2 AS', brand:'Generica', cat:'conformado', img:'plegadora.jpg', pdf:'plegadora.pdf'}
         ];
 
         const $ = id => document.getElementById(id);
