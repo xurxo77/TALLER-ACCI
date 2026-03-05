@@ -115,5 +115,14 @@
     "cat": "corte",
     "img": "m-quina-port-til-de-.jpg",
     "pdf": "m-quina-port-til-de-.pdf"
+  },
+  {
+    "id": "prueba",
+    "name": "PRUEBA",
+    "model": "N/A",
+    "brand": "Generic",
+    "cat": "conformado",
+    "img": "prueba.jpg",
+    "pdf": "prueba.pdf"
   }
 ]
